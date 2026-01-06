@@ -203,6 +203,265 @@
       ],
       "docsUrl": "https://docs.klingai.com",
       "dashboardUrl": "https://klingai.com/dashboard"
+    },
+    {
+      "id": "retellai",
+      "name": "Retell AI",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "Voice AI platform for building conversational agents and phone calls",
+      "icon": "phone",
+      "color": "#5B21B6",
+      "installCommand": "/plugin install retellai-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["retellai-install-auth", "retellai-hello-world", "retellai-local-dev-loop", "retellai-sdk-patterns", "retellai-core-workflow-a", "retellai-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["retellai-common-errors", "retellai-debug-bundle", "retellai-rate-limits", "retellai-security-basics", "retellai-prod-checklist", "retellai-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["retellai-ci-integration", "retellai-deploy-integration", "retellai-webhooks-events", "retellai-performance-tuning", "retellai-cost-tuning", "retellai-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["retellai-multi-env-setup", "retellai-observability", "retellai-incident-runbook", "retellai-data-handling", "retellai-enterprise-rbac", "retellai-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["retellai-advanced-troubleshooting", "retellai-load-scale", "retellai-reliability-patterns", "retellai-policy-guardrails", "retellai-architecture-variants", "retellai-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.retellai.com",
+      "dashboardUrl": "https://beta.retellai.com"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "AI search engine and answer engine with real-time web access",
+      "icon": "search",
+      "color": "#20808D",
+      "installCommand": "/plugin install perplexity-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["perplexity-install-auth", "perplexity-hello-world", "perplexity-local-dev-loop", "perplexity-sdk-patterns", "perplexity-core-workflow-a", "perplexity-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["perplexity-common-errors", "perplexity-debug-bundle", "perplexity-rate-limits", "perplexity-security-basics", "perplexity-prod-checklist", "perplexity-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["perplexity-ci-integration", "perplexity-deploy-integration", "perplexity-webhooks-events", "perplexity-performance-tuning", "perplexity-cost-tuning", "perplexity-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["perplexity-multi-env-setup", "perplexity-observability", "perplexity-incident-runbook", "perplexity-data-handling", "perplexity-enterprise-rbac", "perplexity-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["perplexity-advanced-troubleshooting", "perplexity-load-scale", "perplexity-reliability-patterns", "perplexity-policy-guardrails", "perplexity-architecture-variants", "perplexity-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.perplexity.ai",
+      "dashboardUrl": "https://perplexity.ai"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "AI-powered code editor by Codeium with agentic capabilities",
+      "icon": "wind",
+      "color": "#00A4DC",
+      "installCommand": "/plugin install windsurf-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["windsurf-install-auth", "windsurf-hello-world", "windsurf-local-dev-loop", "windsurf-sdk-patterns", "windsurf-core-workflow-a", "windsurf-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["windsurf-common-errors", "windsurf-debug-bundle", "windsurf-rate-limits", "windsurf-security-basics", "windsurf-prod-checklist", "windsurf-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["windsurf-ci-integration", "windsurf-deploy-integration", "windsurf-webhooks-events", "windsurf-performance-tuning", "windsurf-cost-tuning", "windsurf-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["windsurf-multi-env-setup", "windsurf-observability", "windsurf-incident-runbook", "windsurf-data-handling", "windsurf-enterprise-rbac", "windsurf-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["windsurf-advanced-troubleshooting", "windsurf-load-scale", "windsurf-reliability-patterns", "windsurf-policy-guardrails", "windsurf-architecture-variants", "windsurf-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.codeium.com/windsurf",
+      "dashboardUrl": "https://windsurf.ai"
+    },
+    {
+      "id": "firecrawl",
+      "name": "FireCrawl",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "Web scraping API that converts websites to LLM-ready markdown",
+      "icon": "flame",
+      "color": "#F97316",
+      "installCommand": "/plugin install firecrawl-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["firecrawl-install-auth", "firecrawl-hello-world", "firecrawl-local-dev-loop", "firecrawl-sdk-patterns", "firecrawl-core-workflow-a", "firecrawl-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["firecrawl-common-errors", "firecrawl-debug-bundle", "firecrawl-rate-limits", "firecrawl-security-basics", "firecrawl-prod-checklist", "firecrawl-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["firecrawl-ci-integration", "firecrawl-deploy-integration", "firecrawl-webhooks-events", "firecrawl-performance-tuning", "firecrawl-cost-tuning", "firecrawl-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["firecrawl-multi-env-setup", "firecrawl-observability", "firecrawl-incident-runbook", "firecrawl-data-handling", "firecrawl-enterprise-rbac", "firecrawl-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["firecrawl-advanced-troubleshooting", "firecrawl-load-scale", "firecrawl-reliability-patterns", "firecrawl-policy-guardrails", "firecrawl-architecture-variants", "firecrawl-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.firecrawl.dev",
+      "dashboardUrl": "https://firecrawl.dev/dashboard"
+    },
+    {
+      "id": "clay",
+      "name": "Clay",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "Data enrichment platform for sales and marketing automation",
+      "icon": "users",
+      "color": "#4F46E5",
+      "installCommand": "/plugin install clay-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["clay-install-auth", "clay-hello-world", "clay-local-dev-loop", "clay-sdk-patterns", "clay-core-workflow-a", "clay-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["clay-common-errors", "clay-debug-bundle", "clay-rate-limits", "clay-security-basics", "clay-prod-checklist", "clay-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["clay-ci-integration", "clay-deploy-integration", "clay-webhooks-events", "clay-performance-tuning", "clay-cost-tuning", "clay-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["clay-multi-env-setup", "clay-observability", "clay-incident-runbook", "clay-data-handling", "clay-enterprise-rbac", "clay-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["clay-advanced-troubleshooting", "clay-load-scale", "clay-reliability-patterns", "clay-policy-guardrails", "clay-architecture-variants", "clay-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.clay.com",
+      "dashboardUrl": "https://app.clay.com"
+    },
+    {
+      "id": "replit",
+      "name": "Replit",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "Cloud development platform with AI coding assistant and deployments",
+      "icon": "terminal",
+      "color": "#F26207",
+      "installCommand": "/plugin install replit-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["replit-install-auth", "replit-hello-world", "replit-local-dev-loop", "replit-sdk-patterns", "replit-core-workflow-a", "replit-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["replit-common-errors", "replit-debug-bundle", "replit-rate-limits", "replit-security-basics", "replit-prod-checklist", "replit-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["replit-ci-integration", "replit-deploy-integration", "replit-webhooks-events", "replit-performance-tuning", "replit-cost-tuning", "replit-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["replit-multi-env-setup", "replit-observability", "replit-incident-runbook", "replit-data-handling", "replit-enterprise-rbac", "replit-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["replit-advanced-troubleshooting", "replit-load-scale", "replit-reliability-patterns", "replit-policy-guardrails", "replit-architecture-variants", "replit-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.replit.com",
+      "dashboardUrl": "https://replit.com/~"
+    },
+    {
+      "id": "exa",
+      "name": "Exa",
+      "tier": "flagship+",
+      "skillCount": 30,
+      "description": "Neural search engine API for finding similar content and embeddings",
+      "icon": "search",
+      "color": "#8B5CF6",
+      "installCommand": "/plugin install exa-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["exa-install-auth", "exa-hello-world", "exa-local-dev-loop", "exa-sdk-patterns", "exa-core-workflow-a", "exa-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["exa-common-errors", "exa-debug-bundle", "exa-rate-limits", "exa-security-basics", "exa-prod-checklist", "exa-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["exa-ci-integration", "exa-deploy-integration", "exa-webhooks-events", "exa-performance-tuning", "exa-cost-tuning", "exa-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["exa-multi-env-setup", "exa-observability", "exa-incident-runbook", "exa-data-handling", "exa-enterprise-rbac", "exa-migration-deep-dive"] },
+        { "name": "Advanced Patterns", "skills": ["exa-advanced-troubleshooting", "exa-load-scale", "exa-reliability-patterns", "exa-policy-guardrails", "exa-architecture-variants", "exa-known-pitfalls"] }
+      ],
+      "docsUrl": "https://docs.exa.ai",
+      "dashboardUrl": "https://dashboard.exa.ai"
+    },
+    {
+      "id": "vastai",
+      "name": "Vast.ai",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "GPU cloud marketplace for ML training and inference",
+      "icon": "cpu",
+      "color": "#10B981",
+      "installCommand": "/plugin install vastai-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["vastai-install-auth", "vastai-hello-world", "vastai-local-dev-loop", "vastai-sdk-patterns", "vastai-core-workflow-a", "vastai-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["vastai-common-errors", "vastai-debug-bundle", "vastai-rate-limits", "vastai-security-basics", "vastai-prod-checklist", "vastai-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["vastai-ci-integration", "vastai-deploy-integration", "vastai-webhooks-events", "vastai-performance-tuning", "vastai-cost-tuning", "vastai-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["vastai-multi-env-setup", "vastai-observability", "vastai-incident-runbook", "vastai-data-handling", "vastai-enterprise-rbac", "vastai-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://vast.ai/docs",
+      "dashboardUrl": "https://cloud.vast.ai"
+    },
+    {
+      "id": "groq",
+      "name": "Groq",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "Ultra-fast LLM inference with custom LPU hardware",
+      "icon": "zap",
+      "color": "#F97316",
+      "installCommand": "/plugin install groq-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["groq-install-auth", "groq-hello-world", "groq-local-dev-loop", "groq-sdk-patterns", "groq-core-workflow-a", "groq-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["groq-common-errors", "groq-debug-bundle", "groq-rate-limits", "groq-security-basics", "groq-prod-checklist", "groq-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["groq-ci-integration", "groq-deploy-integration", "groq-webhooks-events", "groq-performance-tuning", "groq-cost-tuning", "groq-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["groq-multi-env-setup", "groq-observability", "groq-incident-runbook", "groq-data-handling", "groq-enterprise-rbac", "groq-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://console.groq.com/docs",
+      "dashboardUrl": "https://console.groq.com"
+    },
+    {
+      "id": "instantly",
+      "name": "Instantly",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "Cold email outreach platform with unlimited sending accounts",
+      "icon": "mail",
+      "color": "#3B82F6",
+      "installCommand": "/plugin install instantly-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["instantly-install-auth", "instantly-hello-world", "instantly-local-dev-loop", "instantly-sdk-patterns", "instantly-core-workflow-a", "instantly-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["instantly-common-errors", "instantly-debug-bundle", "instantly-rate-limits", "instantly-security-basics", "instantly-prod-checklist", "instantly-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["instantly-ci-integration", "instantly-deploy-integration", "instantly-webhooks-events", "instantly-performance-tuning", "instantly-cost-tuning", "instantly-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["instantly-multi-env-setup", "instantly-observability", "instantly-incident-runbook", "instantly-data-handling", "instantly-enterprise-rbac", "instantly-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://developer.instantly.ai",
+      "dashboardUrl": "https://app.instantly.ai"
+    },
+    {
+      "id": "fireflies",
+      "name": "Fireflies.ai",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "AI meeting assistant for transcription and conversation intelligence",
+      "icon": "mic",
+      "color": "#8B5CF6",
+      "installCommand": "/plugin install fireflies-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["fireflies-install-auth", "fireflies-hello-world", "fireflies-local-dev-loop", "fireflies-sdk-patterns", "fireflies-core-workflow-a", "fireflies-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["fireflies-common-errors", "fireflies-debug-bundle", "fireflies-rate-limits", "fireflies-security-basics", "fireflies-prod-checklist", "fireflies-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["fireflies-ci-integration", "fireflies-deploy-integration", "fireflies-webhooks-events", "fireflies-performance-tuning", "fireflies-cost-tuning", "fireflies-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["fireflies-multi-env-setup", "fireflies-observability", "fireflies-incident-runbook", "fireflies-data-handling", "fireflies-enterprise-rbac", "fireflies-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://docs.fireflies.ai",
+      "dashboardUrl": "https://app.fireflies.ai"
+    },
+    {
+      "id": "coderabbit",
+      "name": "CodeRabbit",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "AI code review assistant for pull requests and code quality",
+      "icon": "git-pull-request",
+      "color": "#F59E0B",
+      "installCommand": "/plugin install coderabbit-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["coderabbit-install-auth", "coderabbit-hello-world", "coderabbit-local-dev-loop", "coderabbit-sdk-patterns", "coderabbit-core-workflow-a", "coderabbit-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["coderabbit-common-errors", "coderabbit-debug-bundle", "coderabbit-rate-limits", "coderabbit-security-basics", "coderabbit-prod-checklist", "coderabbit-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["coderabbit-ci-integration", "coderabbit-deploy-integration", "coderabbit-webhooks-events", "coderabbit-performance-tuning", "coderabbit-cost-tuning", "coderabbit-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["coderabbit-multi-env-setup", "coderabbit-observability", "coderabbit-incident-runbook", "coderabbit-data-handling", "coderabbit-enterprise-rbac", "coderabbit-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://docs.coderabbit.ai",
+      "dashboardUrl": "https://app.coderabbit.ai"
+    },
+    {
+      "id": "posthog",
+      "name": "PostHog",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "Product analytics, feature flags, and session replay platform",
+      "icon": "bar-chart",
+      "color": "#F54E00",
+      "installCommand": "/plugin install posthog-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["posthog-install-auth", "posthog-hello-world", "posthog-local-dev-loop", "posthog-sdk-patterns", "posthog-core-workflow-a", "posthog-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["posthog-common-errors", "posthog-debug-bundle", "posthog-rate-limits", "posthog-security-basics", "posthog-prod-checklist", "posthog-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["posthog-ci-integration", "posthog-deploy-integration", "posthog-webhooks-events", "posthog-performance-tuning", "posthog-cost-tuning", "posthog-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["posthog-multi-env-setup", "posthog-observability", "posthog-incident-runbook", "posthog-data-handling", "posthog-enterprise-rbac", "posthog-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://posthog.com/docs",
+      "dashboardUrl": "https://app.posthog.com"
+    },
+    {
+      "id": "ideogram",
+      "name": "Ideogram",
+      "tier": "flagship",
+      "skillCount": 24,
+      "description": "AI image generation with exceptional text rendering capabilities",
+      "icon": "image",
+      "color": "#EC4899",
+      "installCommand": "/plugin install ideogram-pack@claude-code-plugins-plus",
+      "categories": [
+        { "name": "Onboarding & Foundations", "skills": ["ideogram-install-auth", "ideogram-hello-world", "ideogram-local-dev-loop", "ideogram-sdk-patterns", "ideogram-core-workflow-a", "ideogram-core-workflow-b"] },
+        { "name": "Operations & Debugging", "skills": ["ideogram-common-errors", "ideogram-debug-bundle", "ideogram-rate-limits", "ideogram-security-basics", "ideogram-prod-checklist", "ideogram-upgrade-migration"] },
+        { "name": "CI/CD & Deployment", "skills": ["ideogram-ci-integration", "ideogram-deploy-integration", "ideogram-webhooks-events", "ideogram-performance-tuning", "ideogram-cost-tuning", "ideogram-reference-architecture"] },
+        { "name": "Enterprise & Compliance", "skills": ["ideogram-multi-env-setup", "ideogram-observability", "ideogram-incident-runbook", "ideogram-data-handling", "ideogram-enterprise-rbac", "ideogram-migration-deep-dive"] }
+      ],
+      "docsUrl": "https://developer.ideogram.ai",
+      "dashboardUrl": "https://ideogram.ai"
     }
   ],
   "tiers": {
