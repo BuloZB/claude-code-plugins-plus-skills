@@ -1,4 +1,5 @@
 ---
+name: skip-reflect
 description: Discard queued learnings without processing
 allowed-tools: Bash
 ---

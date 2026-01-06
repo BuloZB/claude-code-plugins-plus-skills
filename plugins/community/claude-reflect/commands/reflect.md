@@ -1,4 +1,5 @@
 ---
+name: reflect
 description: Reflect on session corrections and update CLAUDE.md (with human review)
 allowed-tools: Read, Edit, Write, Glob, Bash, Grep, AskUserQuestion
 ---

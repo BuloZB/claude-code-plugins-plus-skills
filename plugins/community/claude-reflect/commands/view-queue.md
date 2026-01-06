@@ -1,4 +1,5 @@
 ---
+name: view-queue
 description: View the learnings queue without processing
 allowed-tools: Bash
 ---
