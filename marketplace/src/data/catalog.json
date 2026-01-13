@@ -1,22 +1,22 @@
 {
   "meta": {
     "version": "1.0.0",
-    "generated": "2026-01-06T08:24:28.790Z",
+    "generated": "2026-01-13T06:11:12.897Z",
     "source": "marketplace.extended.json",
     "generator": "scripts/sync-catalog.mjs"
   },
   "stats": {
-    "totalPlugins": 270,
-    "totalSkills": 107,
-    "totalCommands": 58,
-    "pluginsWithSkills": 31,
+    "totalPlugins": 282,
+    "totalSkills": 348,
+    "totalCommands": 59,
+    "pluginsWithSkills": 42,
     "byCategory": {
-      "productivity": 13,
-      "security": 27,
+      "productivity": 17,
+      "security": 28,
       "testing": 25,
-      "ai-ml": 38,
+      "ai-ml": 41,
       "performance": 25,
-      "devops": 34,
+      "devops": 35,
       "api-development": 25,
       "crypto": 26,
       "skill-enhancers": 6,
@@ -25,7 +25,7 @@
       "database": 28,
       "design": 1,
       "ai-agency": 6,
-      "business-tools": 1,
+      "business-tools": 4,
       "fullstack": 1,
       "example": 3,
       "finance": 1,
@@ -35,12 +35,12 @@
       "development": 1
     },
     "byStatus": {
-      "active": 251,
+      "active": 263,
       "maintained": 19
     },
     "featured": 2,
-    "new": 249,
-    "generatedAt": "2026-01-06T08:24:28.790Z"
+    "new": 261,
+    "generatedAt": "2026-01-13T06:11:12.897Z"
   },
   "plugins": [
     {
@@ -9096,6 +9096,441 @@
         "name": "Numman Ali",
         "email": "numman.ali@gmail.com",
         "url": "https://github.com/numman-ali"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "apollo-pack",
+      "name": "apollo-pack",
+      "displayName": "apollo pack",
+      "description": "Complete Apollo integration skill pack with 24 skills covering sales engagement, prospecting, sequencing, analytics, and outbound automation. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "business-tools",
+      "keywords": [
+        "apollo",
+        "sales",
+        "prospecting",
+        "sequences",
+        "outbound",
+        "crm",
+        "sales-engagement",
+        "lead-generation"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install apollo-pack",
+      "sourcePath": "./plugins/saas-packs/apollo-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "clerk-pack",
+      "name": "clerk-pack",
+      "displayName": "clerk pack",
+      "description": "Complete Clerk integration skill pack with 24 skills covering authentication, user management, embeddable UIs, and identity platform. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "security",
+      "keywords": [
+        "clerk",
+        "authentication",
+        "auth",
+        "users",
+        "identity",
+        "sso",
+        "embeddable-ui",
+        "user-management"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install clerk-pack",
+      "sourcePath": "./plugins/saas-packs/clerk-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "customerio-pack",
+      "name": "customerio-pack",
+      "displayName": "customerio pack",
+      "description": "Complete Customer.io integration skill pack with 24 skills covering marketing automation, email campaigns, SMS, push notifications, and customer journeys. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "business-tools",
+      "keywords": [
+        "customerio",
+        "customer-io",
+        "marketing",
+        "email",
+        "automation",
+        "campaigns",
+        "sms",
+        "push-notifications"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install customerio-pack",
+      "sourcePath": "./plugins/saas-packs/customerio-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "deepgram-pack",
+      "name": "deepgram-pack",
+      "displayName": "deepgram pack",
+      "description": "Complete Deepgram integration skill pack with 24 skills covering speech-to-text, real-time transcription, voice intelligence, and audio processing. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "deepgram",
+        "speech-to-text",
+        "transcription",
+        "voice",
+        "audio",
+        "asr",
+        "real-time",
+        "voice-ai"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install deepgram-pack",
+      "sourcePath": "./plugins/saas-packs/deepgram-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "gamma-pack",
+      "name": "gamma-pack",
+      "displayName": "gamma pack",
+      "description": "Complete Gamma integration skill pack with 24 skills covering AI presentations, document generation, templates, and visual content creation. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "gamma",
+        "presentations",
+        "documents",
+        "ai-generation",
+        "templates",
+        "slides",
+        "visual-content"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install gamma-pack",
+      "sourcePath": "./plugins/saas-packs/gamma-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "granola-pack",
+      "name": "granola-pack",
+      "displayName": "granola pack",
+      "description": "Complete Granola integration skill pack with 24 skills covering AI meeting notes, transcription, summaries, and meeting intelligence. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "granola",
+        "meeting-notes",
+        "transcription",
+        "summaries",
+        "meetings",
+        "ai-notes",
+        "meeting-intelligence"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install granola-pack",
+      "sourcePath": "./plugins/saas-packs/granola-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "juicebox-pack",
+      "name": "juicebox-pack",
+      "displayName": "juicebox pack",
+      "description": "Complete Juicebox integration skill pack with 24 skills covering people data, enrichment, contact search, and AI-powered discovery. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "business-tools",
+      "keywords": [
+        "juicebox",
+        "people-data",
+        "enrichment",
+        "contacts",
+        "search",
+        "data-api",
+        "lead-enrichment"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install juicebox-pack",
+      "sourcePath": "./plugins/saas-packs/juicebox-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "langchain-pack",
+      "name": "langchain-pack",
+      "displayName": "langchain pack",
+      "description": "Complete LangChain integration skill pack with 24 skills covering chains, agents, RAG pipelines, memory, and LLM application development. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "langchain",
+        "llm",
+        "chains",
+        "agents",
+        "rag",
+        "memory",
+        "ai-applications",
+        "langsmith"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install langchain-pack",
+      "sourcePath": "./plugins/saas-packs/langchain-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "lindy-pack",
+      "name": "lindy-pack",
+      "displayName": "lindy pack",
+      "description": "Complete Lindy integration skill pack with 24 skills covering AI assistants, task automation, workflows, and intelligent automation. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "lindy",
+        "ai-assistant",
+        "automation",
+        "workflows",
+        "tasks",
+        "intelligent-automation"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install lindy-pack",
+      "sourcePath": "./plugins/saas-packs/lindy-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "linear-pack",
+      "name": "linear-pack",
+      "displayName": "linear pack",
+      "description": "Complete Linear integration skill pack with 24 skills covering issue tracking, project management, workflows, and team collaboration. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "linear",
+        "issues",
+        "project-management",
+        "tracking",
+        "workflows",
+        "agile",
+        "team-collaboration"
+      ],
+      "hasSkills": true,
+      "skillCount": 24,
+      "commandCount": 0,
+      "installCommand": "/plugin install linear-pack",
+      "sourcePath": "./plugins/saas-packs/linear-pack",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "neurodivergent-visual-org",
+      "name": "neurodivergent-visual-org",
+      "displayName": "neurodivergent visual org",
+      "description": "Create ADHD-friendly visual organizational tools (Mermaid diagrams) optimized for neurodivergent thinking patterns with accessibility modes",
+      "version": "3.1.1",
+      "category": "productivity",
+      "keywords": [
+        "neurodivergent",
+        "adhd",
+        "autism",
+        "accessibility",
+        "mermaid-diagrams",
+        "visual-organization",
+        "task-breakdown",
+        "decision-trees"
+      ],
+      "hasSkills": true,
+      "skillCount": 1,
+      "commandCount": 0,
+      "installCommand": "/plugin install neurodivergent-visual-org",
+      "sourcePath": "./plugins/productivity/neurodivergent-visual-org",
+      "lastUpdatedEpoch": 1768274305,
+      "lastUpdatedDate": "2026-01-13T03:18:25.233Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jack Reis",
+        "url": "https://github.com/JackReis"
+      },
+      "type": "instruction-plugin"
+    },
+    {
+      "slug": "gh-dash",
+      "name": "gh-dash",
+      "displayName": "gh dash",
+      "description": "GitHub PR dashboard for Claude Code. View PR status, CI/CD progress, bot comments, and merge PRs directly from your terminal.",
+      "version": "1.0.0",
+      "category": "devops",
+      "keywords": [
+        "github",
+        "pull-request",
+        "ci-cd",
+        "dashboard",
+        "devops",
+        "merge",
+        "code-review"
+      ],
+      "hasSkills": false,
+      "skillCount": 0,
+      "commandCount": 1,
+      "installCommand": "/plugin install gh-dash",
+      "sourcePath": "./plugins/devops/gh-dash",
+      "lastUpdatedEpoch": 1768284672,
+      "lastUpdatedDate": "2026-01-13T06:11:12.897Z",
+      "status": "active",
+      "badges": [
+        "new"
+      ],
+      "isFeatured": false,
+      "isNew": true,
+      "author": {
+        "name": "Jake Kozloski",
+        "email": "jakozloski@gmail.com"
       },
       "type": "instruction-plugin"
     }
