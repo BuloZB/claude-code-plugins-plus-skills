@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.10.0] - 2026-01-15
+
+### Added
+- 13 new crypto plugin skills with full PRD/ARD documentation and Python implementations:
+  - **Market Data & Pricing**: market-price-tracker, market-movers-scanner, crypto-news-aggregator, market-sentiment-analyzer
+  - **Portfolio & Tax**: crypto-portfolio-tracker, crypto-tax-calculator
+  - **DeFi**: defi-yield-optimizer, liquidity-pool-analyzer, staking-rewards-optimizer, dex-aggregator-router, flash-loan-simulator
+  - **Trading & Derivatives**: arbitrage-opportunity-finder, crypto-derivatives-tracker
+- Firebase Hosting integration for marketplace website
+- Firebase Analytics for download tracking
+
+### Changed
+- Updated skill validator compliance for backtester and signal generator skills
+- Unified theme colors across all marketplace pages (CSS consolidation)
+- Updated .gitignore for firebase cache and skill data files
+
+### Infrastructure
+- All crypto skills follow nixtla enterprise PRD/ARD standard
+- Each skill includes: SKILL.md, PRD.md, ARD.md, Python scripts, references, config
+- Skills use DeFiLlama, CoinGecko, CryptoCompare APIs (free tiers)
+
+### Metrics
+- New crypto skills: 13 (with full documentation)
+- Commits since v4.9.0: 50
+- PRs merged: 8 (crypto skill branches)
+- Total files changed: ~200
+- Lines added: ~25,000
+
 ## [4.9.0] - 2026-01-08
 
 ### Added
