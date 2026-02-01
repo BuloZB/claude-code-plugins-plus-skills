@@ -350,6 +350,10 @@ importers:
 
   plugins/saas-packs/deepgram-pack: {}
 
+  plugins/saas-packs/documenso-pack: {}
+
+  plugins/saas-packs/evernote-pack: {}
+
   plugins/saas-packs/exa-pack: {}
 
   plugins/saas-packs/firecrawl-pack: {}
@@ -361,6 +365,8 @@ importers:
   plugins/saas-packs/granola-pack: {}
 
   plugins/saas-packs/groq-pack: {}
+
+  plugins/saas-packs/guidewire-pack: {}
 
   plugins/saas-packs/ideogram-pack: {}
 
@@ -376,6 +382,14 @@ importers:
 
   plugins/saas-packs/linear-pack: {}
 
+  plugins/saas-packs/lokalise-pack: {}
+
+  plugins/saas-packs/maintainx-pack: {}
+
+  plugins/saas-packs/mistral-pack: {}
+
+  plugins/saas-packs/openevidence-pack: {}
+
   plugins/saas-packs/openrouter-pack: {}
 
   plugins/saas-packs/perplexity-pack: {}
@@ -388,7 +402,11 @@ importers:
 
   plugins/saas-packs/sentry-pack: {}
 
+  plugins/saas-packs/speak-pack: {}
+
   plugins/saas-packs/supabase-pack: {}
+
+  plugins/saas-packs/twinmind-pack: {}
 
   plugins/saas-packs/vastai-pack: {}
 

@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.14.0] - 2026-01-31
+
+### Added
+- 17 additional SaaS skill packs (408 skills), completing the 42-pack SaaS collection:
+  - **apollo-pack**: Sales engagement, sequences, analytics, CRM integration
+  - **clerk-pack**: User authentication, session management, organization features
+  - **coderabbit-pack**: AI code review, PR automation, code quality analysis
+  - **customerio-pack**: Email marketing, customer messaging, campaigns, segments
+  - **deepgram-pack**: Speech-to-text, audio transcription, real-time ASR
+  - **fireflies-pack**: Meeting transcription, note-taking, conversation intelligence
+  - **gamma-pack**: AI presentations, document generation, visual content
+  - **granola-pack**: Meeting notes, AI summaries, productivity automation
+  - **groq-pack**: LPU inference, ultra-fast AI, Groq Cloud deployment
+  - **ideogram-pack**: AI image generation, text rendering, creative design
+  - **instantly-pack**: Cold email, outreach automation, lead generation
+  - **juicebox-pack**: People search, lead enrichment, contact data
+  - **langchain-pack**: LLM orchestration, chains, agents, RAG patterns
+  - **linear-pack**: Issue tracking, project management, engineering workflows
+  - **lindy-pack**: AI assistants, workflow automation, business processes
+  - **posthog-pack**: Product analytics, feature flags, session replay
+  - **vastai-pack**: GPU marketplace, cloud compute, ML infrastructure
+
+### Changed
+- Updated all skill counts in README.md (739 → 1,537 total skills)
+- SaaS pack summary: 42 packs with 1,086 skills total
+- Standalone skills: 1,298 (was 500)
+
+### Metrics
+- New SaaS skill packs: 17 (408 skills)
+- Total SaaS packs: 42 (1,086 skills)
+- Total skills: 1,537 (previously 1,027)
+- 13 packs with 30 skills, 29 packs with 24 skills
+
+---
+
 ## [4.13.0] - 2026-01-26
 
 ### Added

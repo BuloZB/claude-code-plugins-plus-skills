@@ -5025,6 +5025,378 @@
       }
     },
     {
+      "name": "clay-pack",
+      "source": "./plugins/saas-packs/clay-pack",
+      "description": "Complete Clay integration skill pack with 30 skills covering data enrichment, waterfall workflows, AI agents, and GTM automation. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "business-tools",
+      "keywords": [
+        "clay",
+        "data-enrichment",
+        "waterfall",
+        "gtm",
+        "sales-ops",
+        "lead-enrichment",
+        "ai-agents"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "cursor-pack",
+      "source": "./plugins/saas-packs/cursor-pack",
+      "description": "Complete Cursor integration skill pack with 30 skills covering AI code editing, composer workflows, codebase indexing, and productivity features. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "cursor",
+        "ai-editor",
+        "code-editor",
+        "composer",
+        "ai-coding",
+        "vscode-fork",
+        "copilot-alternative"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "exa-pack",
+      "source": "./plugins/saas-packs/exa-pack",
+      "description": "Complete Exa integration skill pack with 30 skills covering neural search, semantic retrieval, web search API, and AI-powered discovery. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "exa",
+        "neural-search",
+        "semantic-search",
+        "web-search",
+        "ai-search",
+        "retrieval",
+        "embeddings"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "firecrawl-pack",
+      "source": "./plugins/saas-packs/firecrawl-pack",
+      "description": "Complete Firecrawl integration skill pack with 30 skills covering web scraping, crawling, markdown conversion, and LLM-ready data extraction. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "data-engineering",
+      "keywords": [
+        "firecrawl",
+        "web-scraping",
+        "crawling",
+        "markdown",
+        "llm-ready",
+        "data-extraction",
+        "scraper"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "klingai-pack",
+      "source": "./plugins/saas-packs/klingai-pack",
+      "description": "Complete Kling AI integration skill pack with 30 skills covering AI video generation, text-to-video, image-to-video, and creative workflows. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "klingai",
+        "kling",
+        "video-generation",
+        "text-to-video",
+        "ai-video",
+        "generative-ai",
+        "creative"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "openrouter-pack",
+      "source": "./plugins/saas-packs/openrouter-pack",
+      "description": "Complete OpenRouter integration skill pack with 30 skills covering LLM routing, model selection, cost optimization, and multi-provider orchestration. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "openrouter",
+        "llm-routing",
+        "model-selection",
+        "ai-gateway",
+        "multi-model",
+        "cost-optimization"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "perplexity-pack",
+      "source": "./plugins/saas-packs/perplexity-pack",
+      "description": "Complete Perplexity integration skill pack with 30 skills covering AI search, real-time answers, citations, and research workflows. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "perplexity",
+        "ai-search",
+        "research",
+        "citations",
+        "real-time",
+        "knowledge",
+        "answers"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "replit-pack",
+      "source": "./plugins/saas-packs/replit-pack",
+      "description": "Complete Replit integration skill pack with 30 skills covering cloud IDE, deployments, AI assistance, and collaborative coding. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "replit",
+        "cloud-ide",
+        "deployments",
+        "collaborative",
+        "ai-coding",
+        "browser-ide",
+        "hosting"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "retellai-pack",
+      "source": "./plugins/saas-packs/retellai-pack",
+      "description": "Complete Retell AI integration skill pack with 30 skills covering AI voice agents, phone automation, conversational AI, and call center solutions. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "retellai",
+        "retell",
+        "voice-ai",
+        "phone-agents",
+        "conversational-ai",
+        "call-center",
+        "ivr"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "sentry-pack",
+      "source": "./plugins/saas-packs/sentry-pack",
+      "description": "Complete Sentry integration skill pack with 30 skills covering error monitoring, performance tracking, session replay, and observability. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "devops",
+      "keywords": [
+        "sentry",
+        "error-monitoring",
+        "performance",
+        "observability",
+        "debugging",
+        "crash-reporting",
+        "apm"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "windsurf-pack",
+      "source": "./plugins/saas-packs/windsurf-pack",
+      "description": "Complete Windsurf integration skill pack with 30 skills covering AI code editing, Cascade workflows, codebase understanding, and developer productivity. Flagship+ tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "windsurf",
+        "ai-editor",
+        "cascade",
+        "codeium",
+        "ai-coding",
+        "code-completion",
+        "refactoring"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "coderabbit-pack",
+      "source": "./plugins/saas-packs/coderabbit-pack",
+      "description": "Complete CodeRabbit integration skill pack with 24 skills covering AI code review, PR automation, and code quality analysis. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "code-quality",
+      "keywords": [
+        "coderabbit",
+        "code-review",
+        "pr-automation",
+        "ai-review",
+        "code-quality",
+        "github-integration"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "fireflies-pack",
+      "source": "./plugins/saas-packs/fireflies-pack",
+      "description": "Complete Fireflies integration skill pack with 24 skills covering meeting transcription, AI summaries, and conversation intelligence. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "fireflies",
+        "meeting-transcription",
+        "ai-notes",
+        "conversation-intelligence",
+        "summaries"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "groq-pack",
+      "source": "./plugins/saas-packs/groq-pack",
+      "description": "Complete Groq integration skill pack with 24 skills covering LPU inference, ultra-fast AI, and Groq Cloud deployment. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "groq",
+        "lpu",
+        "fast-inference",
+        "llm",
+        "groq-cloud",
+        "low-latency",
+        "ai-acceleration"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "ideogram-pack",
+      "source": "./plugins/saas-packs/ideogram-pack",
+      "description": "Complete Ideogram integration skill pack with 24 skills covering AI image generation, text rendering, and creative design workflows. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "ideogram",
+        "image-generation",
+        "text-to-image",
+        "ai-art",
+        "typography",
+        "creative",
+        "design"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "instantly-pack",
+      "source": "./plugins/saas-packs/instantly-pack",
+      "description": "Complete Instantly integration skill pack with 24 skills covering cold email, outreach automation, and lead generation. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "business-tools",
+      "keywords": [
+        "instantly",
+        "cold-email",
+        "outreach",
+        "email-automation",
+        "lead-generation",
+        "sales"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "posthog-pack",
+      "source": "./plugins/saas-packs/posthog-pack",
+      "description": "Complete PostHog integration skill pack with 24 skills covering product analytics, feature flags, session replay, and experimentation. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "analytics",
+      "keywords": [
+        "posthog",
+        "product-analytics",
+        "feature-flags",
+        "session-replay",
+        "ab-testing",
+        "experimentation"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
+      "name": "vastai-pack",
+      "source": "./plugins/saas-packs/vastai-pack",
+      "description": "Complete Vast.ai integration skill pack with 24 skills covering GPU marketplace, cloud compute, and ML infrastructure. Flagship tier vendor pack.",
+      "version": "1.0.0",
+      "category": "ai-ml",
+      "keywords": [
+        "vastai",
+        "vast-ai",
+        "gpu-marketplace",
+        "cloud-gpu",
+        "ml-infrastructure",
+        "compute",
+        "training"
+      ],
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io",
+        "url": "https://github.com/jeremylongshore"
+      }
+    },
+    {
       "name": "apollo-pack",
       "source": "./plugins/saas-packs/apollo-pack",
       "description": "Complete Apollo integration skill pack with 24 skills covering sales engagement, prospecting, sequencing, analytics, and outbound automation. Flagship tier vendor pack.",

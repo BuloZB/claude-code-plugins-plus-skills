@@ -931,14 +931,14 @@ const totalCategories = searchIndex.stats.categories.length;
         "ratingCount": "258",
         "bestRating": "5"
       },
-      "description": "258 plugins for Claude Code with embedded agent skills, interactive tutorials, and production workflows. Supports 2025 schema.",
-      "softwareVersion": "4.4.0",
+      "description": "295 plugins for Claude Code with 1,537 agent skills, interactive tutorials, and production workflows. Supports 2026 schema.",
+      "softwareVersion": "4.14.0",
       "url": "https://claudecodeplugins.io",
       "downloadUrl": "https://github.com/jeremylongshore/claude-code-plugins",
       "applicationSuite": "Claude Code",
       "featureList": [
-        "258 plugins across 22 categories",
-        "239 embedded Agent Skills",
+        "295 plugins across 24 categories",
+        "1,537 Agent Skills (1,298 standalone + 239 embedded)",
         "Interactive Stack Builder",
         "Shareable plugin collections",
         "Cross-platform CLI tool",
@@ -1067,7 +1067,7 @@ const totalCategories = searchIndex.stats.categories.length;
                     <span class="code-keyword">/audit</span> <span class="code-function">--comprehensive</span><br>
                     <span class="code-keyword">/deploy</span> <span class="code-function">--production</span><br>
                     <br>
-                    <span class="code-comment">// 239 AI Skills (embedded in plugins) activate automatically</span>
+                    <span class="code-comment">// 1,537 AI Skills activate automatically based on context</span>
                 </div>
             </div>
         </div>
@@ -1250,7 +1250,7 @@ const totalCategories = searchIndex.stats.categories.length;
                 <span class="saas-badge">New Release</span>
                 <h2 class="saas-title">SaaS Skill Packs</h2>
                 <p class="saas-subtitle">
-                    Deep integration packs for your favorite platforms. 30 skills each for complete coverage.
+                    Deep integration packs for your favorite platforms. 24-30 skills each for complete coverage.
                 </p>
             </div>
 
@@ -1355,19 +1355,77 @@ const totalCategories = searchIndex.stats.categories.length;
                     </div>
                 </div>
 
-                <!-- Coming Soon -->
-                <div class="saas-card coming-soon">
-                    <div class="coming-soon-icon">📦</div>
-                    <h3>+45 More Packs</h3>
-                    <p>
-                        Notion, LangChain, Clerk, PostHog, Linear, Obsidian, and more coming soon
+                <!-- Groq Pack -->
+                <div class="saas-card" data-accent="#f55036">
+                    <div class="saas-card-header">
+                        <div class="saas-icon" style="background: #f55036;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
+                        <div>
+                            <h3>Groq</h3>
+                            <span class="saas-tier" style="color: #f55036;">Flagship • 24 Skills</span>
+                        </div>
+                    </div>
+                    <p class="saas-desc">
+                        Ultra-fast LPU inference, Groq Cloud deployment, and low-latency AI workflows.
                     </p>
+                    <div class="saas-commands">
+                        <code class="saas-cmd primary" style="color: #f55036;" onclick="navigator.clipboard.writeText('/plugin install groq-pack@claude-code-plugins-plus'); this.textContent='Copied!'; setTimeout(() => this.textContent='/plugin install groq-pack', 2000);">/plugin install groq-pack</code>
+                    </div>
+                </div>
+
+                <!-- LangChain Pack -->
+                <div class="saas-card" data-accent="#1c3c3c">
+                    <div class="saas-card-header">
+                        <div class="saas-icon" style="background: #1c3c3c;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                        </div>
+                        <div>
+                            <h3>LangChain</h3>
+                            <span class="saas-tier" style="color: #1c3c3c;">Flagship • 24 Skills</span>
+                        </div>
+                    </div>
+                    <p class="saas-desc">
+                        LLM orchestration, chains, agents, RAG patterns, and production pipelines.
+                    </p>
+                    <div class="saas-commands">
+                        <code class="saas-cmd primary" style="color: #1c3c3c;" onclick="navigator.clipboard.writeText('/plugin install langchain-pack@claude-code-plugins-plus'); this.textContent='Copied!'; setTimeout(() => this.textContent='/plugin install langchain-pack', 2000);">/plugin install langchain-pack</code>
+                    </div>
+                </div>
+
+                <!-- PostHog Pack -->
+                <div class="saas-card" data-accent="#1d4aff">
+                    <div class="saas-card-header">
+                        <div class="saas-icon" style="background: #1d4aff;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </div>
+                        <div>
+                            <h3>PostHog</h3>
+                            <span class="saas-tier" style="color: #1d4aff;">Flagship • 24 Skills</span>
+                        </div>
+                    </div>
+                    <p class="saas-desc">
+                        Product analytics, feature flags, session replay, and A/B testing.
+                    </p>
+                    <div class="saas-commands">
+                        <code class="saas-cmd primary" style="color: #1d4aff;" onclick="navigator.clipboard.writeText('/plugin install posthog-pack@claude-code-plugins-plus'); this.textContent='Copied!'; setTimeout(() => this.textContent='/plugin install posthog-pack', 2000);">/plugin install posthog-pack</code>
+                    </div>
+                </div>
+
+                <!-- View All Packs -->
+                <div class="saas-card coming-soon" style="cursor: pointer;" onclick="window.location.href='/explore?q=pack'">
+                    <div class="coming-soon-icon">🎯</div>
+                    <h3>+34 More Packs</h3>
+                    <p>
+                        Mistral, Perplexity, Clerk, Linear, Obsidian, Firecrawl, and more
+                    </p>
+                    <span style="color: var(--brand-orange); font-weight: 600;">Browse All →</span>
                 </div>
             </div>
 
             <div class="saas-cta">
-                <a href="/learn/" class="saas-button">
-                    Browse All Packs
+                <a href="/explore?q=pack" class="saas-button">
+                    Browse All 42 Packs
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
             </div>

@@ -35,7 +35,13 @@ cd marketplace/ && npm run dev      # Dev server at localhost:4321
 
 # Validation
 ./scripts/validate-all-plugins.sh plugins/[category]/[name]/
-python3 scripts/validate-skills-schema.py   # 2026 skills schema + grading
+python3 scripts/validate-skills-schema.py --verbose  # 2026 skills schema + grading
+
+# Run single test (CLI package)
+cd packages/cli && pnpm test -- --grep "pattern"
+
+# Lint all packages
+pnpm lint
 ```
 
 ## Two Catalog System (Critical)
@@ -46,6 +52,22 @@ python3 scripts/validate-skills-schema.py   # 2026 skills schema + grading
 | `.claude-plugin/marketplace.json` | CLI-compatible (auto-generated) | ❌ Never |
 
 Run `pnpm run sync-marketplace` after editing `.extended.json`. CI fails if out of sync.
+
+## Data Flow
+
+```
+marketplace.extended.json (source of truth, edit this)
+        ↓ pnpm run sync-marketplace
+marketplace.json (auto-generated, never edit)
+        ↓ CI deploys to Firebase
+claudecodeplugins.io/catalog.json
+        ↓
+ccpi CLI fetches and caches locally
+```
+
+Key files:
+- `scripts/sync-marketplace.cjs` - Strips extended fields (featured, mcpTools, pricing)
+- `marketplace/scripts/discover-skills.mjs` - Extracts skills from plugins
 
 ## Plugin Structure
 
@@ -91,6 +113,15 @@ Valid tools: `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, `WebFetch`, `WebSe
 4. `pnpm run sync-marketplace`
 5. `./scripts/validate-all-plugins.sh plugins/[category]/[name]/`
 
+## CI Validation
+
+PRs are blocked if any check fails:
+- **JSON validation** - All plugin.json files must be valid with required fields
+- **Catalog sync** - `marketplace.json` must match regenerated from `.extended.json`
+- **Skills schema** - SKILL.md frontmatter must conform to 2026 spec
+- **TypeScript** - `pnpm typecheck` must pass
+- **Executability** - MCP dist/index.js must have shebang and be executable
+
 ## Conventions
 
 - **Hooks:** Use `${CLAUDE_PLUGIN_ROOT}` for portability
@@ -105,11 +136,22 @@ Valid tools: `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, `WebFetch`, `WebSe
 
 ## Task Tracking (Beads)
 
-See `AGENTS.md` for full protocol. Work isn't done until `git push` succeeds.
-
+**Session start (after compaction):**
 ```bash
-bd ready                            # Available tasks
-bd update <id> --status in_progress # Claim task
-bd close <id> --reason "..."        # Complete task
-bd sync && git push                 # MANDATORY at session end
+bd sync && bd ready              # What's available?
+bd list --status in_progress     # What was I working on?
 ```
+
+**During work:**
+```bash
+bd update <id> --status in_progress  # Claim task BEFORE starting
+# ... do work ...
+bd close <id> --reason "..."         # Complete with evidence
+```
+
+**Session end:**
+```bash
+bd sync && git push              # MANDATORY - work isn't done until pushed
+```
+
+See `AGENTS.md` for full protocol.
