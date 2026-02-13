@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0",
-    "generated": "2026-02-08T08:33:17.395Z",
+    "generated": "2026-02-13T08:49:21.615Z",
     "generator": "scripts/generate-unified-search.mjs"
   },
   "stats": {
@@ -21377,24 +21377,15 @@
       "id": "performing-penetration-testing",
       "slug": "performing-penetration-testing",
       "name": "performing-penetration-testing",
-      "description": "Perform security penetration testing to identify vulnerabilities. Use when conducting security assessments. Trigger with 'run pentest', 'security testing', or 'find vulnerabilities'.",
+      "description": "Perform security testing on web applications, APIs, and codebases. Use when the user asks to \"run a security scan\", \"check for vulnerabilities\", \"audit dependencies\", \"check security headers\", \"find security issues\", \"pentest\", \"security audit\", or \"scan for secrets\". Trigger with \"pentest\", \"security scan\", \"vulnerability check\", \"audit dependencies\", \"check headers\", \"find secrets\". version: 2.0.0 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python3:*), Bash(pip:*), Bash(npm:*), Bash(bandit:*) license: MIT author: Jeremy Longshore <jeremy@intentsolutions.io>",
       "category": "security",
-      "allowedTools": [
-        "\"Read",
-        "Write",
-        "Edit",
-        "Grep",
-        "Glob",
-        "Bash(security:*)",
-        "Bash(scan:*)",
-        "Bash(audit:*)\""
-      ],
+      "allowedTools": [],
       "version": "1.0.0",
       "parentPlugin": {
         "name": "penetration-tester",
         "category": "security"
       },
-      "searchText": "performing-penetration-testing perform security penetration testing to identify vulnerabilities. use when conducting security assessments. trigger with 'run pentest', 'security testing', or 'find vulnerabilities'. security \"read write edit grep glob bash(security:*) bash(scan:*) bash(audit:*)\""
+      "searchText": "performing-penetration-testing perform security testing on web applications, apis, and codebases. use when the user asks to \"run a security scan\", \"check for vulnerabilities\", \"audit dependencies\", \"check security headers\", \"find security issues\", \"pentest\", \"security audit\", or \"scan for secrets\". trigger with \"pentest\", \"security scan\", \"vulnerability check\", \"audit dependencies\", \"check headers\", \"find secrets\". version: 2.0.0 allowed-tools: read, write, edit, grep, glob, bash(python3:*), bash(pip:*), bash(npm:*), bash(bandit:*) license: mit author: jeremy longshore <jeremy@intentsolutions.io> security "
     },
     {
       "type": "skill",
