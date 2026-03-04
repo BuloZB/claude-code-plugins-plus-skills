@@ -76,7 +76,7 @@ jobs:
       - name: Deploy to Firebase Hosting
         run: |
           ACCESS_TOKEN=$(gcloud auth print-access-token)
-          npx firebase-tools deploy --only hosting \
+          npx firebase-tools deploy --only hosting:marketplace \
             --project claude-code-plugins-io \
             --non-interactive \
             --token "$ACCESS_TOKEN"

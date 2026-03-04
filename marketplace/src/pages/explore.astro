@@ -787,9 +787,20 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       }
 
       // Search input
+      let searchDebounceTimer = null;
       document.getElementById('main-search').addEventListener('input', (e) => {
         activeFilters.search = e.target.value;
         applyFilters();
+
+        // Debounced search tracking (1s)
+        clearTimeout(searchDebounceTimer);
+        if (e.target.value.length >= 2) {
+          searchDebounceTimer = setTimeout(() => {
+            if (window.trackEvent) {
+              window.trackEvent('search', { query: e.target.value, source: 'explore' });
+            }
+          }, 1000);
+        }
       });
 
       // Type toggle buttons
@@ -799,6 +810,9 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
           e.target.classList.add('active');
           activeFilters.type = e.target.dataset.type;
           applyFilters();
+          if (window.trackEvent) {
+            window.trackEvent('filter_applied', { filter_type: 'type', value: activeFilters.type });
+          }
         });
       });
 
@@ -806,18 +820,27 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       document.getElementById('category-filter').addEventListener('change', (e) => {
         activeFilters.category = e.target.value || null;
         applyFilters();
+        if (window.trackEvent && activeFilters.category) {
+          window.trackEvent('filter_applied', { filter_type: 'category', value: activeFilters.category });
+        }
       });
 
       // Tool filter
       document.getElementById('tool-filter').addEventListener('change', (e) => {
         activeFilters.tool = e.target.value || null;
         applyFilters();
+        if (window.trackEvent && activeFilters.tool) {
+          window.trackEvent('filter_applied', { filter_type: 'tool', value: activeFilters.tool });
+        }
       });
 
       // Sort filter
       document.getElementById('sort-filter').addEventListener('change', (e) => {
         activeFilters.sort = e.target.value;
         applyFilters();
+        if (window.trackEvent) {
+          window.trackEvent('filter_applied', { filter_type: 'sort', value: activeFilters.sort });
+        }
       });
 
       // Read additional URL params (category, sort)
@@ -966,8 +989,10 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
           if (window.CompareManager) {
             if (window.CompareManager.has(id)) {
               window.CompareManager.remove(id);
+              if (window.trackEvent) window.trackEvent('compare_action', { action: 'remove', plugin_name: name });
             } else {
               window.CompareManager.add({ id, name, type });
+              if (window.trackEvent) window.trackEvent('compare_action', { action: 'add', plugin_name: name });
             }
           }
         });
@@ -994,12 +1019,18 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       },
 
       toggle(id) {
+        var action;
         if (this.favorites.has(id)) {
           this.favorites.delete(id);
           this.showToast('Removed from favorites');
+          action = 'remove';
         } else {
           this.favorites.add(id);
           this.showToast('Added to favorites');
+          action = 'add';
+        }
+        if (window.trackEvent) {
+          window.trackEvent('favorite_toggled', { plugin_name: id, action: action });
         }
         this.save();
         this.updateUI();
