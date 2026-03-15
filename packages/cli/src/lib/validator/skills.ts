@@ -23,8 +23,11 @@ const REQUIRED_FIELDS = new Set(['name', 'description']);
 // Enterprise standard fields (Intent Solutions)
 const ENTERPRISE_REQUIRED = new Set(['allowed-tools', 'version', 'author', 'license']);
 
-// Optional fields per Anthropic spec
-const OPTIONAL_FIELDS = new Set(['model', 'disable-model-invocation', 'mode', 'tags', 'metadata']);
+// Optional fields per Anthropic spec + AgentSkills.io
+const OPTIONAL_FIELDS = new Set([
+  'model', 'disable-model-invocation', 'mode', 'tags', 'metadata', 'compatible-with',
+  'argument-hint', 'context', 'agent', 'user-invocable', 'hooks', 'compatibility',
+]);
 
 const DEPRECATED_FIELDS = new Set(['when_to_use']);
 
@@ -101,7 +104,7 @@ function validateToolPermission(tool: string): { valid: boolean; message: string
 }
 
 /**
- * Check for hardcoded paths that should use {baseDir}
+ * Check for hardcoded paths that should use ${CLAUDE_SKILL_DIR}
  */
 function checkHardcodedPaths(content: string): string[] {
   const issues: string[] = [];
@@ -118,7 +121,7 @@ function checkHardcodedPaths(content: string): string[] {
 
   for (const [pattern, desc] of pathPatterns) {
     if (pattern.test(contentNoCode)) {
-      issues.push(`Hardcoded path detected (use {baseDir}): ${desc}`);
+      issues.push(`Hardcoded path detected (use \${CLAUDE_SKILL_DIR}): ${desc}`);
     }
   }
 

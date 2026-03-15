@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Upgrade Migration
 
 ## Prerequisites
@@ -42,13 +42,17 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry JavaScript Changelog](https://github.com/getsentry/sentry-javascript/blob/master/CHANGELOG.md)
 - [Sentry Python Changelog](https://github.com/getsentry/sentry-python/blob/master/CHANGELOG.md)
 - [Migration Guides](https://docs.sentry.io/platforms/javascript/migration/)
+
+## Overview
+
+Execute upgrade Sentry SDK and migrate between versions.

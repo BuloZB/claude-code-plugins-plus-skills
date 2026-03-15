@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(profiling:*), Bash(memory:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Memory Leak Detector
 
@@ -57,7 +58,7 @@ This skill can be used in conjunction with other performance analysis tools to p
 
 ## Prerequisites
 
-- Access to application source code in {baseDir}/
+- Access to application source code in ${CLAUDE_SKILL_DIR}/
 - Memory profiling tools (valgrind, heapdump, etc.)
 - Understanding of application memory architecture
 - Runtime environment for testing

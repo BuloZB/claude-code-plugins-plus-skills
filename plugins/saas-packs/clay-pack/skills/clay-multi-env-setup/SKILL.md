@@ -10,213 +10,82 @@ allowed-tools: Read, Write, Edit, Bash(aws:*), Bash(gcloud:*), Bash(vault:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Clay Multi-Environment Setup
 
 ## Overview
-Configure Clay across development, staging, and production environments.
+
+Configure Clay across development, staging, and production environments with isolated API keys, environment-specific settings, and proper secret management.
 
 ## Prerequisites
-- Separate Clay accounts or API keys per environment
-- Secret management solution (Vault, AWS Secrets Manager, etc.)
-- CI/CD pipeline with environment variables
-- Environment detection in application
+
+- Separate Clay API keys per environment
+- Secret management solution (environment variables, Vault, or cloud secrets)
+- CI/CD pipeline with environment-aware deployment
+- Application with environment detection logic
 
 ## Environment Strategy
 
-| Environment | Purpose | API Keys | Data |
-|-------------|---------|----------|------|
-| Development | Local dev | Test keys | Sandbox |
-| Staging | Pre-prod validation | Staging keys | Test data |
-| Production | Live traffic | Production keys | Real data |
-
-## Configuration Structure
-
-```
-config/
-├── clay/
-│   ├── base.json           # Shared config
-│   ├── development.json    # Dev overrides
-│   ├── staging.json        # Staging overrides
-│   └── production.json     # Prod overrides
-```
-
-### base.json
-```json
-{
-  "timeout": 30000,
-  "retries": 3,
-  "cache": {
-    "enabled": true,
-    "ttlSeconds": 60
-  }
-}
-```
-
-### development.json
-```json
-{
-  "apiKey": "${CLAY_API_KEY}",
-  "baseUrl": "https://api-sandbox.clay.com",
-  "debug": true,
-  "cache": {
-    "enabled": false
-  }
-}
-```
-
-### staging.json
-```json
-{
-  "apiKey": "${CLAY_API_KEY_STAGING}",
-  "baseUrl": "https://api-staging.clay.com",
-  "debug": false
-}
-```
-
-### production.json
-```json
-{
-  "apiKey": "${CLAY_API_KEY_PROD}",
-  "baseUrl": "https://api.clay.com",
-  "debug": false,
-  "retries": 5
-}
-```
-
-## Environment Detection
-
-```typescript
-// src/clay/config.ts
-import baseConfig from '../../config/clay/base.json';
-
-type Environment = 'development' | 'staging' | 'production';
-
-function detectEnvironment(): Environment {
-  const env = process.env.NODE_ENV || 'development';
-  const validEnvs: Environment[] = ['development', 'staging', 'production'];
-  return validEnvs.includes(env as Environment)
-    ? (env as Environment)
-    : 'development';
-}
-
-export function getClayConfig() {
-  const env = detectEnvironment();
-  const envConfig = require(`../../config/clay/${env}.json`);
-
-  return {
-    ...baseConfig,
-    ...envConfig,
-    environment: env,
-  };
-}
-```
-
-## Secret Management by Environment
-
-### Local Development
-```bash
-# .env.local (git-ignored)
-CLAY_API_KEY=sk_test_dev_***
-```
-
-### CI/CD (GitHub Actions)
-```yaml
-env:
-  CLAY_API_KEY: ${{ secrets.CLAY_API_KEY_${{ matrix.environment }} }}
-```
-
-### Production (Vault/Secrets Manager)
-```bash
-# AWS Secrets Manager
-aws secretsmanager get-secret-value --secret-id clay/production/api-key
-
-# GCP Secret Manager
-gcloud secrets versions access latest --secret=clay-api-key
-
-# HashiCorp Vault
-vault kv get -field=api_key secret/clay/production
-```
-
-## Environment Isolation
-
-```typescript
-// Prevent production operations in non-prod
-function guardProductionOperation(operation: string): void {
-  const config = getClayConfig();
-
-  if (config.environment !== 'production') {
-    console.warn(`[clay] ${operation} blocked in ${config.environment}`);
-    throw new Error(`${operation} only allowed in production`);
-  }
-}
-
-// Usage
-async function deleteAllData() {
-  guardProductionOperation('deleteAllData');
-  // Dangerous operation here
-}
-```
-
-## Feature Flags by Environment
-
-```typescript
-const featureFlags: Record<Environment, Record<string, boolean>> = {
-  development: {
-    newFeature: true,
-    betaApi: true,
-  },
-  staging: {
-    newFeature: true,
-    betaApi: false,
-  },
-  production: {
-    newFeature: false,
-    betaApi: false,
-  },
-};
-```
+| Environment | Purpose | API Key Source | Settings |
+|-------------|---------|---------------|----------|
+| Development | Local development | `.env.local` | Debug enabled, relaxed limits |
+| Staging | Pre-production testing | CI/CD secrets | Production-like settings |
+| Production | Live traffic | Secret manager | Optimized, hardened |
 
 ## Instructions
 
-### Step 1: Create Config Structure
-Set up the base and per-environment configuration files.
+### Step 1: Create Configuration Structure
 
-### Step 2: Implement Environment Detection
-Add logic to detect and load environment-specific config.
+Create `config/clay/` with `base.ts` (shared defaults), per-environment override files, and an `index.ts` resolver.
 
-### Step 3: Configure Secrets
-Store API keys securely using your secret management solution.
+### Step 2: Define Base and Environment Configs
 
-### Step 4: Add Environment Guards
-Implement safeguards for production-only operations.
+Base config sets timeout (30s), retries (3), and cache (5 min TTL). Dev disables cache and enables debug. Prod extends timeout to 60s, retries to 5, and cache TTL to 10 min.
 
-## Output
-- Multi-environment config structure
-- Environment detection logic
-- Secure secret management
-- Production safeguards enabled
+### Step 3: Implement Environment Detection
+
+Detect environment from `NODE_ENV` and `VERCEL_ENV`. Throw if API key is missing for the detected environment.
+
+### Step 4: Configure Secret Management
+
+Store keys in `.env.local` (dev), GitHub Environment Secrets (staging/prod), or cloud secret managers (AWS/GCP). Reference in CI workflows per environment.
+
+### Step 5: Add Startup Validation
+
+Use Zod to validate config at startup, ensuring API key is set, environment is valid, and timeout is positive.
+
+For detailed TypeScript implementations and CI workflow configs, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
 ## Error Handling
+
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Wrong environment | Missing NODE_ENV | Set environment variable |
-| Secret not found | Wrong secret path | Verify secret manager config |
-| Config merge fails | Invalid JSON | Validate config files |
-| Production guard triggered | Wrong environment | Check NODE_ENV value |
+| Wrong environment | Missing NODE_ENV | Set environment variable in deployment |
+| Secret not found | Wrong secret path | Verify secret manager configuration |
+| Cross-env data leak | Shared API key | Use separate keys per environment |
+| Config validation fail | Missing field | Add startup validation with Zod schema |
+
+## Resources
+
+- [Clay API Documentation](https://docs.clay.com/api)
+- [Clay Environments](https://docs.clay.com/environments)
+
+## Next Steps
+
+For deployment, see `clay-deploy-integration`.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [deployment implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
 
 ## Examples
 
-### Quick Environment Check
-```typescript
-const env = getClayConfig();
-console.log(`Running in ${env.environment} with ${env.baseUrl}`);
-```
+**Basic usage**: Apply clay multi env setup to a standard project setup with default configuration options.
 
-## Resources
-- [Clay Environments Guide](https://docs.clay.com/environments)
-- [12-Factor App Config](https://12factor.net/config)
-
-## Next Steps
-For observability setup, see `clay-observability`.
+**Advanced scenario**: Customize clay multi env setup for production environments with multiple constraints and team-specific requirements.

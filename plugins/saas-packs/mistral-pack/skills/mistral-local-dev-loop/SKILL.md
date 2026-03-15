@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pnpm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Mistral AI Local Dev Loop
 
 ## Overview
@@ -255,6 +255,7 @@ vi.mock('@mistralai/mistralai', () => ({
 
 ### Debug Mode
 ```bash
+set -euo pipefail
 # Enable verbose logging
 DEBUG=mistral:* npm run dev
 

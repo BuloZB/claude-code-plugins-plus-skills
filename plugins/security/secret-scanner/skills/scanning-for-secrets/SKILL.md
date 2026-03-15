@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(security:*), Bash(scan:*), Bash(audit:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Secret Scanner
 
@@ -12,7 +13,7 @@ This skill provides automated assistance for secret scanner tasks.
 
 ## Overview
 
-This skill enables Claude to scan your codebase for exposed secrets, API keys, passwords, and other sensitive credentials. It helps you identify and remediate potential security vulnerabilities before they are committed or deployed.
+scan your codebase for exposed secrets, API keys, passwords, and other sensitive credentials. It helps you identify and remediate potential security vulnerabilities before they are committed or deployed.
 
 ## How It Works
 
@@ -60,7 +61,7 @@ This skill can be integrated with other security tools, such as vulnerability sc
 
 ## Prerequisites
 
-- Access to codebase and configuration files in {baseDir}/
+- Access to codebase and configuration files in ${CLAUDE_SKILL_DIR}/
 - Security scanning tools installed as needed
 - Understanding of security standards and best practices
 - Permissions for security analysis operations

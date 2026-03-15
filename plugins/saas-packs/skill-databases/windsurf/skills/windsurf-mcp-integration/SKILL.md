@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*)"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Mcp Integration
 
 ## Overview
 
-This skill enables integration of MCP (Model Context Protocol) servers with Windsurf, extending Cascade's capabilities with external tools and services. MCP allows Cascade to interact with databases, filesystems, APIs, and custom tools through a standardized protocol. Configure servers, manage permissions, and enable seamless tool access within your AI-assisted development workflow.
+This skill enables integration of MCP (Model Context Protocol) servers with Windsurf, extending Cascade's capabilities with external tools and services. MCP allows Cascade to interact with databases, filesystems, APIs, and custom tools through a standardized protocol.
 
 ## Prerequisites
 
@@ -33,8 +33,7 @@ This skill enables integration of MCP (Model Context Protocol) servers with Wind
 4. **Test Integration**
 5. **Deploy to Team**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -45,11 +44,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

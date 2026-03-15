@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(curl:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # LangChain Incident Runbook
 
 ## Overview
@@ -37,6 +37,7 @@ Standard operating procedures for responding to LangChain production incidents w
 
 ### Detection
 ```bash
+set -euo pipefail
 # Check if LLM provider is responding
 curl -s https://status.openai.com/api/v2/status.json | jq '.status.indicator'
 curl -s https://status.anthropic.com/api/v2/status.json | jq '.status.indicator'
@@ -67,7 +68,7 @@ async def diagnose_providers():
 
     # Test Anthropic
     try:
-        llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", timeout=10)
+        llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", timeout=10)  # 20241022 = date/version stamp
         await llm.ainvoke("test")
         results["anthropic"] = "OK"
     except Exception as e:
@@ -90,7 +91,7 @@ llm = ChatOpenAI(model="gpt-4o-mini")
 
 # With fallback
 primary = ChatOpenAI(model="gpt-4o-mini", max_retries=1, request_timeout=5)
-fallback = ChatAnthropic(model="claude-3-haiku-20240307")
+fallback = ChatAnthropic(model="claude-3-haiku-20240307")  # 20240307 = configured value
 
 llm = primary.with_fallbacks([fallback])
 ```
@@ -304,3 +305,31 @@ def check_budget(cost: float):
 
 ## Next Steps
 Use `langchain-debug-bundle` for detailed evidence collection.
+
+## Instructions
+
+1. Assess the current state of the Langchain Incident Runbook configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Langchain Incident Runbook |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply langchain incident runbook to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize langchain incident runbook for production environments with multiple constraints and team-specific requirements.

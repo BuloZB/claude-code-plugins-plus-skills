@@ -11,8 +11,8 @@ allowed-tools: Read, Write, Edit, Bash(cmd:*), Grep, Glob, WebFetch
 version: 1.0.0
 license: Apache-2.0
 author: Numman Ali <numman.ali@gmail.com>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gastown
 
 ## Overview
@@ -51,12 +51,15 @@ The Cognition Engine. Track work with convoys; sling to agents.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 
 
+- Official Gastown documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

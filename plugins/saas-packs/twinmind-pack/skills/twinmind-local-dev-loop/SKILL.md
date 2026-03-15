@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # TwinMind Local Dev Loop
 
 ## Overview
@@ -28,6 +28,7 @@ Configure a productive local development environment for TwinMind API integratio
 ### Step 1: Project Setup
 
 ```bash
+set -euo pipefail
 # Create project directory
 mkdir twinmind-integration && cd twinmind-integration
 
@@ -108,13 +109,13 @@ export class TwinMindClient {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      timeout: 30000,  # 30000: 30 seconds in ms
     });
   }
 
   async healthCheck(): Promise<boolean> {
     const response = await this.client.get('/health');
-    return response.status === 200;
+    return response.status === 200;  # HTTP 200 OK
   }
 
   async transcribe(audioUrl: string, options?: {
@@ -231,7 +232,7 @@ export const mockTranscript = {
       ],
     },
   ],
-  created_at: '2025-01-15T10:00:00Z',
+  created_at: '2025-01-15T10:00:00Z',  # 2025 year
 };
 
 export const mockSummary = {
@@ -255,6 +256,7 @@ export const mockSummary = {
 ### Step 7: Run Development Loop
 
 ```bash
+set -euo pipefail
 # Start development
 npm run dev
 
@@ -312,3 +314,9 @@ twinmind-integration/
 
 ## Next Steps
 Apply patterns in `twinmind-sdk-patterns` for production-ready code.
+
+## Examples
+
+**Basic usage**: Apply twinmind local dev loop to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize twinmind local dev loop for production environments with multiple constraints and team-specific requirements.

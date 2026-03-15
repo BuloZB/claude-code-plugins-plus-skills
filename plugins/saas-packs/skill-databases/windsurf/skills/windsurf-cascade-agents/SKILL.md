@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*),Grep,Glob"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Cascade Agents
 
 ## Overview
 
-This skill enables creation of specialized Cascade agents tailored for specific domains or tasks. Custom agents can be configured with domain knowledge, specialized prompts, and focused capabilities. Use cases include security review agents, API design agents, performance optimization agents, and documentation writers that understand your project's specific conventions and requirements.
+This skill enables creation of specialized Cascade agents tailored for specific domains or tasks. Custom agents can be configured with domain knowledge, specialized prompts, and focused capabilities.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables creation of specialized Cascade agents tailored for specific 
 4. **Set Activation Triggers**
 5. **Test and Refine**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

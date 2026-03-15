@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(git:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Fireflies.ai Upgrade & Migration
 
 ## Overview
@@ -27,6 +27,7 @@ Guide for upgrading Fireflies.ai SDK versions and handling breaking changes.
 
 ### Step 1: Check Current Version
 ```bash
+set -euo pipefail
 npm list @fireflies/sdk
 npm view @fireflies/sdk version
 ```
@@ -38,6 +39,7 @@ open https://github.com/fireflies/sdk/releases
 
 ### Step 3: Create Upgrade Branch
 ```bash
+set -euo pipefail
 git checkout -b upgrade/fireflies-sdk-vX.Y.Z
 npm install @fireflies/sdk@latest
 npm test
@@ -83,6 +85,7 @@ const client = new Fireflies.aiClient({
 
 ### Rollback Procedure
 ```bash
+set -euo pipefail
 npm install @fireflies/sdk@1.x.x --save-exact
 ```
 

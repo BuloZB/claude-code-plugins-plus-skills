@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Langfuse Core Workflow A: Tracing LLM Calls
 
 ## Overview
@@ -74,7 +74,7 @@ async function ragPipeline(query: string) {
   // Span: Vector search
   const searchSpan = trace.span({
     name: "vector-search",
-    input: { embedding: "vector[1536]" },
+    input: { embedding: "vector[1536]" },  # 1536 = configured value
   });
 
   const documents = await searchVectorDB(queryEmbedding);
@@ -90,7 +90,7 @@ async function ragPipeline(query: string) {
   const generation = trace.generation({
     name: "generate-answer",
     model: "gpt-4",
-    modelParameters: { temperature: 0.7, maxTokens: 500 },
+    modelParameters: { temperature: 0.7, maxTokens: 500 },  # HTTP 500 Internal Server Error
     input: {
       query,
       context: documents.map((d) => d.content),
@@ -238,13 +238,13 @@ async function callClaude(prompt: string) {
 
   const generation = trace.generation({
     name: "claude-response",
-    model: "claude-3-sonnet-20240229",
+    model: "claude-3-sonnet-20240229",  # 20240229 = configured value
     input: [{ role: "user", content: prompt }],
   });
 
   const response = await anthropic.messages.create({
     model: "claude-3-sonnet-20240229",
-    max_tokens: 1024,
+    max_tokens: 1024,  # 1024: 1 KB
     messages: [{ role: "user", content: prompt }],
   });
 

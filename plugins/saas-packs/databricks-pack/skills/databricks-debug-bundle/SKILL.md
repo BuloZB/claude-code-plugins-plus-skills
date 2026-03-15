@@ -10,8 +10,8 @@ allowed-tools: Read, Bash(databricks:*), Bash(tar:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Databricks Debug Bundle
 
 ## Overview
@@ -41,6 +41,7 @@ echo "" >> "$BUNDLE_DIR/summary.txt"
 
 ### Step 2: Collect Environment Info
 ```bash
+set -euo pipefail
 # Environment info
 echo "--- Environment ---" >> "$BUNDLE_DIR/summary.txt"
 echo "CLI Version: $(databricks --version)" >> "$BUNDLE_DIR/summary.txt"
@@ -111,7 +112,7 @@ fi
 ```bash
 # Spark driver logs (requires cluster_id)
 if [ -n "$CLUSTER_ID" ]; then
-    echo "--- Spark Driver Logs (last 500 lines) ---" > "$BUNDLE_DIR/driver_logs.txt"
+    echo "--- Spark Driver Logs (last 500 lines) ---" > "$BUNDLE_DIR/driver_logs.txt"  # HTTP 500 Internal Server Error
 
     # Get logs via API
     python3 << EOF >> "$BUNDLE_DIR/driver_logs.txt" 2>&1
@@ -119,7 +120,7 @@ from databricks.sdk import WorkspaceClient
 w = WorkspaceClient()
 try:
     logs = w.clusters.get_cluster_driver_logs(cluster_id="$CLUSTER_ID")
-    print(logs.log_content[:50000] if logs.log_content else "No logs available")
+    print(logs.log_content[:50000] if logs.log_content else "No logs available")  # 50000ms = 50 seconds
 except Exception as e:
     print(f"Error fetching logs: {e}")
 EOF
@@ -158,6 +159,7 @@ fi
 
 ### Step 7: Package Bundle
 ```bash
+set -euo pipefail
 # Create config snapshot (redacted)
 echo "--- Config (redacted) ---" >> "$BUNDLE_DIR/summary.txt"
 cat ~/.databrickscfg 2>/dev/null | sed 's/token = .*/token = ***REDACTED***/' >> "$BUNDLE_DIR/config-redacted.txt"
@@ -226,10 +228,10 @@ echo "  - config-redacted.txt: CLI configuration (secrets removed)"
 ./databricks-debug-bundle.sh
 
 # With cluster diagnostics
-./databricks-debug-bundle.sh cluster-12345-abcde
+./databricks-debug-bundle.sh cluster-12345-abcde  # port 12345 - example/test
 
 # With job run diagnostics
-./databricks-debug-bundle.sh cluster-12345-abcde 67890
+./databricks-debug-bundle.sh cluster-12345-abcde 67890  # 67890 = configured value
 
 # Full diagnostics with Delta table
 ./databricks-debug-bundle.sh cluster-12345 67890 catalog.schema.table

@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*),Grep,Glob"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Refactoring Large
 
 ## Overview
 
-This skill enables large-scale refactoring operations that span hundreds or thousands of files. It provides phased execution with checkpoints, comprehensive rollback capabilities, and AI-assisted planning. Ideal for architecture migrations, API version upgrades, dependency replacements, and codebase modernization efforts that would traditionally take weeks to complete manually.
+This skill enables large-scale refactoring operations that span hundreds or thousands of files. It provides phased execution with checkpoints, comprehensive rollback capabilities, and AI-assisted planning.
 
 ## Prerequisites
 
@@ -33,8 +33,7 @@ This skill enables large-scale refactoring operations that span hundreds or thou
 4. **Execute with Cascade**
 5. **Verify Completion**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -46,11 +45,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

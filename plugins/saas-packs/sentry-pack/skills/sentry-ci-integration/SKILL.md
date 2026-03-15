@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(gh:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Ci Integration
 
 ## Prerequisites
@@ -42,12 +42,16 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry CI/CD](https://docs.sentry.io/product/releases/setup/release-automation/)
 - [GitHub Action](https://github.com/getsentry/action-release)
+
+## Overview
+
+Manage integrate Sentry with CI/CD pipelines.

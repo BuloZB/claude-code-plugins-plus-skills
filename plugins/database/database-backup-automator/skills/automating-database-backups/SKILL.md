@@ -4,13 +4,13 @@ description: |
   Automate database backup processes with scheduling, compression, and encryption.
   Supports PostgreSQL (pg_dump), MySQL (mysqldump), MongoDB (mongodump), and SQLite.
   Generates production-ready backup scripts with retention policies and restore procedures.
-  Trigger: "automate database backups", "schedule backups", "create backup script", "disaster recovery".
+  Trigger: "automate database backups", "schedule backups", "create backup script", "disaster recovery". Use when working with automating database backups. Trigger with 'automating', 'database', 'backups'.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(pg_dump:*), Bash(mysqldump:*), Bash(mongodump:*), Bash(cron:*), Bash(gpg:*)
 version: 2.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Database Backup Automation
 
 Generate production-ready backup scripts for PostgreSQL, MySQL, MongoDB, and SQLite with compression, encryption, scheduling, and retention policies.
@@ -20,6 +20,7 @@ Generate production-ready backup scripts for PostgreSQL, MySQL, MongoDB, and SQL
 ### PostgreSQL Backup
 ```bash
 #!/bin/bash
+set -euo pipefail
 BACKUP_DIR="/var/backups/postgresql"
 DB_NAME="mydb"
 DATE=$(date +%Y%m%d_%H%M%S)
@@ -52,7 +53,7 @@ mysqldump -h localhost -u root -p"${MYSQL_PASSWORD}" \
 ### MongoDB Backup
 ```bash
 #!/bin/bash
-mongodump --uri="mongodb://localhost:27017" \
+mongodump --uri="mongodb://localhost:27017" \  # 27017: MongoDB port
   --db=mydb \
   --out=/var/backups/mongodb/$(date +%Y%m%d_%H%M%S) \
   --gzip
@@ -72,7 +73,7 @@ Ask the user for:
 ### Step 2: Generate Backup Script
 Use `scripts/backup_script_generator.py` to create a customized backup script:
 ```bash
-python3 {baseDir}/scripts/backup_script_generator.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/backup_script_generator.py \
   --db-type postgresql \
   --database mydb \
   --output /opt/backup-scripts/mydb-backup.sh \
@@ -83,7 +84,7 @@ python3 {baseDir}/scripts/backup_script_generator.py \
 ### Step 3: Schedule with Cron
 Use `scripts/backup_scheduler.py` to create cron entries:
 ```bash
-python3 {baseDir}/scripts/backup_scheduler.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/backup_scheduler.py \
   --script /opt/backup-scripts/mydb-backup.sh \
   --schedule "0 2 * * *" \
   --user postgres
@@ -92,7 +93,7 @@ python3 {baseDir}/scripts/backup_scheduler.py \
 ### Step 4: Validate Backup
 After backup completes, validate integrity:
 ```bash
-python3 {baseDir}/scripts/backup_validator.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/backup_validator.py \
   --backup-file /var/backups/postgresql/mydb_20250115.sql.gz \
   --db-type postgresql
 ```
@@ -100,7 +101,7 @@ python3 {baseDir}/scripts/backup_validator.py \
 ### Step 5: Generate Restore Procedure
 Create matching restore script:
 ```bash
-python3 {baseDir}/scripts/restore_script_generator.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/restore_script_generator.py \
   --db-type postgresql \
   --database mydb \
   --output /opt/backup-scripts/mydb-restore.sh
@@ -124,7 +125,7 @@ python3 {baseDir}/scripts/restore_script_generator.py \
 
 find /var/backups -name "*.gz" -mtime +7 -delete  # Daily cleanup
 find /var/backups/weekly -mtime +28 -delete       # Weekly cleanup
-find /var/backups/monthly -mtime +365 -delete     # Monthly cleanup
+find /var/backups/monthly -mtime +365 -delete     # 365: Monthly cleanup
 ```
 
 ## Output
@@ -145,9 +146,25 @@ find /var/backups/monthly -mtime +365 -delete     # Monthly cleanup
 
 ## Resources
 
-- `{baseDir}/references/postgresql_backup_restore.md` - PostgreSQL backup guide
-- `{baseDir}/references/mysql_backup_restore.md` - MySQL backup guide
-- `{baseDir}/references/mongodb_backup_restore.md` - MongoDB backup guide
-- `{baseDir}/references/sqlite_backup_restore.md` - SQLite backup guide
-- `{baseDir}/references/backup_best_practices.md` - Security and storage best practices
-- `{baseDir}/references/cron_syntax.md` - Cron scheduling reference
+- `${CLAUDE_SKILL_DIR}/references/postgresql_backup_restore.md` - PostgreSQL backup guide
+- `${CLAUDE_SKILL_DIR}/references/mysql_backup_restore.md` - MySQL backup guide
+- `${CLAUDE_SKILL_DIR}/references/mongodb_backup_restore.md` - MongoDB backup guide
+- `${CLAUDE_SKILL_DIR}/references/sqlite_backup_restore.md` - SQLite backup guide
+- `${CLAUDE_SKILL_DIR}/references/backup_best_practices.md` - Security and storage best practices
+- `${CLAUDE_SKILL_DIR}/references/cron_syntax.md` - Cron scheduling reference
+
+## Overview
+
+Automate database backup processes with scheduling, compression, and encryption.
+
+## Prerequisites
+
+- Access to the PostgreSQL environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with PostgreSQL concepts and terminology
+
+## Examples
+
+**Basic usage**: Apply automating database backups to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize automating database backups for production environments with multiple constraints and team-specific requirements.

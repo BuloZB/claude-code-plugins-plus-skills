@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(curl:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # TwinMind Install & Auth
 
 ## Overview
@@ -81,6 +81,7 @@ https://play.google.com/store/apps/details?id=ai.twinmind.android
 ### Step 6: Configure API Access (Pro/Enterprise)
 
 ```bash
+set -euo pipefail
 # Set environment variable for API access
 export TWINMIND_API_KEY="your-api-key"
 
@@ -158,3 +159,9 @@ pactl list sources | grep -i "name:"
 
 ## Next Steps
 After successful setup, proceed to `twinmind-hello-world` for your first meeting transcription.
+
+## Examples
+
+**Basic usage**: Apply twinmind install auth to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize twinmind install auth for production environments with multiple constraints and team-specific requirements.

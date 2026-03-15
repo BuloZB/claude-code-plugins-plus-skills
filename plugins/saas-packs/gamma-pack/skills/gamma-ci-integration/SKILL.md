@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(gh:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma CI Integration
 
 ## Overview
@@ -88,8 +88,8 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     include: ['tests/gamma/**/*.test.ts'],
-    testTimeout: 60000, // Gamma API can be slow
-    hookTimeout: 30000,
+    testTimeout: 60000, // Gamma API can be slow  # 60000: 1 minute in ms
+    hookTimeout: 30000,  # 30000: 30 seconds in ms
     setupFiles: ['./tests/gamma/setup.ts'],
   },
 });
@@ -187,3 +187,9 @@ gh secret list
 
 ## Next Steps
 Proceed to `gamma-deploy-integration` for deployment workflows.
+
+## Examples
+
+**Basic usage**: Apply gamma ci integration to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma ci integration for production environments with multiple constraints and team-specific requirements.

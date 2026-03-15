@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # OpenEvidence Core Workflow A: Clinical Query
 
 ## Overview
@@ -73,7 +73,7 @@ import { OpenEvidenceClient } from '@openevidence/sdk';
 const client = new OpenEvidenceClient({
   apiKey: process.env.OPENEVIDENCE_API_KEY,
   orgId: process.env.OPENEVIDENCE_ORG_ID,
-  timeout: 15000, // 15 second timeout for point-of-care
+  timeout: 15000, // 15 second timeout for point-of-care  # 15000 = configured value
 });
 
 export async function queryAtPointOfCare(

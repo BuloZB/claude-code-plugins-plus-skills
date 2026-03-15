@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # LangChain SDK Patterns
 
 ## Overview
@@ -57,7 +57,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.runnables import RunnableWithFallbacks
 
 primary = ChatOpenAI(model="gpt-4o")
-fallback = ChatAnthropic(model="claude-3-5-sonnet-20241022")
+fallback = ChatAnthropic(model="claude-3-5-sonnet-20241022")  # 20241022 = date/version stamp
 
 # Automatically falls back on failure
 robust_llm = primary.with_fallbacks([fallback])
@@ -158,3 +158,17 @@ def safe_invoke(chain, input_data, max_retries=3):
 
 ## Next Steps
 Proceed to `langchain-core-workflow-a` for chains and prompts workflow.
+
+## Instructions
+
+1. Assess the current state of the Langchain Sdk Patterns configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Examples
+
+**Basic usage**: Apply langchain sdk patterns to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize langchain sdk patterns for production environments with multiple constraints and team-specific requirements.

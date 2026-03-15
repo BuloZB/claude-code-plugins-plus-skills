@@ -10,189 +10,54 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Lindy Security Basics
 
 ## Overview
-Essential security practices for Lindy AI integrations.
+Security practices for Lindy AI agent integrations. Lindy creates autonomous AI agents that can access external services, execute actions, and handle data -- making security boundaries and permission controls essential.
 
 ## Prerequisites
-- Lindy account with admin access
-- Understanding of security requirements
-- Access to secret management solution
+- Lindy account with API access
+- Understanding of Lindy's agent execution model
+- Awareness of connected service permissions
 
 ## Instructions
 
-### Step 1: Secure API Key Storage
-```typescript
-// NEVER do this
-const apiKey = 'lnd_abc123...'; // Hardcoded - BAD!
+### Step 1: API Key Protection
 
-// DO this instead
-const apiKey = process.env.LINDY_API_KEY;
+### Step 2: Agent Permission Boundaries
 
-// Or use secret management
-import { SecretManager } from '@google-cloud/secret-manager';
+Lindy agents can connect to external services. Limit what each agent can access.
 
-async function getApiKey(): Promise<string> {
-  const client = new SecretManager();
-  const [secret] = await client.accessSecretVersion({
-    name: 'projects/my-project/secrets/lindy-api-key/versions/latest',
-  });
-  return secret.payload?.data?.toString() || '';
-}
-```
+### Step 3: Webhook Signature Verification
 
-### Step 2: Environment-Specific Keys
-```bash
-# .env.development
-LINDY_API_KEY=lnd_dev_xxx
-LINDY_ENVIRONMENT=development
+### Step 4: Audit Agent Actions
 
-# .env.production
-LINDY_API_KEY=lnd_prod_xxx
-LINDY_ENVIRONMENT=production
-```
+For detailed implementation code and configurations, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
-```typescript
-// Validate environment
-function validateEnvironment(): void {
-  const env = process.env.LINDY_ENVIRONMENT;
-  const key = process.env.LINDY_API_KEY;
-
-  if (!key) {
-    throw new Error('LINDY_API_KEY not set');
-  }
-
-  if (env === 'production' && key.startsWith('lnd_dev_')) {
-    throw new Error('Development key used in production!');
-  }
-}
-```
-
-### Step 3: Configure Agent Permissions
-```typescript
-import { Lindy } from '@lindy-ai/sdk';
-
-const lindy = new Lindy({ apiKey: process.env.LINDY_API_KEY });
-
-async function createSecureAgent() {
-  const agent = await lindy.agents.create({
-    name: 'Secure Agent',
-    instructions: 'Handle data securely.',
-    permissions: {
-      // Restrict to specific tools
-      allowedTools: ['email', 'calendar'],
-      // Prevent external network access
-      networkAccess: 'internal-only',
-      // Limit data access
-      dataScopes: ['read:users', 'write:tickets'],
-    },
-  });
-
-  return agent;
-}
-```
-
-### Step 4: Audit Logging
-```typescript
-async function withAuditLog<T>(
-  operation: string,
-  fn: () => Promise<T>
-): Promise<T> {
-  const start = Date.now();
-  const requestId = crypto.randomUUID();
-
-  console.log(JSON.stringify({
-    type: 'audit',
-    operation,
-    requestId,
-    timestamp: new Date().toISOString(),
-    status: 'started',
-  }));
-
-  try {
-    const result = await fn();
-    console.log(JSON.stringify({
-      type: 'audit',
-      operation,
-      requestId,
-      duration: Date.now() - start,
-      status: 'completed',
-    }));
-    return result;
-  } catch (error: any) {
-    console.log(JSON.stringify({
-      type: 'audit',
-      operation,
-      requestId,
-      duration: Date.now() - start,
-      status: 'failed',
-      error: error.message,
-    }));
-    throw error;
-  }
-}
-```
-
-## Security Checklist
-```markdown
-[ ] API keys stored in environment variables or secret manager
-[ ] Different keys for dev/staging/prod environments
-[ ] Key validation on startup
-[ ] Agent permissions configured (least privilege)
-[ ] Audit logging enabled
-[ ] Network access restricted where possible
-[ ] Regular key rotation scheduled
-[ ] Access reviewed quarterly
-```
-
-## Output
-- Secure API key storage patterns
-- Environment-specific configuration
-- Agent permission controls
-- Audit logging implementation
+Log all agent actions for security review and debugging.
 
 ## Error Handling
-| Risk | Mitigation | Implementation |
-|------|------------|----------------|
-| Key exposure | Secret manager | Use cloud secrets |
-| Wrong env | Validation | Check key prefix |
-| Over-permission | Least privilege | Restrict agent tools |
-| No audit | Logging | Log all operations |
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Agent accesses wrong service | No permission boundaries | Define explicit agent permissions |
+| Fake webhook processed | No signature verification | Verify HMAC signatures |
+| Key exposure | Hardcoded in source | Use environment variables |
+| Runaway agent | No action limits | Set per-hour action quotas |
 
 ## Examples
 
-### Production-Ready Security
-```typescript
-// security/index.ts
-export async function initializeLindy(): Promise<Lindy> {
-  // Validate environment
-  validateEnvironment();
-
-  // Get key from secret manager
-  const apiKey = await getApiKey();
-
-  // Initialize with security options
-  const lindy = new Lindy({
-    apiKey,
-    timeout: 30000,
-    retries: 3,
-  });
-
-  // Verify connection
-  await lindy.users.me();
-
-  console.log('Lindy initialized securely');
-  return lindy;
-}
-```
-
+### Permission Check Middleware
 ## Resources
-- [Lindy Security](https://docs.lindy.ai/security)
-- [API Key Best Practices](https://docs.lindy.ai/security/api-keys)
-- [SOC 2 Compliance](https://lindy.ai/security)
+- [Lindy API Docs](https://docs.lindy.ai)
+- [Lindy Security](https://www.lindy.ai/security)
 
-## Next Steps
-Proceed to `lindy-prod-checklist` for production readiness.
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [security implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.

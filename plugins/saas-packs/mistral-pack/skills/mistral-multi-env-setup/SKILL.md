@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(aws:*), Bash(gcloud:*), Bash(vault:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Mistral AI Multi-Environment Setup
 
 ## Overview
@@ -50,15 +50,15 @@ config/
 // config/mistral/base.ts
 export const baseConfig = {
   defaultModel: 'mistral-small-latest',
-  timeout: 30000,
+  timeout: 30000,  # 30000: 30 seconds in ms
   maxRetries: 3,
   cache: {
     enabled: true,
-    ttlSeconds: 300,
+    ttlSeconds: 300,  # 300: timeout: 5 minutes
   },
   rateLimits: {
     requestsPerMinute: 60,
-    tokensPerMinute: 500000,
+    tokensPerMinute: 500000,  # 500000 = configured value
   },
 };
 ```
@@ -79,7 +79,7 @@ export const developmentConfig = {
   },
   rateLimits: {
     requestsPerMinute: 10,
-    tokensPerMinute: 100000,
+    tokensPerMinute: 100000,  # 100000 = configured value
   },
 };
 ```
@@ -94,7 +94,7 @@ export const stagingConfig = {
   debug: false,
   cache: {
     enabled: true,
-    ttlSeconds: 300,
+    ttlSeconds: 300,  # 300: timeout: 5 minutes
   },
 };
 ```
@@ -107,11 +107,11 @@ export const productionConfig = {
   ...baseConfig,
   apiKey: process.env.MISTRAL_API_KEY_PROD,
   debug: false,
-  timeout: 60000,
+  timeout: 60000,  # 60000: 1 minute in ms
   maxRetries: 5,
   cache: {
     enabled: true,
-    ttlSeconds: 600,
+    ttlSeconds: 600,  # 600: timeout: 10 minutes
   },
 };
 ```

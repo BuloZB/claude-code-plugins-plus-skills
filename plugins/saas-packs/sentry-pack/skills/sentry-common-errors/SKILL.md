@@ -10,8 +10,8 @@ allowed-tools: Read, Grep, Bash(npm:*), Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Common Errors
 
 ## Prerequisites
@@ -42,12 +42,16 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry Troubleshooting](https://docs.sentry.io/platforms/javascript/troubleshooting/)
 - [Sentry Status](https://status.sentry.io)
+
+## Overview
+
+Execute troubleshoot common Sentry integration issues and fixes.

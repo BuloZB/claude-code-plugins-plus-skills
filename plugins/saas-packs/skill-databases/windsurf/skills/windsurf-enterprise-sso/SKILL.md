@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*)"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Enterprise Sso
 
 ## Overview
 
-This skill enables enterprise Single Sign-On (SSO) integration for Windsurf deployments. It supports SAML 2.0, OIDC/OAuth 2.0, and integration with major identity providers including Okta, Azure AD, and Google Workspace. Proper SSO configuration ensures secure authentication, simplified user management, and compliance with enterprise security requirements.
+This skill enables enterprise Single Sign-On (SSO) integration for Windsurf deployments. It supports SAML 2.0, OIDC/OAuth 2.0, and integration with major identity providers including Okta, Azure AD, and Google Workspace.
 
 ## Prerequisites
 
@@ -33,8 +33,7 @@ This skill enables enterprise Single Sign-On (SSO) integration for Windsurf depl
 4. **Configure Policies**
 5. **Test and Enable**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -45,11 +44,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(vercel:*), Bash(fly:*), Bash(gcloud:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Deploy Integration
 
 ## Prerequisites
@@ -42,14 +42,18 @@ Test the health check endpoint to confirm Supabase connectivity.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Documentation](https://vercel.com/docs)
 - [Fly.io Documentation](https://fly.io/docs)
 - [Cloud Run Documentation](https://cloud.google.com/run/docs)
 - [Supabase Deploy Guide](https://supabase.com/docs/deploy)
+
+## Overview
+
+Deploy Supabase integrations to Vercel, Fly.

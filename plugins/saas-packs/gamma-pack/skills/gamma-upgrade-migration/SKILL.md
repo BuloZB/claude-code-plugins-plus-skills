@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma Upgrade & Migration
 
 ## Overview
@@ -26,6 +26,7 @@ Guide for upgrading Gamma SDK versions and migrating between API versions safely
 
 ### Step 1: Check Current Version
 ```bash
+set -euo pipefail
 # Node.js
 npm list @gamma/sdk
 
@@ -38,6 +39,7 @@ npm outdated @gamma/sdk
 
 ### Step 2: Review Changelog
 ```bash
+set -euo pipefail
 # View changelog
 npm info @gamma/sdk changelog
 
@@ -47,6 +49,7 @@ npm info @gamma/sdk changelog
 
 ### Step 3: Upgrade SDK
 ```bash
+set -euo pipefail
 # Create upgrade branch
 git checkout -b feat/gamma-sdk-upgrade
 
@@ -121,6 +124,7 @@ npx tsc --noEmit
 
 ### Step 6: Test Thoroughly
 ```bash
+set -euo pipefail
 # Run unit tests
 npm test
 
@@ -166,6 +170,7 @@ await gamma.presentations.list();
 
 ## Rollback Procedure
 ```bash
+set -euo pipefail
 # If issues occur after upgrade
 git checkout main
 npm install  # Restores previous version from lock file
@@ -181,3 +186,23 @@ npm install @gamma/sdk@1.x.x
 
 ## Next Steps
 Proceed to `gamma-ci-integration` for CI/CD setup.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with migration |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply gamma upgrade migration to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma upgrade migration for production environments with multiple constraints and team-specific requirements.

@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*),Grep"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Performance Profiling
 
 ## Overview
 
-This skill enables AI-assisted performance profiling within Windsurf. Cascade analyzes profiling data to identify bottlenecks, suggest optimizations, and predict impact of changes. It integrates with language-specific profilers and helps prioritize optimization efforts based on actual performance data rather than assumptions.
+This skill enables AI-assisted performance profiling within Windsurf. Cascade analyzes profiling data to identify bottlenecks, suggest optimizations, and predict impact of changes.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables AI-assisted performance profiling within Windsurf. Cascade an
 4. **Implement Optimizations**
 5. **Document and Monitor**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

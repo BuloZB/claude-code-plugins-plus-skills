@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Granola Core Workflow B: Post-Meeting Processing
 
 ## Overview
@@ -100,7 +100,7 @@ Organize for future reference:
 
 Folder Structure:
 /meetings
-  /2025
+  /2025  # 2025 year
     /q1
       /project-alpha
         2025-01-06-sprint-planning.md
@@ -160,3 +160,9 @@ Tags:
 
 ## Next Steps
 Proceed to `granola-common-errors` for troubleshooting common issues.
+
+## Examples
+
+**Basic usage**: Apply granola core workflow b to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize granola core workflow b for production environments with multiple constraints and team-specific requirements.

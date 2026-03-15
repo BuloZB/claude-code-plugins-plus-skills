@@ -8,13 +8,13 @@ allowed-tools: Read,Write,Edit
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Keyboard Shortcuts
 
 ## Overview
 
-This skill enables customization of Windsurf keyboard shortcuts for optimal productivity. It covers Cascade AI shortcuts, multi-file editing commands, navigation keys, and custom workflow bindings. Proper shortcut configuration can significantly reduce context switching and accelerate common development tasks.
+This skill enables customization of Windsurf keyboard shortcuts for optimal productivity. It covers Cascade AI shortcuts, multi-file editing commands, navigation keys, and custom workflow bindings.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables customization of Windsurf keyboard shortcuts for optimal prod
 4. **Create Custom Bindings**
 5. **Document and Share**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

@@ -7,13 +7,13 @@ allowed-tools: "Read, Write, Edit, Bash(cmd:*)"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Cursor Upgrade Migration
 
 ## Overview
 
-This skill provides comprehensive guidance for upgrading Cursor IDE versions and migrating settings between installations. It covers version checking, upgrade methods, settings backup, and troubleshooting common migration issues.
+Provides guidance for upgrading Cursor IDE versions and migrating settings between installations. It covers version checking, upgrade methods, settings backup, and troubleshooting common migration issues.
 
 ## Prerequisites
 
@@ -41,11 +41,11 @@ This skill provides comprehensive guidance for upgrading Cursor IDE versions and
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

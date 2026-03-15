@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Apollo Install & Auth
 
 ## Overview
@@ -27,6 +27,7 @@ Set up Apollo.io API client and configure authentication credentials for B2B sal
 
 ### Step 1: Install SDK/HTTP Client
 ```bash
+set -euo pipefail
 # Node.js (using axios for REST API)
 npm install axios dotenv
 
@@ -68,7 +69,7 @@ export const apolloClient = axios.create({
 async function verifyConnection() {
   try {
     const response = await apolloClient.get('/auth/health');
-    console.log('Apollo connection:', response.status === 200 ? 'OK' : 'Failed');
+    console.log('Apollo connection:', response.status === 200 ? 'OK' : 'Failed');  # HTTP 200 OK
   } catch (error) {
     console.error('Connection failed:', error.message);
   }

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma Core Workflow B: Editing and Export
 
 ## Overview
@@ -94,8 +94,8 @@ async function exportPresentation(
 
   // Wait for export to complete
   const result = await gamma.exports.wait(exportJob.id, {
-    timeout: 60000,
-    pollInterval: 2000,
+    timeout: 60000,  # 60000: 1 minute in ms
+    pollInterval: 2000,  # 2000: 2 seconds in ms
   });
 
   return result.downloadUrl;
@@ -146,3 +146,9 @@ async function listAssets(presentationId: string) {
 
 ## Next Steps
 Proceed to `gamma-common-errors` for error handling patterns.
+
+## Examples
+
+**Basic usage**: Apply gamma core workflow b to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma core workflow b for production environments with multiple constraints and team-specific requirements.

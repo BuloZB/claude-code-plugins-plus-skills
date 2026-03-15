@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Reference Architecture
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Add health check endpoint for Supabase connectivity.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Supabase SDK Documentation](https://supabase.com/docs/sdk)
 - [Supabase Best Practices](https://supabase.com/docs/best-practices)
+
+## Overview
+
+Implement Supabase reference architecture with best-practice project layout.

@@ -23,12 +23,14 @@ Usage:
     python scripts/validate-skills-schema.py --skills-only
     python scripts/validate-skills-schema.py --commands-only
     python scripts/validate-skills-schema.py --agents-only
+    python scripts/validate-skills-schema.py path/to/SKILL.md    # Single-file mode
 
 Author: Jeremy Longshore <jeremy@intentsolutions.io>
 Version: 3.0.0
 """
 
 import argparse
+import json as json_module
 import re
 import sys
 from pathlib import Path
@@ -54,13 +56,17 @@ VALID_TOOLS = {
 ANTHROPIC_REQUIRED = {'name', 'description'}
 
 # Enterprise required fields (Intent Solutions marketplace)
+# Note: author, version, license can be top-level OR under metadata: per AgentSkills.io spec
 ENTERPRISE_REQUIRED = {'allowed-tools', 'version', 'author', 'license'}
 
 # All required fields (Anthropic + Enterprise)
 REQUIRED_FIELDS = ANTHROPIC_REQUIRED | ENTERPRISE_REQUIRED
 
-# Optional fields per Anthropic spec
-OPTIONAL_FIELDS = {'model', 'disable-model-invocation', 'mode', 'tags', 'metadata'}
+# Optional fields per Anthropic spec + AgentSkills.io
+OPTIONAL_FIELDS = {
+    'model', 'disable-model-invocation', 'mode', 'tags', 'metadata', 'compatible-with',
+    'argument-hint', 'context', 'agent', 'user-invocable', 'hooks', 'compatibility',
+}
 
 # Deprecated fields (warn but don't error)
 DEPRECATED_FIELDS = {'when_to_use'}
@@ -81,9 +87,9 @@ REQUIRED_SECTIONS = [
 RE_FRONTMATTER = re.compile(r"^---\s*\n(.*?)\n---\s*\n(.*)$", re.DOTALL)
 RE_DESCRIPTION_USE_WHEN = re.compile(r"\bUse when\b", re.IGNORECASE)
 RE_DESCRIPTION_TRIGGER_WITH = re.compile(r"\bTrigger with\b", re.IGNORECASE)
-RE_BASEDIR_SCRIPTS = re.compile(r"{baseDir}/scripts/([\w\-./]+)")
-RE_BASEDIR_REFERENCES = re.compile(r"{baseDir}/references/([\w\-./]+)")
-RE_BASEDIR_ASSETS = re.compile(r"{baseDir}/assets/([\w\-./]+)")
+RE_SKILLDIR_SCRIPTS = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/scripts/([\w\-./]+)")
+RE_SKILLDIR_REFERENCES = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/references/([\w\-./]+)")
+RE_SKILLDIR_ASSETS = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/assets/([\w\-./]+)")
 RE_FIRST_PERSON = re.compile(r"\b(I can|I will|I'm going to|I help)\b", re.IGNORECASE)
 RE_SECOND_PERSON = re.compile(r"\b(You can|You should|You will)\b", re.IGNORECASE)
 FORBIDDEN_WORDS = ("anthropic", "claude")
@@ -148,11 +154,13 @@ def score_progressive_disclosure(path: Path, body: str, fm: dict) -> dict:
     skill_dir = path.parent
 
     # Token Economy (10 pts) - Per Anthropic: SKILL.md should be concise
-    # 80-150 lines = full points, 150-300 = half, >300 = 0
+    # ≤150=10, 151-300=7, 301-500=4, >500=0
     if lines <= 150:
         breakdown['token_economy'] = (10, "Excellent: ≤150 lines")
     elif lines <= 300:
-        breakdown['token_economy'] = (5, f"Acceptable: {lines} lines (target ≤150)")
+        breakdown['token_economy'] = (7, f"Good: {lines} lines (target ≤150)")
+    elif lines <= 500:
+        breakdown['token_economy'] = (4, f"Acceptable: {lines} lines (target ≤150)")
     else:
         breakdown['token_economy'] = (0, f"Too long: {lines} lines (target ≤150)")
 
@@ -867,9 +875,16 @@ def validate_frontmatter(path: Path, fm: dict) -> Tuple[List[str], List[str]]:
     warnings: List[str] = []
 
     # === REQUIRED FIELDS (Anthropic + Enterprise) ===
+    # Per AgentSkills.io spec, author/version/license can live under metadata:
+    # Accept both top-level and metadata.{field} locations
+
+    metadata = fm.get('metadata', {}) if isinstance(fm.get('metadata'), dict) else {}
 
     for key in REQUIRED_FIELDS:
         if key not in fm:
+            # Check metadata fallback for author, version, license
+            if key in ('author', 'version', 'license') and key in metadata:
+                continue  # Found in metadata block — valid per spec
             errors.append(f"[frontmatter] Missing required field: '{key}'")
 
     # === FIELD-SPECIFIC VALIDATION ===
@@ -911,12 +926,12 @@ def validate_frontmatter(path: Path, fm: dict) -> Tuple[List[str], List[str]]:
             if len(desc) > 1024:
                 errors.append("[frontmatter] 'description' exceeds 1024 characters")
 
-            # Nixtla quality checks (WARN for now, upgrade to ERROR when compliant)
+            # Nixtla quality checks
             if not RE_DESCRIPTION_USE_WHEN.search(desc):
-                warnings.append("[frontmatter] 'description' should include 'Use when ...' phrase (nixtla quality standard)")
+                errors.append("[frontmatter] 'description' must include 'Use when ...' phrase for model discoverability")
 
             if not RE_DESCRIPTION_TRIGGER_WITH.search(desc):
-                warnings.append("[frontmatter] 'description' should include 'Trigger with ...' phrase (nixtla quality standard)")
+                errors.append("[frontmatter] 'description' must include 'Trigger with ...' phrase for user discoverability")
 
             # Voice checks (nixtla strict mode)
             if RE_FIRST_PERSON.search(desc):
@@ -972,9 +987,9 @@ def validate_frontmatter(path: Path, fm: dict) -> Tuple[List[str], List[str]]:
             if not valid:
                 errors.append(f"[frontmatter] allowed-tools: {msg}")
 
-        # Nixtla strict mode: forbid unscoped Bash (WARN for now)
+        # Nixtla strict mode: forbid unscoped Bash
         if 'Bash' in tools:
-            warnings.append("[frontmatter] allowed-tools: unscoped 'Bash' should use scoped Bash(git:*) or Bash(npm:*)")
+            errors.append("[frontmatter] allowed-tools: unscoped 'Bash' is not allowed - use scoped Bash(git:*), Bash(npm:*), etc.")
 
         # Info about over-permissioning
         # Count unique base tools (Bash scopes like Bash(git:*) should not inflate the tool count).
@@ -1039,6 +1054,62 @@ def validate_frontmatter(path: Path, fm: dict) -> Tuple[List[str], List[str]]:
             errors.append(f"[frontmatter] 'tags' must be array of strings, got: {type(tags).__name__}")
         elif not all(isinstance(t, str) for t in tags):
             errors.append("[frontmatter] 'tags' must contain only strings")
+
+    # === COMPATIBLE-WITH FIELD ===
+    VALID_PLATFORMS = {'claude-code', 'codex', 'openclaw', 'aider', 'continue', 'cursor', 'windsurf'}
+
+    if 'compatible-with' in fm:
+        compat = fm['compatible-with']
+        if isinstance(compat, str):
+            # CSV string
+            platforms = [p.strip().lower() for p in compat.split(',')]
+        elif isinstance(compat, list):
+            platforms = [str(p).strip().lower() for p in compat]
+        else:
+            errors.append(f"[frontmatter] 'compatible-with' must be CSV string or array, got: {type(compat).__name__}")
+            platforms = []
+
+        for p in platforms:
+            if p and p not in VALID_PLATFORMS:
+                warnings.append(f"[frontmatter] 'compatible-with' unknown platform: '{p}' (known: {', '.join(sorted(VALID_PLATFORMS))})")
+
+    # === NEW CLAUDE CODE SPEC FIELDS ===
+
+    # context field (fork for subagent execution)
+    if 'context' in fm:
+        ctx = fm['context']
+        if ctx not in ('fork',):
+            warnings.append(f"[frontmatter] 'context' value '{ctx}' not standard (use: fork)")
+
+    # agent field (subagent type)
+    if 'agent' in fm:
+        agent_val = str(fm['agent']).strip()
+        if not agent_val:
+            errors.append("[frontmatter] 'agent' must be non-empty if specified")
+
+    # user-invocable field (boolean)
+    if 'user-invocable' in fm:
+        ui = fm['user-invocable']
+        if not isinstance(ui, bool):
+            errors.append(f"[frontmatter] 'user-invocable' must be boolean, got: {type(ui).__name__}")
+
+    # argument-hint field (string autocomplete hint)
+    if 'argument-hint' in fm:
+        hint = str(fm['argument-hint']).strip()
+        if len(hint) > 200:
+            warnings.append("[frontmatter] 'argument-hint' exceeds 200 chars - keep hints concise")
+
+    # hooks field (skill-scoped lifecycle hooks)
+    if 'hooks' in fm:
+        hooks_val = fm['hooks']
+        if not isinstance(hooks_val, dict):
+            errors.append(f"[frontmatter] 'hooks' must be a mapping, got: {type(hooks_val).__name__}")
+
+    # compatibility field (AgentSkills.io environment requirements)
+    if 'compatibility' in fm:
+        compat_str = str(fm['compatibility']).strip()
+        if len(compat_str) > 500:
+            warnings.append("[frontmatter] 'compatibility' exceeds 500 chars")
 
     # === DEPRECATED FIELDS ===
 
@@ -1282,7 +1353,7 @@ def validate_body(path: Path, body: str) -> Tuple[List[str], List[str]]:
         for pattern, desc in ABSOLUTE_PATH_PATTERNS:
             if pattern.search(line):
                 errors.append(
-                    f"[body] Line {i}: contains absolute/OS-specific path ({desc}) - use '{{baseDir}}/...'"
+                    f"[body] Line {i}: contains absolute/OS-specific path ({desc}) - use '${{CLAUDE_SKILL_DIR}}/...'"
                 )
                 break
 
@@ -1308,15 +1379,24 @@ def validate_body(path: Path, body: str) -> Tuple[List[str], List[str]]:
     # Check embedded scripts for error handling
     code_blocks = re.findall(r'```(?:bash|sh|python|py)?\n(.*?)```', body, re.DOTALL | re.IGNORECASE)
     for i, block in enumerate(code_blocks):
-        # Check for error handling in bash scripts
+        # Check for error handling in bash scripts (only for substantial scripts, not examples)
         if 'set -e' not in block and '|| ' not in block and 'if [' not in block:
-            if len(block.strip().splitlines()) > 5:  # Only warn for non-trivial scripts
+            if len(block.strip().splitlines()) > 15:  # Only warn for substantial scripts
                 if re.search(r'\b(rm|mv|cp|curl|wget|pip|npm)\b', block):
                     warnings.append(f"[scripts] Code block {i+1}: Consider adding error handling (set -e or || exit)")
 
         # Check for unexplained magic numbers (voodoo constants)
+        # Whitelist well-known HTTP status codes and common port numbers
+        KNOWN_NUMBERS = {
+            '200', '201', '204', '301', '302', '304', '307', '308',
+            '400', '401', '403', '404', '405', '408', '409', '422', '429',
+            '500', '502', '503', '504',
+            '3000', '5000', '8000', '8080', '8443', '9090',  # common ports
+        }
         magic_numbers = re.findall(r'(?<![.\d])\b(?:(?:[2-9]\d{2,})|(?:1\d{3,}))\b(?![.\d])', block)
         for num in magic_numbers[:3]:  # Limit warnings
+            if num in KNOWN_NUMBERS:
+                continue
             if not re.search(rf'#.*{num}', block):  # No comment explaining it
                 warnings.append(f"[scripts] Code block {i+1}: Magic number '{num}' - add comment explaining why")
 
@@ -1330,14 +1410,14 @@ def validate_body(path: Path, body: str) -> Tuple[List[str], List[str]]:
 
 def validate_scripts_exist(path: Path, body: str) -> Tuple[List[str], List[str]]:
     """
-    Validate that all {baseDir}/scripts/... references point to real files.
+    Validate that all ${CLAUDE_SKILL_DIR}/scripts/... references point to real files.
     Returns (errors, warnings).
     """
     errors: List[str] = []
     warnings: List[str] = []
     skill_dir = path.parent.resolve()
 
-    referenced = set(m.group(1) for m in RE_BASEDIR_SCRIPTS.finditer(body))
+    referenced = set(m.group(1) for m in RE_SKILLDIR_SCRIPTS.finditer(body))
 
     for rel in sorted(referenced):
         script_path = (skill_dir / "scripts" / rel).resolve()
@@ -1351,7 +1431,7 @@ def validate_scripts_exist(path: Path, body: str) -> Tuple[List[str], List[str]]
 
         if not script_path.exists():
             warnings.append(
-                f"[scripts] Referenced script not found: '{{baseDir}}/scripts/{rel}' "
+                f"[scripts] Referenced script not found: '${{CLAUDE_SKILL_DIR}}/scripts/{rel}' "
                 f"(expected at {skill_dir.name}/scripts/{rel})"
             )
 
@@ -1360,14 +1440,14 @@ def validate_scripts_exist(path: Path, body: str) -> Tuple[List[str], List[str]]
 
 def validate_resource_files_exist(path: Path, body: str) -> Tuple[List[str], List[str]]:
     """
-    Validate that all {baseDir}/references/... and {baseDir}/assets/... references point to real files.
+    Validate that all ${CLAUDE_SKILL_DIR}/references/... and ${CLAUDE_SKILL_DIR}/assets/... references point to real files.
     Returns (errors, warnings).
     """
     errors: List[str] = []
     warnings: List[str] = []
     skill_dir = path.parent.resolve()
 
-    for rel in sorted(set(m.group(1) for m in RE_BASEDIR_REFERENCES.finditer(body))):
+    for rel in sorted(set(m.group(1) for m in RE_SKILLDIR_REFERENCES.finditer(body))):
         target = (skill_dir / "references" / rel).resolve()
         try:
             target.relative_to(skill_dir)
@@ -1376,11 +1456,11 @@ def validate_resource_files_exist(path: Path, body: str) -> Tuple[List[str], Lis
             continue
         if not target.exists():
             warnings.append(
-                f"[resources] Referenced file not found: '{{baseDir}}/references/{rel}' "
+                f"[resources] Referenced file not found: '${{CLAUDE_SKILL_DIR}}/references/{rel}' "
                 f"(expected at {skill_dir.name}/references/{rel})"
             )
 
-    for rel in sorted(set(m.group(1) for m in RE_BASEDIR_ASSETS.finditer(body))):
+    for rel in sorted(set(m.group(1) for m in RE_SKILLDIR_ASSETS.finditer(body))):
         target = (skill_dir / "assets" / rel).resolve()
         try:
             target.relative_to(skill_dir)
@@ -1389,7 +1469,7 @@ def validate_resource_files_exist(path: Path, body: str) -> Tuple[List[str], Lis
             continue
         if not target.exists():
             warnings.append(
-                f"[resources] Referenced file not found: '{{baseDir}}/assets/{rel}' "
+                f"[resources] Referenced file not found: '${{CLAUDE_SKILL_DIR}}/assets/{rel}' "
                 f"(expected at {skill_dir.name}/assets/{rel})"
             )
 
@@ -1743,8 +1823,94 @@ def main() -> int:
         action="store_true",
         help="Only validate agent files",
     )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output machine-readable JSON with per-skill scoring data",
+    )
+    parser.add_argument(
+        "path",
+        nargs="?",
+        default=None,
+        help="Path to a single SKILL.md file to validate (optional)",
+    )
     args, _unknown = parser.parse_known_args()
     verbose = args.verbose
+
+    # Single-file mode: validate just one SKILL.md
+    if args.path:
+        target = Path(args.path).resolve()
+        if not target.exists():
+            print(f"ERROR: File not found: {args.path}", file=sys.stderr)
+            return 1
+        if target.name != 'SKILL.md' and not target.name.endswith('.md'):
+            print(f"ERROR: Expected a SKILL.md or .md file: {args.path}", file=sys.stderr)
+            return 1
+
+        print(f"🔍 CLAUDE CODE PLUGIN VALIDATOR v3.0")
+        print(f"   Single-file mode: {target}")
+        print(f"{'=' * 70}\n")
+
+        if target.name == 'SKILL.md':
+            result = validate_skill(target)
+            if 'fatal' in result:
+                print(f"❌ FATAL: {result['fatal']}")
+                return 1
+
+            grade_info = result.get('grade', {})
+            score = grade_info.get('score', 0)
+            letter = grade_info.get('grade', 'F')
+
+            if result['errors']:
+                for error in result['errors']:
+                    print(f"   ERROR: {error}")
+            if result['warnings']:
+                for warning in result['warnings']:
+                    print(f"   WARN: {warning}")
+
+            # Always show grade in single-file mode
+            print(f"\n{'=' * 70}")
+            print(f"📊 GRADE: {letter} ({score}/100)")
+            print(f"{'=' * 70}")
+            breakdown = grade_info.get('breakdown', {})
+            for pillar_name, pillar_data in breakdown.items():
+                if pillar_name == 'modifiers':
+                    mod_score = pillar_data.get('score', 0)
+                    print(f"  {'Modifiers':<30} {mod_score:+d}")
+                    for item_name, (pts, note) in pillar_data.get('items', {}).items():
+                        print(f"    {item_name:<28} {pts:+d} - {note}")
+                else:
+                    pil_score = pillar_data.get('score', 0)
+                    pil_max = pillar_data.get('max', 0)
+                    print(f"  {pillar_name.replace('_', ' ').title():<30} {pil_score}/{pil_max}")
+                    for item_name, (pts, note) in pillar_data.get('breakdown', {}).items():
+                        print(f"    {item_name:<28} {pts} - {note}")
+            print(f"{'=' * 70}")
+
+            return 1 if result['errors'] else 0
+        else:
+            # Command or agent file
+            if '/commands/' in str(target):
+                result = validate_command(target)
+            elif '/agents/' in str(target):
+                result = validate_agent(target)
+            else:
+                print(f"Cannot determine file type for: {target}")
+                print("File must be in a commands/ or agents/ directory, or named SKILL.md")
+                return 1
+
+            if 'fatal' in result:
+                print(f"❌ FATAL: {result['fatal']}")
+                return 1
+            if result.get('errors'):
+                for error in result['errors']:
+                    print(f"   ERROR: {error}")
+                return 1
+            if result.get('warnings'):
+                for warning in result['warnings']:
+                    print(f"   WARN: {warning}")
+            print(f"\n✅ Validation passed")
+            return 0
 
     # Determine what to validate
     validate_skills = not args.commands_only and not args.agents_only
@@ -1761,16 +1927,17 @@ def main() -> int:
         print("No files found to validate.")
         return 0
 
-    print(f"🔍 CLAUDE CODE PLUGIN VALIDATOR v3.0")
-    print(f"   Intent Solutions Standard (100-Point Grading)")
-    print(f"{'=' * 70}\n")
-    if validate_skills:
-        print(f"Found {len(skills)} SKILL.md files")
-    if validate_commands:
-        print(f"Found {len(commands)} command files")
-    if validate_agents:
-        print(f"Found {len(agents)} agent files")
-    print()
+    if not args.json:
+        print(f"🔍 CLAUDE CODE PLUGIN VALIDATOR v3.0")
+        print(f"   Intent Solutions Standard (100-Point Grading)")
+        print(f"{'=' * 70}\n")
+        if validate_skills:
+            print(f"Found {len(skills)} SKILL.md files")
+        if validate_commands:
+            print(f"Found {len(commands)} command files")
+        if validate_agents:
+            print(f"Found {len(agents)} agent files")
+        print()
 
     total_errors = 0
     total_warnings = 0
@@ -1786,15 +1953,21 @@ def main() -> int:
     below_min_grade = []  # Skills below --min-grade threshold
 
     grade_thresholds = {'A': 90, 'B': 80, 'C': 70, 'D': 60}
+    json_skill_results = []  # Collected for --json output
 
     for skill in skills:
         rel = skill.relative_to(repo_root)
         result = validate_skill(skill)
 
         if 'fatal' in result:
-            print(f"❌ {rel}: FATAL - {result['fatal']}")
+            if not args.json:
+                print(f"❌ {rel}: FATAL - {result['fatal']}")
             total_errors += 1
             files_with_errors.append(str(rel))
+            json_skill_results.append({
+                'path': str(rel),
+                'fatal': result['fatal'],
+            })
             continue
 
         has_issues = False
@@ -1805,6 +1978,14 @@ def main() -> int:
         letter = grade_info.get('grade', 'F')
         grade_counts[letter] += 1
         grade_scores.append(score)
+
+        json_skill_results.append({
+            'path': str(rel),
+            'score': score,
+            'grade': letter,
+            'errors': len(result.get('errors', [])),
+            'warnings': len(result.get('warnings', [])),
+        })
 
         # Check min-grade threshold
         if args.min_grade:
@@ -1817,30 +1998,37 @@ def main() -> int:
             low_grade_skills.append((str(rel), score, letter, grade_info.get('breakdown', {})))
 
         if result['errors']:
-            print(f"❌ {rel}:")
-            for error in result['errors']:
-                print(f"   ERROR: {error}")
+            if not args.json:
+                print(f"❌ {rel}:")
+                for error in result['errors']:
+                    print(f"   ERROR: {error}")
             total_errors += len(result['errors'])
             files_with_errors.append(str(rel))
             has_issues = True
 
         if result['warnings']:
-            if not has_issues:
-                print(f"⚠️  {rel}:")
-            for warning in result['warnings']:
-                print(f"   WARN: {warning}")
+            if not args.json:
+                if not has_issues:
+                    print(f"⚠️  {rel}:")
+                for warning in result['warnings']:
+                    print(f"   WARN: {warning}")
             total_warnings += len(result['warnings'])
             if str(rel) not in files_with_errors:
                 files_with_warnings.append(str(rel))
             has_issues = True
 
-        if verbose and not has_issues:
+        if verbose and not has_issues and not args.json:
             print(f"✅ {rel} - {letter} ({score}/100) ({result['word_count']} words, {result['line_count']} lines)")
 
         if not result['errors'] and not result['warnings']:
             files_compliant.append(str(rel))
 
         total_description_chars += int(result.get("description_length") or 0)
+
+    # JSON output mode: emit machine-readable results and exit
+    if args.json:
+        print(json_module.dumps(json_skill_results))
+        return 0
 
     # Validate commands
     for cmd in commands:

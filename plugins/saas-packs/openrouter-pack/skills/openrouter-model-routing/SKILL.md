@@ -6,6 +6,7 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # OpenRouter Model Routing
 
@@ -28,27 +29,34 @@ Follow these steps to implement this skill:
 4. **Test the Integration**: Run the verification steps to confirm functionality
 5. **Monitor in Production**: Set up appropriate logging and monitoring
 
-## Overview
-
-This skill covers advanced routing patterns including A/B testing, gradual rollouts, and performance-based model selection.
-
-## Prerequisites
-
-- OpenRouter integration
-- Metrics collection capability
-
 ## Intelligent Model Selection
 
-### Multi-Criteria Router
-```python
-from dataclasses import dataclass
-from typing import Callable, Optional
-import re
+Use multi-criteria routing to select models based on cost, latency, and quality requirements per request.
 
-@dataclass
-class ModelProfile:
-    id: str
+## Output
 
-## Detailed Reference
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
 
-See `{baseDir}/references/implementation.md` for complete implementation guide.
+See [testing implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with testing |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply openrouter model routing to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize openrouter model routing for production environments with multiple constraints and team-specific requirements.
+
+## Resources
+
+- Official testing documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Load Scale
 
 ## Prerequisites
@@ -42,12 +42,16 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry Quotas](https://docs.sentry.io/product/accounts/quotas/)
 - [Performance Best Practices](https://docs.sentry.io/product/performance/)
+
+## Overview
+
+Manage scale Sentry for high-traffic applications.

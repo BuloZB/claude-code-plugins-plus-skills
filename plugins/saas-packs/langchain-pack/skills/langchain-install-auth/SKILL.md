@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # LangChain Install & Auth
 
 ## Overview
@@ -27,6 +27,7 @@ Set up LangChain SDK and configure LLM provider authentication credentials.
 
 ### Step 1: Install LangChain Core
 ```bash
+set -euo pipefail
 # Python (recommended)
 pip install langchain langchain-core langchain-community
 
@@ -88,7 +89,7 @@ assert os.environ.get("OPENAI_API_KEY"), "Set OPENAI_API_KEY"
 llm = ChatOpenAI(
     model="gpt-4o-mini",
     temperature=0.7,
-    max_tokens=1000
+    max_tokens=1000  # 1000: 1 second in ms
 )
 ```
 
@@ -97,7 +98,7 @@ llm = ChatOpenAI(
 from langchain_anthropic import ChatAnthropic
 
 llm = ChatAnthropic(
-    model="claude-3-5-sonnet-20241022",
+    model="claude-3-5-sonnet-20241022",  # 20241022 = date/version stamp
     temperature=0.7
 )
 ```

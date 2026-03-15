@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # FireCrawl Security Basics
 
 ## Overview
@@ -38,6 +38,7 @@ FIRECRAWL_SECRET=***
 
 ### Step 2: Implement Secret Rotation
 ```bash
+set -euo pipefail
 # 1. Generate new key in FireCrawl dashboard
 # 2. Update environment variable
 export FIRECRAWL_API_KEY="new_key_here"

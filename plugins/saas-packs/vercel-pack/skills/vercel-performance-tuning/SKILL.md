@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Performance Tuning
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Configure connection pooling with keep-alive.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Performance Guide](https://vercel.com/docs/performance)
 - [DataLoader Documentation](https://github.com/graphql/dataloader)
 - [LRU Cache Documentation](https://github.com/isaacs/node-lru-cache)
+
+## Overview
+
+Optimize Vercel API performance with caching, batching, and connection pooling.

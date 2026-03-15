@@ -11,6 +11,7 @@ const execAsync = promisify(exec);
 
 interface DoctorOptions {
   json?: boolean;
+  fix?: boolean;
 }
 
 interface DiagnosticResult {
@@ -20,7 +21,7 @@ interface DiagnosticResult {
 
 interface CheckResult {
   name: string;
-  status: 'pass' | 'warn' | 'fail';
+  status: 'pass' | 'warn' | 'fail' | 'fixed';
   message: string;
   details?: string;
 }
@@ -30,9 +31,15 @@ interface CheckResult {
  */
 export async function doctorCheck(options: DoctorOptions): Promise<void> {
   const results: DiagnosticResult[] = [];
+  const fixMode = !!options.fix;
 
   if (!options.json) {
-    console.log(chalk.bold('\n🔍 Claude Code Plugins - System Diagnostics\n'));
+    console.log(chalk.bold('\n🔍 Claude Code Plugins - System Diagnostics'));
+    if (fixMode) {
+      console.log(chalk.cyan('   🔧 Fix mode enabled — safe remediations will be applied\n'));
+    } else {
+      console.log('');
+    }
   }
 
   // System checks
@@ -40,7 +47,7 @@ export async function doctorCheck(options: DoctorOptions): Promise<void> {
   results.push(systemChecks);
 
   // Claude installation checks
-  const claudeChecks = await runClaudeChecks();
+  const claudeChecks = await runClaudeChecks(fixMode);
   results.push(claudeChecks);
 
   // Plugin checks
@@ -48,7 +55,7 @@ export async function doctorCheck(options: DoctorOptions): Promise<void> {
   results.push(pluginChecks);
 
   // Marketplace checks
-  const marketplaceChecks = await runMarketplaceChecks();
+  const marketplaceChecks = await runMarketplaceChecks(fixMode);
   results.push(marketplaceChecks);
 
   // MCP server checks
@@ -68,7 +75,7 @@ export async function doctorCheck(options: DoctorOptions): Promise<void> {
   displayResults(results);
 
   // Summary
-  displaySummary(results);
+  displaySummary(results, fixMode);
 }
 
 /**
@@ -113,7 +120,7 @@ async function runSystemChecks(): Promise<DiagnosticResult> {
 /**
  * Run Claude Code installation checks
  */
-async function runClaudeChecks(): Promise<DiagnosticResult> {
+async function runClaudeChecks(fixMode: boolean = false): Promise<DiagnosticResult> {
   const checks: CheckResult[] = [];
 
   try {
@@ -125,17 +132,51 @@ async function runClaudeChecks(): Promise<DiagnosticResult> {
       message: paths.configDir,
     });
 
-    checks.push({
-      name: 'Plugins Directory',
-      status: 'pass',
-      message: paths.pluginsDir,
-    });
+    // Check plugins directory exists
+    if (existsSync(paths.pluginsDir)) {
+      checks.push({
+        name: 'Plugins Directory',
+        status: 'pass',
+        message: paths.pluginsDir,
+      });
+    } else if (fixMode) {
+      await fs.mkdir(paths.pluginsDir, { recursive: true });
+      checks.push({
+        name: 'Plugins Directory',
+        status: 'fixed',
+        message: `Created ${paths.pluginsDir}`,
+      });
+    } else {
+      checks.push({
+        name: 'Plugins Directory',
+        status: 'warn',
+        message: `Missing: ${paths.pluginsDir}`,
+        details: 'Run with --fix to create this directory',
+      });
+    }
 
-    checks.push({
-      name: 'Marketplaces Directory',
-      status: 'pass',
-      message: paths.marketplacesDir,
-    });
+    // Check marketplaces directory exists
+    if (existsSync(paths.marketplacesDir)) {
+      checks.push({
+        name: 'Marketplaces Directory',
+        status: 'pass',
+        message: paths.marketplacesDir,
+      });
+    } else if (fixMode) {
+      await fs.mkdir(paths.marketplacesDir, { recursive: true });
+      checks.push({
+        name: 'Marketplaces Directory',
+        status: 'fixed',
+        message: `Created ${paths.marketplacesDir}`,
+      });
+    } else {
+      checks.push({
+        name: 'Marketplaces Directory',
+        status: 'warn',
+        message: `Missing: ${paths.marketplacesDir}`,
+        details: 'Run with --fix to create this directory',
+      });
+    }
 
     if (paths.projectPluginDir) {
       checks.push({
@@ -227,24 +268,63 @@ async function runPluginChecks(): Promise<DiagnosticResult> {
 /**
  * Run marketplace checks
  */
-async function runMarketplaceChecks(): Promise<DiagnosticResult> {
+async function runMarketplaceChecks(fixMode: boolean = false): Promise<DiagnosticResult> {
   const checks: CheckResult[] = [];
 
   try {
     const paths = await detectClaudePaths();
     const marketplaceInstalled = await isMarketplaceInstalled(paths);
 
-    checks.push({
-      name: 'Marketplace Catalog',
-      status: marketplaceInstalled ? 'pass' : 'warn',
-      message: marketplaceInstalled ? 'Installed' : 'Not installed',
-      details: !marketplaceInstalled ? 'Run `ccpi install <plugin>` to install marketplace' : undefined,
-    });
-
     if (marketplaceInstalled) {
+      checks.push({
+        name: 'Marketplace Catalog',
+        status: 'pass',
+        message: 'Installed',
+      });
+
       // Check catalog integrity
-      const integrityCheck = await checkMarketplaceIntegrity(paths);
+      const integrityCheck = await checkMarketplaceIntegrity(paths, fixMode);
       checks.push(...integrityCheck);
+    } else if (fixMode) {
+      // Create marketplace directory structure and fetch catalog
+      const marketplaceSlug = 'claude-code-plugins-plus';
+      const marketplacePath = `${paths.marketplacesDir}/${marketplaceSlug}`;
+      const claudePluginDir = `${marketplacePath}/.claude-plugin`;
+
+      await fs.mkdir(claudePluginDir, { recursive: true });
+
+      // Fetch the latest catalog from GitHub Pages
+      try {
+        const catalogUrl = 'https://claudecodeplugins.io/catalog.json';
+        const { stdout: catalogJson } = await execAsync(`curl -sL "${catalogUrl}"`, { timeout: 15000 });
+
+        // Validate it's real JSON
+        JSON.parse(catalogJson);
+
+        await fs.writeFile(`${claudePluginDir}/marketplace.json`, catalogJson);
+        await fs.writeFile(`${claudePluginDir}/marketplace.extended.json`, catalogJson);
+
+        checks.push({
+          name: 'Marketplace Catalog',
+          status: 'fixed',
+          message: `Installed at ${marketplacePath}`,
+          details: 'Fetched latest catalog from claudecodeplugins.io',
+        });
+      } catch (fetchError) {
+        checks.push({
+          name: 'Marketplace Catalog',
+          status: 'warn',
+          message: 'Could not fetch catalog',
+          details: `Created directory but failed to download catalog: ${fetchError instanceof Error ? fetchError.message : 'Unknown error'}`,
+        });
+      }
+    } else {
+      checks.push({
+        name: 'Marketplace Catalog',
+        status: 'warn',
+        message: 'Not installed',
+        details: 'Run with --fix to download and install the marketplace catalog',
+      });
     }
   } catch {
     checks.push({
@@ -263,7 +343,7 @@ async function runMarketplaceChecks(): Promise<DiagnosticResult> {
 /**
  * Check marketplace catalog integrity
  */
-async function checkMarketplaceIntegrity(paths: any): Promise<CheckResult[]> {
+async function checkMarketplaceIntegrity(paths: any, fixMode: boolean = false): Promise<CheckResult[]> {
   const checks: CheckResult[] = [];
   const marketplaceSlug = 'claude-code-plugins-plus';
   const marketplacePath = `${paths.marketplacesDir}/${marketplaceSlug}`;
@@ -294,26 +374,61 @@ async function checkMarketplaceIntegrity(paths: any): Promise<CheckResult[]> {
       const catalogContent = await fs.readFile(catalogPath, 'utf-8');
       catalog = JSON.parse(catalogContent);
     } catch (error) {
-      checks.push({
-        name: 'Catalog Structure',
-        status: 'fail',
-        message: 'marketplace.json is corrupted',
-        details: error instanceof Error ? error.message : 'Invalid JSON',
-      });
-      return checks;
+      if (fixMode) {
+        try {
+          const { stdout: freshCatalog } = await execAsync(
+            'curl -sL "https://claudecodeplugins.io/catalog.json"',
+            { timeout: 15000 }
+          );
+          catalog = JSON.parse(freshCatalog);
+          await fs.writeFile(catalogPath, freshCatalog);
+          checks.push({
+            name: 'Catalog Structure',
+            status: 'fixed',
+            message: 'Re-downloaded marketplace.json from claudecodeplugins.io',
+          });
+        } catch {
+          checks.push({
+            name: 'Catalog Structure',
+            status: 'fail',
+            message: 'marketplace.json is corrupted and could not be re-downloaded',
+            details: error instanceof Error ? error.message : 'Invalid JSON',
+          });
+          return checks;
+        }
+      } else {
+        checks.push({
+          name: 'Catalog Structure',
+          status: 'fail',
+          message: 'marketplace.json is corrupted',
+          details: `${error instanceof Error ? error.message : 'Invalid JSON'}. Run with --fix to re-download.`,
+        });
+        return checks;
+      }
     }
 
     try {
       const extendedContent = await fs.readFile(extendedPath, 'utf-8');
       extended = JSON.parse(extendedContent);
     } catch (error) {
-      checks.push({
-        name: 'Extended Catalog Structure',
-        status: 'fail',
-        message: 'marketplace.extended.json is corrupted',
-        details: error instanceof Error ? error.message : 'Invalid JSON',
-      });
-      return checks;
+      if (fixMode) {
+        // Copy catalog as a baseline for extended
+        await fs.writeFile(extendedPath, JSON.stringify(catalog, null, 2));
+        extended = catalog;
+        checks.push({
+          name: 'Extended Catalog Structure',
+          status: 'fixed',
+          message: 'Restored marketplace.extended.json from marketplace.json',
+        });
+      } else {
+        checks.push({
+          name: 'Extended Catalog Structure',
+          status: 'fail',
+          message: 'marketplace.extended.json is corrupted',
+          details: `${error instanceof Error ? error.message : 'Invalid JSON'}. Run with --fix to restore.`,
+        });
+        return checks;
+      }
     }
 
     // Check sync status (plugin count comparison)
@@ -337,12 +452,46 @@ async function checkMarketplaceIntegrity(paths: any): Promise<CheckResult[]> {
 
     // Validate plugin count is reasonable
     if (catalogCount > 0) {
-      checks.push({
-        name: 'Catalog Size',
-        status: catalogCount >= 200 ? 'pass' : catalogCount >= 100 ? 'warn' : 'fail',
-        message: `${catalogCount} plugins available`,
-        details: catalogCount < 200 ? 'Catalog may be incomplete or outdated' : undefined,
-      });
+      if (catalogCount < 200 && fixMode) {
+        // Try to refresh the catalog
+        try {
+          const { stdout: freshCatalog } = await execAsync(
+            'curl -sL "https://claudecodeplugins.io/catalog.json"',
+            { timeout: 15000 }
+          );
+          const freshData = JSON.parse(freshCatalog);
+          const freshCount = freshData.plugins?.length || 0;
+          if (freshCount > catalogCount) {
+            await fs.writeFile(catalogPath, freshCatalog);
+            checks.push({
+              name: 'Catalog Size',
+              status: 'fixed',
+              message: `Updated from ${catalogCount} to ${freshCount} plugins`,
+              details: 'Refreshed catalog from claudecodeplugins.io',
+            });
+          } else {
+            checks.push({
+              name: 'Catalog Size',
+              status: catalogCount >= 100 ? 'warn' : 'fail',
+              message: `${catalogCount} plugins available (already latest)`,
+            });
+          }
+        } catch {
+          checks.push({
+            name: 'Catalog Size',
+            status: 'warn',
+            message: `${catalogCount} plugins available`,
+            details: 'Could not refresh catalog',
+          });
+        }
+      } else {
+        checks.push({
+          name: 'Catalog Size',
+          status: catalogCount >= 200 ? 'pass' : catalogCount >= 100 ? 'warn' : 'fail',
+          message: `${catalogCount} plugins available`,
+          details: catalogCount < 200 ? 'Catalog may be incomplete or outdated. Run with --fix to refresh.' : undefined,
+        });
+      }
     }
 
     // Check for required fields in catalog
@@ -900,6 +1049,7 @@ function displayResults(results: DiagnosticResult[]): void {
 
     for (const check of category.checks) {
       const icon = check.status === 'pass' ? chalk.green('✓') :
+                   check.status === 'fixed' ? chalk.cyan('🔧') :
                    check.status === 'warn' ? chalk.yellow('⚠') :
                    chalk.red('✗');
 
@@ -915,14 +1065,16 @@ function displayResults(results: DiagnosticResult[]): void {
 /**
  * Display summary
  */
-function displaySummary(results: DiagnosticResult[]): void {
+function displaySummary(results: DiagnosticResult[], fixMode: boolean = false): void {
   let passCount = 0;
   let warnCount = 0;
   let failCount = 0;
+  let fixedCount = 0;
 
   for (const category of results) {
     for (const check of category.checks) {
       if (check.status === 'pass') passCount++;
+      else if (check.status === 'fixed') fixedCount++;
       else if (check.status === 'warn') warnCount++;
       else failCount++;
     }
@@ -932,6 +1084,10 @@ function displaySummary(results: DiagnosticResult[]): void {
   console.log(chalk.bold('Summary:'));
   console.log(chalk.green(`  ✓ ${passCount} passed`));
 
+  if (fixedCount > 0) {
+    console.log(chalk.cyan(`  🔧 ${fixedCount} fixed`));
+  }
+
   if (warnCount > 0) {
     console.log(chalk.yellow(`  ⚠ ${warnCount} warnings`));
   }
@@ -940,11 +1096,19 @@ function displaySummary(results: DiagnosticResult[]): void {
     console.log(chalk.red(`  ✗ ${failCount} failed`));
   }
 
+  if (fixedCount > 0) {
+    console.log(chalk.cyan(`\n🔧 ${fixedCount} issue(s) automatically fixed.`));
+  }
+
   if (failCount === 0 && warnCount === 0) {
     console.log(chalk.green('\n✨ All checks passed! Your Claude Code setup is healthy.\n'));
+  } else if (failCount === 0 && !fixMode && warnCount > 0) {
+    console.log(chalk.yellow(`\n⚠️  Some warnings detected. Run ${chalk.bold('ccpi doctor --fix')} to auto-fix what we can.\n`));
   } else if (failCount === 0) {
-    console.log(chalk.yellow('\n⚠️  Some warnings detected. Your setup should work but could be improved.\n'));
+    console.log(chalk.yellow('\n⚠️  Some warnings remain that require manual attention.\n'));
+  } else if (!fixMode) {
+    console.log(chalk.red(`\n❌ Critical issues detected. Try ${chalk.bold('ccpi doctor --fix')} or address the failures above.\n`));
   } else {
-    console.log(chalk.red('\n❌ Critical issues detected. Please address the failures above.\n'));
+    console.log(chalk.red('\n❌ Some issues could not be auto-fixed. Please address the failures above.\n'));
   }
 }

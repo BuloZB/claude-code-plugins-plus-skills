@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # LangChain Security Basics
 
 ## Overview
@@ -124,7 +124,7 @@ import re
 
 class SafeOutput(BaseModel):
     """Validated output model."""
-    response: str = Field(max_length=10000)
+    response: str = Field(max_length=10000)  # 10000: 10 seconds in ms
     confidence: float = Field(ge=0, le=1)
 
     @field_validator("response")
@@ -196,3 +196,15 @@ class AuditCallback(BaseCallbackHandler):
 
 ## Next Steps
 Proceed to `langchain-prod-checklist` for production readiness.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Examples
+
+**Basic usage**: Apply langchain security basics to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize langchain security basics for production environments with multiple constraints and team-specific requirements.

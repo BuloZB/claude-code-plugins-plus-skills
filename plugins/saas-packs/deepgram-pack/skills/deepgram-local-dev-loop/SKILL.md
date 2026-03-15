@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Deepgram Local Dev Loop
 
 ## Overview
@@ -44,6 +44,7 @@ DEEPGRAM_MODEL=nova-2
 
 ### Step 3: Create Test Fixtures
 ```bash
+set -euo pipefail
 # Download sample audio for testing
 curl -o fixtures/sample.wav https://static.deepgram.com/examples/nasa-podcast.wav
 ```

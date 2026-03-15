@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Lindy Common Errors
 
 ## Overview
@@ -27,129 +27,36 @@ Comprehensive guide to troubleshooting common Lindy AI errors and issues.
 ### Authentication Errors
 
 #### LINDY_AUTH_INVALID_KEY
-```
-Error: Invalid API key provided
-Code: LINDY_AUTH_INVALID_KEY
-```
-
 **Causes:**
 - Expired API key
 - Incorrect key format
 - Key from wrong environment
 
 **Solutions:**
-```bash
-# Verify key is set
-echo $LINDY_API_KEY
-
-# Regenerate key in dashboard
-# https://app.lindy.ai/settings/api-keys
-
-# Test key
-curl -H "Authorization: Bearer $LINDY_API_KEY" \
-  https://api.lindy.ai/v1/users/me
-```
-
 ### Rate Limit Errors
 
 #### LINDY_RATE_LIMITED
-```
-Error: Rate limit exceeded
-Code: LINDY_RATE_LIMITED
-Retry-After: 60
-```
-
 **Causes:**
 - Too many API requests
 - Concurrent agent runs exceeded
 - Burst limit reached
 
 **Solutions:**
-```typescript
-// Implement exponential backoff
-async function withBackoff<T>(fn: () => Promise<T>): Promise<T> {
-  for (let i = 0; i < 5; i++) {
-    try {
-      return await fn();
-    } catch (e: any) {
-      if (e.code === 'LINDY_RATE_LIMITED') {
-        const delay = Math.pow(2, i) * 1000;
-        await new Promise(r => setTimeout(r, delay));
-        continue;
-      }
-      throw e;
-    }
-  }
-  throw new Error('Max retries exceeded');
-}
-```
-
 ### Agent Errors
 
 #### LINDY_AGENT_NOT_FOUND
-```
-Error: Agent not found
-Code: LINDY_AGENT_NOT_FOUND
-```
-
 **Solutions:**
-```typescript
-// Verify agent exists
-const agents = await lindy.agents.list();
-const exists = agents.some(a => a.id === agentId);
-
-// Check environment (dev vs prod)
-console.log('Environment:', process.env.LINDY_ENVIRONMENT);
-```
-
 #### LINDY_AGENT_TIMEOUT
-```
-Error: Agent execution timed out
-Code: LINDY_AGENT_TIMEOUT
-```
-
 **Solutions:**
-```typescript
-// Increase timeout
-const result = await lindy.agents.run(agentId, {
-  input,
-  timeout: 120000, // 2 minutes
-});
-
-// Use streaming for long tasks
-const stream = await lindy.agents.runStream(agentId, { input });
-```
-
 ### Tool Errors
 
 #### LINDY_TOOL_FAILED
-```
-Error: Tool execution failed
-Code: LINDY_TOOL_FAILED
-Tool: email
-```
-
 **Solutions:**
-```typescript
-// Check tool configuration
-const agent = await lindy.agents.get(agentId);
-console.log('Tools:', agent.tools);
-
-// Verify tool credentials
-await lindy.tools.test('email');
-```
-
 ## Debugging Checklist
 
-```markdown
-[ ] API key is valid and not expired
-[ ] Correct environment (dev/staging/prod)
-[ ] Agent ID exists and is accessible
-[ ] Rate limits not exceeded
-[ ] Network connectivity to api.lindy.ai
-[ ] Required tools are configured
-[ ] Timeout is sufficient for task
-```
+
+For detailed implementation code and configurations, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
 ## Error Handling
 | Error Code | HTTP Status | Retry? |
@@ -167,3 +74,25 @@ await lindy.tools.test('email');
 
 ## Next Steps
 Proceed to `lindy-debug-bundle` for comprehensive debugging.
+
+## Instructions
+
+1. Assess the current state of the debugging configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [debugging implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
+
+## Examples
+
+**Basic usage**: Apply lindy common errors to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize lindy common errors for production environments with multiple constraints and team-specific requirements.

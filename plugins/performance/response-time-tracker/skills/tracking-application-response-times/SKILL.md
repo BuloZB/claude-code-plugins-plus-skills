@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(monitoring:*), Bash(metrics:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Response Time Tracker
 
@@ -58,7 +59,7 @@ This skill can be integrated with other monitoring and alerting tools to provide
 ## Prerequisites
 
 - Access to application monitoring infrastructure
-- Response time data collection in {baseDir}/metrics/response-times/
+- Response time data collection in ${CLAUDE_SKILL_DIR}/metrics/response-times/
 - APM tools or custom instrumentation
 - Performance SLO definitions
 

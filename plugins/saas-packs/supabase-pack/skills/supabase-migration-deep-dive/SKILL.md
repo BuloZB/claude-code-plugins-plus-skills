@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(node:*), Bash(kubectl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Migration Deep Dive
 
 ## Prerequisites
@@ -22,7 +22,7 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Instructions
 
-### Step 1: Assess Current State
+### Assess current configuration
 Document existing implementation and data inventory.
 
 ### Step 2: Build Adapter Layer
@@ -42,12 +42,16 @@ Gradually route traffic to new Supabase integration.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Strangler Fig Pattern](https://martinfowler.com/bliki/StranglerFigApplication.html)
 - [Supabase Migration Guide](https://supabase.com/docs/migration)
+
+## Overview
+
+Execute Supabase major re-architecture and migration strategies with strangler fig pattern.

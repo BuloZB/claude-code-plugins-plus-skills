@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Migration Deep Dive
 
 ## Prerequisites
@@ -42,12 +42,16 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry Migration Guide](https://docs.sentry.io/product/accounts/migration/)
 - [SDK Documentation](https://docs.sentry.io/platforms/)
+
+## Overview
+
+Execute migrate to Sentry from other error tracking tools.

@@ -10,190 +10,81 @@ allowed-tools: Read, Write, Edit, Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # PostHog Webhooks & Events
 
 ## Overview
-Securely handle PostHog webhooks with signature validation and replay protection.
+
+Handle PostHog webhooks triggered by Actions and event-based alerts. PostHog fires webhooks when defined Actions match incoming events, allowing you to send notifications, update external systems, or trigger workflows based on user behavior patterns.
 
 ## Prerequisites
-- PostHog webhook secret configured
-- HTTPS endpoint accessible from internet
-- Understanding of cryptographic signatures
-- Redis or database for idempotency (optional)
 
-## Webhook Endpoint Setup
+- PostHog project with API access (cloud or self-hosted)
+- PostHog project API key and personal API key
+- HTTPS endpoint for receiving webhook deliveries
+- Actions configured in PostHog dashboard
 
-### Express.js
-```typescript
-import express from 'express';
-import crypto from 'crypto';
+## Webhook Event Types
 
-const app = express();
-
-// IMPORTANT: Raw body needed for signature verification
-app.post('/webhooks/posthog',
-  express.raw({ type: 'application/json' }),
-  async (req, res) => {
-    const signature = req.headers['x-posthog-signature'] as string;
-    const timestamp = req.headers['x-posthog-timestamp'] as string;
-
-    if (!verifyPostHogSignature(req.body, signature, timestamp)) {
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
-
-    const event = JSON.parse(req.body.toString());
-    await handlePostHogEvent(event);
-
-    res.status(200).json({ received: true });
-  }
-);
-```
-
-## Signature Verification
-
-```typescript
-function verifyPostHogSignature(
-  payload: Buffer,
-  signature: string,
-  timestamp: string
-): boolean {
-  const secret = process.env.POSTHOG_WEBHOOK_SECRET!;
-
-  // Reject old timestamps (replay attack protection)
-  const timestampAge = Date.now() - parseInt(timestamp) * 1000;
-  if (timestampAge > 300000) { // 5 minutes
-    console.error('Webhook timestamp too old');
-    return false;
-  }
-
-  // Compute expected signature
-  const signedPayload = `${timestamp}.${payload.toString()}`;
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(signedPayload)
-    .digest('hex');
-
-  // Timing-safe comparison
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature)
-  );
-}
-```
-
-## Event Handler Pattern
-
-```typescript
-type PostHogEventType = 'resource.created' | 'resource.updated' | 'resource.deleted';
-
-interface PostHogEvent {
-  id: string;
-  type: PostHogEventType;
-  data: Record<string, any>;
-  created: string;
-}
-
-const eventHandlers: Record<PostHogEventType, (data: any) => Promise<void>> = {
-  'resource.created': async (data) => { /* handle */ },
-  'resource.updated': async (data) => { /* handle */ },
-  'resource.deleted': async (data) => { /* handle */ }
-};
-
-async function handlePostHogEvent(event: PostHogEvent): Promise<void> {
-  const handler = eventHandlers[event.type];
-
-  if (!handler) {
-    console.log(`Unhandled event type: ${event.type}`);
-    return;
-  }
-
-  try {
-    await handler(event.data);
-    console.log(`Processed ${event.type}: ${event.id}`);
-  } catch (error) {
-    console.error(`Failed to process ${event.type}: ${event.id}`, error);
-    throw error; // Rethrow to trigger retry
-  }
-}
-```
-
-## Idempotency Handling
-
-```typescript
-import { Redis } from 'ioredis';
-
-const redis = new Redis(process.env.REDIS_URL);
-
-async function isEventProcessed(eventId: string): Promise<boolean> {
-  const key = `posthog:event:${eventId}`;
-  const exists = await redis.exists(key);
-  return exists === 1;
-}
-
-async function markEventProcessed(eventId: string): Promise<void> {
-  const key = `posthog:event:${eventId}`;
-  await redis.set(key, '1', 'EX', 86400 * 7); // 7 days TTL
-}
-```
-
-## Webhook Testing
-
-```bash
-# Use PostHog CLI to send test events
-posthog webhooks trigger resource.created --url http://localhost:3000/webhooks/posthog
-
-# Or use webhook.site for debugging
-curl -X POST https://webhook.site/your-uuid \
-  -H "Content-Type: application/json" \
-  -d '{"type": "resource.created", "data": {}}'
-```
+| Event Source | Trigger | Payload |
+|-------------|---------|---------|
+| Action webhook | Action matches event | Event properties, person data |
+| Zapier integration | Action fires | Structured action data |
+| HogQL alert | Query threshold exceeded | Alert details, query results |
+| Feature flag change | Flag toggled | Flag key, rollout percentage |
+| Export completed | Data export finishes | Export URL, row count |
 
 ## Instructions
 
-### Step 1: Register Webhook Endpoint
-Configure your webhook URL in the PostHog dashboard.
+### Step 1: Create an Action with Webhook
 
-### Step 2: Implement Signature Verification
-Use the signature verification code to validate incoming webhooks.
+Use the PostHog API to create an Action that fires on specific events (e.g., autocapture on signup page). Configure the Action's steps with event type and URL matching.
 
-### Step 3: Handle Events
-Implement handlers for each event type your application needs.
+### Step 2: Configure Webhook Endpoint
 
-### Step 4: Add Idempotency
-Prevent duplicate processing with event ID tracking.
+Build an Express endpoint at `/webhooks/posthog` that receives the event payload (event name, person data, properties, timestamp). Acknowledge with 200 immediately, then route to handlers.
 
-## Output
-- Secure webhook endpoint
-- Signature validation enabled
-- Event handlers implemented
-- Replay attack protection active
+### Step 3: Route and Handle Events
+
+Implement a switch on event name to dispatch to specific handlers: `onUserSignup` (sync to CRM, Slack notify), `onSubscriptionUpgrade` (revenue tracking), `onFeatureActivated` (adoption tracking).
+
+### Step 4: Query Events via API
+
+Use the PostHog events API to query recent events by name and time range for reporting and analysis.
+
+For complete TypeScript implementations, event handlers, and API query code, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
 ## Error Handling
+
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Invalid signature | Wrong secret | Verify webhook secret |
-| Timestamp rejected | Clock drift | Check server time sync |
-| Duplicate events | Missing idempotency | Implement event ID tracking |
-| Handler timeout | Slow processing | Use async queue |
+| Webhook not firing | Action not matched | Test Action with debug mode in PostHog |
+| Missing person data | Anonymous user | Ensure `posthog.identify()` called first |
+| Duplicate events | Action matches multiple | Refine Action event/URL filters |
+| Rate limited | Too many API calls | Use batch endpoints for queries |
+
+## Resources
+
+- [PostHog Webhooks](https://posthog.com/docs/webhooks)
+- [PostHog Actions](https://posthog.com/docs/data/actions)
+- [PostHog API Reference](https://posthog.com/docs/api)
+
+## Next Steps
+
+For deployment setup, see `posthog-deploy-integration`.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [PostHog implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
 
 ## Examples
 
-### Testing Webhooks Locally
-```bash
-# Use ngrok to expose local server
-ngrok http 3000
+**Basic usage**: Apply posthog webhooks events to a standard project setup with default configuration options.
 
-# Send test webhook
-curl -X POST https://your-ngrok-url/webhooks/posthog \
-  -H "Content-Type: application/json" \
-  -d '{"type": "test", "data": {}}'
-```
-
-## Resources
-- [PostHog Webhooks Guide](https://docs.posthog.com/webhooks)
-- [Webhook Security Best Practices](https://docs.posthog.com/webhooks/security)
-
-## Next Steps
-For performance optimization, see `posthog-performance-tuning`.
+**Advanced scenario**: Customize posthog webhooks events for production environments with multiple constraints and team-specific requirements.

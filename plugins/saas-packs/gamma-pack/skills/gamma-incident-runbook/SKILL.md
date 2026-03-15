@@ -1,7 +1,7 @@
 ---
 name: gamma-incident-runbook
 description: |
-  Incident response runbook for Gamma integration issues.
+  Manage incident response for Gamma integration issues.
   Use when experiencing production incidents, outages,
   or need systematic troubleshooting procedures.
   Trigger with phrases like "gamma incident", "gamma outage",
@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(curl:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma Incident Runbook
 
 ## Overview
@@ -36,6 +36,7 @@ Systematic procedures for responding to and resolving Gamma integration incident
 
 ### Step 1: Check Gamma Status
 ```bash
+set -euo pipefail
 # Check Gamma status page
 curl -s https://status.gamma.app/api/v2/status.json | jq '.status'
 
@@ -50,14 +51,15 @@ curl -w "\nTime: %{time_total}s\n" \
 
 ### Step 2: Review Key Metrics
 ```bash
+set -euo pipefail
 # Check error rate (Prometheus)
-curl -s 'http://prometheus:9090/api/v1/query?query=rate(gamma_requests_total{status=~"5.."}[5m])' | jq '.data.result'
+curl -s 'http://prometheus:9090/api/v1/query?query=rate(gamma_requests_total{status=~"5.."}[5m])' | jq '.data.result'  # 9090: Prometheus port
 
 # Check latency P95
-curl -s 'http://prometheus:9090/api/v1/query?query=histogram_quantile(0.95,rate(gamma_request_duration_seconds_bucket[5m]))' | jq '.data.result'
+curl -s 'http://prometheus:9090/api/v1/query?query=histogram_quantile(0.95,rate(gamma_request_duration_seconds_bucket[5m]))' | jq '.data.result'  # Prometheus port
 
 # Check rate limit
-curl -s 'http://prometheus:9090/api/v1/query?query=gamma_rate_limit_remaining' | jq '.data.result'
+curl -s 'http://prometheus:9090/api/v1/query?query=gamma_rate_limit_remaining' | jq '.data.result'  # Prometheus port
 ```
 
 ### Step 3: Review Recent Logs
@@ -66,7 +68,7 @@ curl -s 'http://prometheus:9090/api/v1/query?query=gamma_rate_limit_remaining' |
 grep -i "gamma.*error" /var/log/app/gamma-*.log | tail -100
 
 # Rate limit hits
-grep "429" /var/log/app/gamma-*.log | wc -l
+grep "429" /var/log/app/gamma-*.log | wc -l  # HTTP 429 Too Many Requests
 
 # Timeout errors
 grep -i "timeout" /var/log/app/gamma-*.log | tail -50
@@ -231,3 +233,31 @@ ETA: [If known]
 
 ## Next Steps
 Proceed to `gamma-data-handling` for data management.
+
+## Instructions
+
+1. Assess the current state of the Gamma configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Gamma |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply gamma incident runbook to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma incident runbook for production environments with multiple constraints and team-specific requirements.

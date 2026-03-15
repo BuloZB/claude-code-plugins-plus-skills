@@ -6,6 +6,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(cmd:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
 # Data Preprocessing Pipeline
 
@@ -13,7 +14,7 @@ This skill provides automated assistance for data preprocessing pipeline tasks.
 
 ## Overview
 
-This skill enables Claude to construct and execute automated data preprocessing pipelines, ensuring data quality and readiness for machine learning. It streamlines the data preparation process by automating common tasks such as data cleaning, transformation, and validation.
+construct and execute automated data preprocessing pipelines, ensuring data quality and readiness for machine learning. It streamlines the data preparation process by automating common tasks such as data cleaning, transformation, and validation.
 
 ## How It Works
 

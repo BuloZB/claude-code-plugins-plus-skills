@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Sdk Patterns
 
 ## Prerequisites
@@ -31,7 +31,7 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 8. Configure sampling rates based on traffic volume
 
 
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 - Clean, maintainable error handling code
@@ -40,12 +40,16 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry SDK Docs](https://docs.sentry.io/platforms/)
 - [Sentry Best Practices](https://docs.sentry.io/product/issues/best-practices/)
+
+## Overview
+
+Execute best practices for using Sentry SDK in TypeScript and Python.

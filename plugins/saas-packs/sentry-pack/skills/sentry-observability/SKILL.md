@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Observability
 
 ## Prerequisites
@@ -42,12 +42,16 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry Integrations](https://docs.sentry.io/product/integrations/)
 - [OpenTelemetry Integration](https://docs.sentry.io/platforms/javascript/performance/instrumentation/opentelemetry/)
+
+## Overview
+
+Execute integrate Sentry with observability stack.

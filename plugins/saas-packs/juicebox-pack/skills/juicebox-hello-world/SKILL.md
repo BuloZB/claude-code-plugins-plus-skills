@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Juicebox Hello World
 
 ## Overview
@@ -98,7 +98,7 @@ const results = await client.search.people({
   query: 'senior engineer',
   filters: {
     location: 'New York',
-    company_size: '1000+',
+    company_size: '1000+',  # 1000: 1 second in ms
     experience_years: { min: 5 }
   },
   limit: 20

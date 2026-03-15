@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Bash(prometheus:*), Bash(metrics:*), Bash(monitoring:*), Grep"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Metrics Aggregator
 
@@ -62,7 +63,7 @@ This skill integrates with other plugins that manage infrastructure, deploy appl
 
 - Access to metrics collection tools (Prometheus, StatsD, CloudWatch)
 - Network connectivity to metric sources
-- Metrics storage configuration in {baseDir}/metrics/
+- Metrics storage configuration in ${CLAUDE_SKILL_DIR}/metrics/
 - Understanding of metrics taxonomy
 
 ## Instructions

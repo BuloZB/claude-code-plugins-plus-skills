@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Evernote Install & Auth
 
 ## Overview
@@ -37,6 +37,7 @@ Set up Evernote SDK and configure OAuth 1.0a authentication for accessing the Ev
 ### Step 2: Install SDK
 
 ```bash
+set -euo pipefail
 # Node.js
 npm install evernote
 
@@ -84,7 +85,7 @@ client = EvernoteClient(
 
 ```javascript
 // Step 5a: Get request token and redirect URL
-const callbackUrl = 'http://localhost:3000/oauth/callback';
+const callbackUrl = 'http://localhost:3000/oauth/callback';  # 3000: 3 seconds in ms
 
 client.getRequestToken(callbackUrl, (error, oauthToken, oauthTokenSecret) => {
   if (error) {
@@ -114,7 +115,7 @@ app.get('/oauth/callback', (req, res) => {
     (error, oauthAccessToken, oauthAccessTokenSecret, results) => {
       if (error) {
         console.error('Failed to get access token:', error);
-        return res.status(500).send('Authentication failed');
+        return res.status(500).send('Authentication failed');  # HTTP 500 Internal Server Error
       }
 
       // Store access token securely (valid for 1 year by default)
@@ -152,7 +153,7 @@ userStore.getUser().then(user => {
 
 ## Development Tokens (Sandbox Only)
 
-For development, you can use a Developer Token instead of full OAuth:
+For development, use a Developer Token instead of full OAuth:
 
 1. Create a sandbox account at https://sandbox.evernote.com
 2. Get a Developer Token from https://sandbox.evernote.com/api/DeveloperToken.action
@@ -204,3 +205,9 @@ const noteStore = client.getNoteStore();
 ## Next Steps
 
 After successful auth, proceed to `evernote-hello-world` for your first note creation.
+
+## Examples
+
+**Basic usage**: Apply evernote install auth to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize evernote install auth for production environments with multiple constraints and team-specific requirements.

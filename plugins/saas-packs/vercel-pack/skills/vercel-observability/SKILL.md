@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Observability
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Define Prometheus alerting rules for error rates and latency.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Prometheus Best Practices](https://prometheus.io/docs/practices/naming/)
 - [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
 - [Vercel Observability Guide](https://vercel.com/docs/observability)
+
+## Overview
+
+Execute set up comprehensive observability for Vercel integrations with metrics, traces, and alerts.

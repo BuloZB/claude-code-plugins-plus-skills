@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Rate Limits
 
 ## Prerequisites
@@ -20,7 +20,7 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 - Access to rate limit headers
 
 
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 - Reliable API calls with automatic retry
@@ -29,12 +29,24 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Rate Limits](https://vercel.com/docs/rate-limits)
 - [p-queue Documentation](https://github.com/sindresorhus/p-queue)
+
+## Overview
+
+Implement Vercel rate limiting, backoff, and idempotency patterns.
+
+## Instructions
+
+1. Assess the current state of the API configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference

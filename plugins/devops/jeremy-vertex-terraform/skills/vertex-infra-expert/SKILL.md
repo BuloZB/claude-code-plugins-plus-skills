@@ -6,8 +6,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(terraform:*), Bash(gcloud:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vertex Infra Expert
 
 ## Overview
@@ -38,14 +38,19 @@ Before using this skill, ensure:
 ## Output
 
 
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [Terraform implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 
@@ -53,4 +58,4 @@ See `{baseDir}/references/examples.md` for detailed examples.
 - Vertex AI documentation: https://cloud.google.com/vertex-ai/docs
 - Model Garden: https://cloud.google.com/model-garden
 - Vector Search guide: https://cloud.google.com/vertex-ai/docs/vector-search
-- Terraform examples in {baseDir}/vertex-examples/
+- Terraform examples in ${CLAUDE_SKILL_DIR}/vertex-examples/

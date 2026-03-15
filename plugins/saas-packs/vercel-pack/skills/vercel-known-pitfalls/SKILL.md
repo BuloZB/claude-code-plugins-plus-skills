@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Known Pitfalls
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Set up linting and CI checks to prevent recurrence.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Security Guide](https://vercel.com/docs/security)
 - [Vercel Best Practices](https://vercel.com/docs/best-practices)
+
+## Overview
+
+Execute identify and avoid Vercel anti-patterns and common integration mistakes.

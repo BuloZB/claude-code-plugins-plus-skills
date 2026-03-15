@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # OpenEvidence Hello World
 
 ## Overview
@@ -70,7 +70,7 @@ node dist/openevidence-demo.js
 - Console output showing:
 ```
 Answer: First-line treatment for type 2 diabetes in adults typically includes...
-Sources: ["NEJM 2024", "ADA Standards of Care 2025", "JAMA Internal Medicine"]
+Sources: ["NEJM 2024", "ADA Standards of Care 2025", "JAMA Internal Medicine"]  # 2024: 2025 year
 Confidence: 0.95
 ```
 

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(gh:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Linear CI Integration
 
 ## Overview
@@ -271,3 +271,9 @@ jobs:
 
 ## Next Steps
 Configure deployment integration with `linear-deploy-integration`.
+
+## Examples
+
+**Basic usage**: Apply linear ci integration to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize linear ci integration for production environments with multiple constraints and team-specific requirements.

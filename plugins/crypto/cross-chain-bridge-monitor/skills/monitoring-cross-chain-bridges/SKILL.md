@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python:*bridge_monitor*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Cross-Chain Bridge Monitor
 
 ## Overview
@@ -48,7 +48,7 @@ Shows detailed info including volume, chains, and TVL breakdown.
 
 ### compare - Compare Routes
 ```bash
-python bridge_monitor.py compare --source ethereum --dest arbitrum --amount 1000 --token USDC
+python bridge_monitor.py compare --source ethereum --dest arbitrum --amount 1000 --token USDC  # 1000: 1 second in ms
 ```
 Compares fees and transfer times across bridges for a route.
 
@@ -75,13 +75,13 @@ Shows supported bridge protocols with their chains.
 
 1. **Check bridge TVL rankings**:
    ```bash
-   cd {baseDir}/scripts
+   cd ${CLAUDE_SKILL_DIR}/scripts
    python bridge_monitor.py tvl
    ```
 
 2. **Compare bridge routes** before transferring:
    ```bash
-   python bridge_monitor.py compare -s ethereum -d base -a 5000 -t USDC
+   python bridge_monitor.py compare -s ethereum -d base -a 5000 -t USDC  # 5000: bridge transfer amount in USD
    ```
 
 3. **Get bridge details** for research:
@@ -123,14 +123,14 @@ Shows supported bridge protocols with their chains.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling including:
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling including:
 - API unavailability and fallback behavior
 - Transaction tracking edge cases
 - Rate limiting mitigation
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples including:
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples including:
 - Finding best route for large transfers
 - Monitoring transactions after bridging
 - Research workflows for bridge safety

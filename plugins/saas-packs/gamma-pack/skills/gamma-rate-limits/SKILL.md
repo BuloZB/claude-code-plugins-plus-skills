@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma Rate Limits
 
 ## Overview
@@ -41,25 +41,25 @@ const response = await gamma.presentations.list();
 const headers = response.headers;
 console.log('Limit:', headers['x-ratelimit-limit']);
 console.log('Remaining:', headers['x-ratelimit-remaining']);
-console.log('Reset:', new Date(headers['x-ratelimit-reset'] * 1000));
+console.log('Reset:', new Date(headers['x-ratelimit-reset'] * 1000));  # 1000: 1 second in ms
 ```
 
 ### Step 2: Implement Exponential Backoff
 ```typescript
 async function withBackoff<T>(
   fn: () => Promise<T>,
-  options = { maxRetries: 5, baseDelay: 1000 }
+  options = { maxRetries: 5, baseDelay: 1000 }  # 1000: 1 second in ms
 ): Promise<T> {
   for (let attempt = 0; attempt < options.maxRetries; attempt++) {
     try {
       return await fn();
     } catch (err) {
-      if (err.status !== 429 || attempt === options.maxRetries - 1) {
+      if (err.status !== 429 || attempt === options.maxRetries - 1) {  # HTTP 429 Too Many Requests
         throw err;
       }
 
       const delay = err.retryAfter
-        ? err.retryAfter * 1000
+        ? err.retryAfter * 1000  # 1 second in ms
         : options.baseDelay * Math.pow(2, attempt);
 
       console.log(`Rate limited. Retrying in ${delay}ms...`);
@@ -85,7 +85,7 @@ class RateLimitedQueue {
 
   constructor(requestsPerMinute = 60) {
     this.requestsPerMinute = requestsPerMinute;
-    this.interval = 60000 / requestsPerMinute;
+    this.interval = 60000 / requestsPerMinute;  # 60000: 1 minute in ms
   }
 
   async add<T>(fn: () => Promise<T>): Promise<T> {
@@ -134,8 +134,8 @@ async function getRateLimitStatus() {
     limit: status.limit,
     remaining: status.remaining,
     percentUsed: ((status.limit - status.remaining) / status.limit * 100).toFixed(1),
-    resetAt: new Date(status.reset * 1000),
-    resetIn: Math.ceil((status.reset * 1000 - Date.now()) / 1000),
+    resetAt: new Date(status.reset * 1000),  # 1000: 1 second in ms
+    resetIn: Math.ceil((status.reset * 1000 - Date.now()) / 1000),  # 1 second in ms
   };
 }
 
@@ -165,3 +165,9 @@ console.log(`Resets in ${status.resetIn} seconds`);
 
 ## Next Steps
 Proceed to `gamma-security-basics` for security best practices.
+
+## Examples
+
+**Basic usage**: Apply gamma rate limits to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma rate limits for production environments with multiple constraints and team-specific requirements.

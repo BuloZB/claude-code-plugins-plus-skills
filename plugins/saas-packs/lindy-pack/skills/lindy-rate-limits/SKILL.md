@@ -10,193 +10,58 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Lindy Rate Limits
 
 ## Overview
-Comprehensive guide to understanding and managing Lindy API rate limits.
+Rate limit management for Lindy AI agent API. Lindy's agent execution model involves orchestrating multiple service calls per request, making rate limits apply at both the API level and the agent action level.
 
 ## Prerequisites
-- Lindy SDK installed
-- Understanding of your plan's limits
-- Access to usage dashboard
+- Lindy API configured
+- Understanding of agent execution costs
+- Monitoring for action-level limits
 
-## Rate Limit Tiers
+## Lindy Rate Limits
 
-### Free Tier
 | Resource | Limit | Window |
 |----------|-------|--------|
-| API Requests | 100/min | Rolling |
-| Agent Runs | 50/day | Daily |
-| Concurrent Runs | 2 | Instant |
-
-### Pro Tier
-| Resource | Limit | Window |
-|----------|-------|--------|
-| API Requests | 1000/min | Rolling |
-| Agent Runs | 1000/day | Daily |
-| Concurrent Runs | 10 | Instant |
-
-### Enterprise
-| Resource | Limit | Window |
-|----------|-------|--------|
-| API Requests | Custom | Rolling |
-| Agent Runs | Unlimited | - |
-| Concurrent Runs | 100+ | Instant |
+| API Requests | 100/min | Per API key |
+| Agent Triggers | 50/min | Per agent |
+| Actions Per Agent | 200/hour | Per agent |
+| Webhook Deliveries | 500/min | Per endpoint |
 
 ## Instructions
 
-### Step 1: Check Current Usage
-```typescript
-import { Lindy } from '@lindy-ai/sdk';
+### Step 1: API-Level Rate Limiter
 
-const lindy = new Lindy({ apiKey: process.env.LINDY_API_KEY });
+### Step 2: Agent Action Budget
 
-async function checkUsage() {
-  const usage = await lindy.usage.current();
+Track actions per agent to prevent hitting hourly limits.
 
-  console.log('Current Usage:');
-  console.log(`  API Requests: ${usage.apiRequests.used}/${usage.apiRequests.limit}`);
-  console.log(`  Agent Runs: ${usage.agentRuns.used}/${usage.agentRuns.limit}`);
-  console.log(`  Concurrent: ${usage.concurrent.active}/${usage.concurrent.limit}`);
+### Step 3: Webhook Rate Management
 
-  return usage;
-}
-```
-
-### Step 2: Implement Rate Limiter
-```typescript
-class RateLimiter {
-  private tokens: number;
-  private lastRefill: number;
-  private readonly maxTokens: number;
-  private readonly refillRate: number; // tokens per second
-
-  constructor(maxTokens: number, refillRate: number) {
-    this.maxTokens = maxTokens;
-    this.tokens = maxTokens;
-    this.refillRate = refillRate;
-    this.lastRefill = Date.now();
-  }
-
-  async acquire(): Promise<void> {
-    this.refill();
-
-    if (this.tokens < 1) {
-      const waitTime = (1 - this.tokens) / this.refillRate * 1000;
-      await new Promise(r => setTimeout(r, waitTime));
-      this.refill();
-    }
-
-    this.tokens -= 1;
-  }
-
-  private refill(): void {
-    const now = Date.now();
-    const elapsed = (now - this.lastRefill) / 1000;
-    this.tokens = Math.min(this.maxTokens, this.tokens + elapsed * this.refillRate);
-    this.lastRefill = now;
-  }
-}
-
-// Usage: 100 requests per minute
-const limiter = new RateLimiter(100, 100 / 60);
-
-async function rateLimitedRequest<T>(fn: () => Promise<T>): Promise<T> {
-  await limiter.acquire();
-  return fn();
-}
-```
-
-### Step 3: Handle Rate Limit Errors
-```typescript
-async function withRetryOnRateLimit<T>(
-  fn: () => Promise<T>,
-  maxRetries = 5
-): Promise<T> {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (error: any) {
-      if (error.code === 'LINDY_RATE_LIMITED') {
-        const retryAfter = error.retryAfter || Math.pow(2, attempt);
-        console.log(`Rate limited. Retrying in ${retryAfter}s...`);
-        await new Promise(r => setTimeout(r, retryAfter * 1000));
-        continue;
-      }
-      throw error;
-    }
-  }
-  throw new Error('Max retries exceeded');
-}
-```
-
-## Output
-- Usage monitoring implementation
-- Client-side rate limiter
-- Retry logic for rate limit errors
-- Optimized API usage patterns
+For detailed implementation code and configurations, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
 ## Error Handling
-| Scenario | Strategy | Code |
-|----------|----------|------|
-| Near limit | Slow down | Reduce request rate |
-| Hit limit | Wait | Respect Retry-After |
-| Burst | Queue | Implement request queue |
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| 429 API response | Exceeded 100 RPM | Rate limiter with backoff |
+| Agent actions blocked | Exceeded 200 actions/hour | Track and budget agent actions |
+| Webhook flood | External trigger storm | Rate limit webhook processing |
+| Agent stalled | Hit action limit mid-workflow | Monitor remaining budget |
 
 ## Examples
 
-### Queue-Based Rate Limiting
-```typescript
-class RequestQueue {
-  private queue: Array<() => Promise<void>> = [];
-  private processing = false;
-  private requestsThisMinute = 0;
-  private lastMinuteStart = Date.now();
-
-  async enqueue<T>(fn: () => Promise<T>): Promise<T> {
-    return new Promise((resolve, reject) => {
-      this.queue.push(async () => {
-        try {
-          resolve(await fn());
-        } catch (e) {
-          reject(e);
-        }
-      });
-      this.processQueue();
-    });
-  }
-
-  private async processQueue(): Promise<void> {
-    if (this.processing) return;
-    this.processing = true;
-
-    while (this.queue.length > 0) {
-      if (Date.now() - this.lastMinuteStart > 60000) {
-        this.requestsThisMinute = 0;
-        this.lastMinuteStart = Date.now();
-      }
-
-      if (this.requestsThisMinute >= 100) {
-        await new Promise(r => setTimeout(r, 1000));
-        continue;
-      }
-
-      const request = this.queue.shift()!;
-      this.requestsThisMinute++;
-      await request();
-    }
-
-    this.processing = false;
-  }
-}
-```
-
+### Status Dashboard
 ## Resources
-- [Lindy Rate Limits](https://docs.lindy.ai/rate-limits)
-- [Usage Dashboard](https://app.lindy.ai/usage)
-- [Upgrade Plans](https://lindy.ai/pricing)
+- [Lindy API Docs](https://docs.lindy.ai)
 
-## Next Steps
-Proceed to `lindy-security-basics` for security configuration.
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [API implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.

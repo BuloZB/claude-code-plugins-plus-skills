@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Cost Tuning
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Enable batching, caching, and sampling where appropriate.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Supabase Pricing](https://supabase.com/pricing)
 - [Supabase Billing Dashboard](https://dashboard.supabase.com/billing)
+
+## Overview
+
+Optimize Supabase costs through tier selection, sampling, and usage monitoring.

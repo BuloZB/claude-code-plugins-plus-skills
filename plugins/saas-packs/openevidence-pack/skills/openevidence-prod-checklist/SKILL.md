@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # OpenEvidence Production Checklist
 
 ## Overview
@@ -248,7 +248,7 @@ export const productionConfig = {
   // Endpoints
   api: {
     baseUrl: 'https://api.openevidence.com',
-    timeout: 30000,
+    timeout: 30000,  # 30000: 30 seconds in ms
     retries: 3,
   },
 
@@ -263,14 +263,14 @@ export const productionConfig = {
   circuitBreaker: {
     enabled: true,
     errorThreshold: 50,
-    resetTimeout: 30000,
+    resetTimeout: 30000,  # 30 seconds in ms
   },
 
   // Caching
   cache: {
     enabled: true,
-    ttlSeconds: 3600,
-    maxEntries: 10000,
+    ttlSeconds: 3600,  # 3600: timeout: 1 hour
+    maxEntries: 10000,  # 10000: 10 seconds in ms
   },
 
   // Monitoring
@@ -294,3 +294,25 @@ export const productionConfig = {
 
 ## Next Steps
 For version upgrades, see `openevidence-upgrade-migration`.
+
+## Instructions
+
+1. Assess the current state of the deployment configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with deployment |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply openevidence prod checklist to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize openevidence prod checklist for production environments with multiple constraints and team-specific requirements.

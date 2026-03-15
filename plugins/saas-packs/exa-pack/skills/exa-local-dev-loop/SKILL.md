@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pnpm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Exa Local Dev Loop
 
 ## Overview
@@ -43,6 +43,7 @@ my-exa-project/
 
 ### Step 2: Configure Environment
 ```bash
+set -euo pipefail
 # Copy environment template
 cp .env.example .env.local
 
@@ -104,6 +105,7 @@ vi.mock('@exa/sdk', () => ({
 
 ### Debug Mode
 ```bash
+set -euo pipefail
 # Enable verbose logging
 DEBUG=EXA=* npm run dev
 ```

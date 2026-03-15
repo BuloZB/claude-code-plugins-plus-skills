@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Webhooks Events
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Prevent duplicate processing with event ID tracking.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Webhooks Guide](https://vercel.com/docs/webhooks)
 - [Webhook Security Best Practices](https://vercel.com/docs/webhooks/security)
+
+## Overview
+
+Implement Vercel webhook signature validation and event handling.

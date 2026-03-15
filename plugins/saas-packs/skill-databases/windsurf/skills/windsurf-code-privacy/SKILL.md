@@ -8,13 +8,13 @@ allowed-tools: Read,Write,Edit
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Code Privacy
 
 ## Overview
 
-This skill enables comprehensive privacy configuration for Windsurf deployments. It covers data transmission controls, retention policies, regional compliance settings, and code exclusion patterns. Proper privacy configuration ensures your organization meets GDPR, CCPA, and other regulatory requirements while using AI-assisted development tools.
+This skill enables comprehensive privacy configuration for Windsurf deployments. It covers data transmission controls, retention policies, regional compliance settings, and code exclusion patterns.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables comprehensive privacy configuration for Windsurf deployments.
 4. **Enable Regional Compliance**
 5. **Document and Monitor**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

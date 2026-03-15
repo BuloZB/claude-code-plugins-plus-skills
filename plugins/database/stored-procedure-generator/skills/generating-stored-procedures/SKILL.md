@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(psql:*), Bash(mysql:*), Bash(
 version: 2.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Stored Procedure Generator
 
 Generate production-ready stored procedures for PostgreSQL, MySQL, and SQL Server with proper error handling, transaction management, and security best practices.
@@ -24,7 +24,7 @@ Generate production-ready stored procedures for PostgreSQL, MySQL, and SQL Serve
 
 ## Instructions
 
-### 1. Identify Database Type and Requirements
+### Step 1: Identify Database Type and Requirements
 
 Determine the target database and procedure requirements:
 
@@ -41,7 +41,7 @@ SHOW VARIABLES LIKE 'sql_mode';
 SELECT @@VERSION;
 ```
 
-### 2. Generate Stored Procedure
+### Step 2: Generate Stored Procedure
 
 **PostgreSQL Function (PL/pgSQL):**
 
@@ -75,7 +75,7 @@ BEGIN
     SELECT COUNT(*) INTO user_exists FROM users WHERE id = p_user_id;
 
     IF user_exists = 0 THEN
-        SIGNAL SQLSTATE '45000'
+        SIGNAL SQLSTATE '45000'  # 45000 = configured value
             SET MESSAGE_TEXT = 'User not found';
     END IF;
 
@@ -108,7 +108,7 @@ END;
 GO
 ```
 
-### 3. Add Transaction Management
+### Step 3: Add Transaction Management
 
 **PostgreSQL with Transaction:**
 
@@ -168,7 +168,7 @@ BEGIN
     WHERE id = p_from_account AND balance >= p_amount;
 
     IF ROW_COUNT() = 0 THEN
-        SIGNAL SQLSTATE '45000'
+        SIGNAL SQLSTATE '45000'  # 45000 = configured value
             SET MESSAGE_TEXT = 'Insufficient funds';
     END IF;
 
@@ -180,34 +180,34 @@ END //
 DELIMITER ;
 ```
 
-### 4. Validate Syntax
+### Step 4: Validate Syntax
 
 Use the validation script to check procedure syntax:
 
 ```bash
 # Validate PostgreSQL procedure
-python3 {baseDir}/scripts/stored_procedure_syntax_validator.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/stored_procedure_syntax_validator.py \
     --db-type postgresql \
     --file procedure.sql
 
 # Validate MySQL procedure
-python3 {baseDir}/scripts/stored_procedure_syntax_validator.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/stored_procedure_syntax_validator.py \
     --db-type mysql \
     --file procedure.sql
 ```
 
-### 5. Deploy to Database
+### Step 5: Deploy to Database
 
 ```bash
 # Deploy to PostgreSQL
-python3 {baseDir}/scripts/stored_procedure_deployer.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/stored_procedure_deployer.py \
     --db-type postgresql \
     --host localhost \
     --database mydb \
     --file procedure.sql
 
 # Deploy to MySQL
-python3 {baseDir}/scripts/stored_procedure_deployer.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/stored_procedure_deployer.py \
     --db-type mysql \
     --host localhost \
     --database mydb \
@@ -258,8 +258,12 @@ Claude: I'll create an audit trigger that:
 
 ## Resources
 
-- `{baseDir}/references/postgresql_stored_procedure_best_practices.md`
-- `{baseDir}/references/mysql_stored_procedure_best_practices.md`
-- `{baseDir}/references/sqlserver_stored_procedure_best_practices.md`
-- `{baseDir}/references/database_security_guidelines.md`
-- `{baseDir}/references/stored_procedure_optimization_techniques.md`
+- `${CLAUDE_SKILL_DIR}/references/postgresql_stored_procedure_best_practices.md`
+- `${CLAUDE_SKILL_DIR}/references/mysql_stored_procedure_best_practices.md`
+- `${CLAUDE_SKILL_DIR}/references/sqlserver_stored_procedure_best_practices.md`
+- `${CLAUDE_SKILL_DIR}/references/database_security_guidelines.md`
+- `${CLAUDE_SKILL_DIR}/references/stored_procedure_optimization_techniques.md`
+
+## Overview
+
+Use when you need to generate, validate, or deploy stored procedures for PostgreSQL, MySQL, or SQL Server.

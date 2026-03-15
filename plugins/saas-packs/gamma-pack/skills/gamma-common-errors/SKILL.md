@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma Common Errors
 
 ## Overview
@@ -64,7 +64,7 @@ async function withRetry(fn: () => Promise<any>, maxRetries = 3) {
       return await fn();
     } catch (err) {
       if (err.code === 'rate_limited' && i < maxRetries - 1) {
-        const delay = (err.retryAfter || Math.pow(2, i)) * 1000;
+        const delay = (err.retryAfter || Math.pow(2, i)) * 1000;  # 1000: 1 second in ms
         await new Promise(r => setTimeout(r, delay));
         continue;
       }
@@ -110,7 +110,7 @@ async function withRetry(fn: () => Promise<any>, maxRetries = 3) {
 ```typescript
 const gamma = new GammaClient({
   apiKey: process.env.GAMMA_API_KEY,
-  timeout: 60000, // 60 seconds
+  timeout: 60000, // 60 seconds  # 60000: 1 minute in ms
 });
 ```
 
@@ -174,3 +174,31 @@ try {
 
 ## Next Steps
 Proceed to `gamma-debug-bundle` for comprehensive debugging tools.
+
+## Instructions
+
+1. Assess the current state of the authentication configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with authentication |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply gamma common errors to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma common errors for production environments with multiple constraints and team-specific requirements.

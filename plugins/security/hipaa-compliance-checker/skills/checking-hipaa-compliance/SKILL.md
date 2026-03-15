@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(security:*), Bash(scan:*), Bash(audit:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Hipaa Compliance Checker
 
@@ -61,7 +62,7 @@ This skill can be integrated with other security and compliance tools to provide
 
 ## Prerequisites
 
-- Access to codebase and configuration files in {baseDir}/
+- Access to codebase and configuration files in ${CLAUDE_SKILL_DIR}/
 - Security scanning tools installed as needed
 - Understanding of security standards and best practices
 - Permissions for security analysis operations

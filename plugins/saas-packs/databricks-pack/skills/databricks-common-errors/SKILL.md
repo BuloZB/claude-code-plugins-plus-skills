@@ -10,8 +10,8 @@ allowed-tools: Read, Grep, Bash(databricks:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Databricks Common Errors
 
 ## Overview
@@ -85,7 +85,7 @@ SparkException: Job aborted due to stage failure
 {
     "spark.driver.memory": "8g",
     "spark.executor.memory": "8g",
-    "spark.sql.shuffle.partitions": "200"
+    "spark.sql.shuffle.partitions": "200"  # HTTP 200 OK
 }
 
 # Or use more efficient operations
@@ -233,7 +233,7 @@ print(f"Extra in source: {source_cols - target_cols}")
 **Error Message:**
 ```
 RateLimitExceeded: Too many requests
-HTTP 429: Rate limit exceeded
+HTTP 429: Rate limit exceeded  # HTTP 429 Too Many Requests
 ```
 
 **Cause:** Too many API calls in short period.
@@ -269,7 +269,7 @@ Run terminated with error: Task failed with error
 **Solution:**
 ```bash
 # Get detailed run info
-databricks runs get --run-id 12345
+databricks runs get --run-id 12345  # port 12345 - example/test
 
 # Get run output (stdout/stderr)
 databricks runs get-output --run-id 12345
@@ -284,7 +284,7 @@ databricks runs get-output --run-id 12345
 ```python
 # Programmatic debugging
 w = WorkspaceClient()
-run = w.jobs.get_run(run_id=12345)
+run = w.jobs.get_run(run_id=12345)  # port 12345 - example/test
 
 print(f"State: {run.state.life_cycle_state}")
 print(f"Result: {run.state.result_state}")
@@ -305,7 +305,7 @@ for task in run.tasks:
 databricks clusters get --cluster-id abc123
 
 # Get recent job runs
-databricks runs list --job-id 456 --limit 5
+databricks runs list --job-id 456 --limit 5  # 456 = configured value
 
 # Check workspace permissions
 databricks permissions get jobs --job-id 456

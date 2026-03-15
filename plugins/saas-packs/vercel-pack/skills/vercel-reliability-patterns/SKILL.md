@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Reliability Patterns
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Handle permanent failures gracefully.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Circuit Breaker Pattern](https://martinfowler.com/bliki/CircuitBreaker.html)
 - [Opossum Documentation](https://nodeshift.dev/opossum/)
 - [Vercel Reliability Guide](https://vercel.com/docs/reliability)
+
+## Overview
+
+Implement Vercel reliability patterns including circuit breakers, idempotency, and graceful degradation.

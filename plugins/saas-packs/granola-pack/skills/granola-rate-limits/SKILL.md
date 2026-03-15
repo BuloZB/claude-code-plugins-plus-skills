@@ -1,7 +1,7 @@
 ---
 name: granola-rate-limits
 description: |
-  Understand Granola usage limits, quotas, and plan restrictions.
+  Monitor Granola usage limits, quotas, and plan restrictions.
   Use when hitting usage limits, planning capacity,
   or understanding plan differences.
   Trigger with phrases like "granola limits", "granola quota",
@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Granola Rate Limits
 
 ## Overview
@@ -79,7 +79,7 @@ Storage:
 Integrations:
 [==========] 2/2 connected
 
-Reset Date: February 1, 2025
+Reset Date: February 1, 2025  # 2025 year
 ```
 
 ## Rate Limit Behaviors
@@ -176,3 +176,37 @@ Required Plan: Pro
 
 ## Next Steps
 Proceed to `granola-security-basics` for security best practices.
+
+## Prerequisites
+
+- Access to the Granola Rate Limits environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with Granola Rate Limits concepts and terminology
+
+## Instructions
+
+1. Assess the current state of the Granola Rate Limits configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Granola Rate Limits |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply granola rate limits to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize granola rate limits for production environments with multiple constraints and team-specific requirements.

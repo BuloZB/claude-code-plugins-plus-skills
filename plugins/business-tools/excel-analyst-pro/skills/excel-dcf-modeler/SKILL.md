@@ -8,8 +8,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(cmd:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Excel DCF Modeler
 
 ## Overview
@@ -59,4 +59,4 @@ Result: Model with synergy adjustments, scenario analysis, and per-share valuati
 
 - [Damodaran Online DCF Resources](https://pages.stern.nyu.edu/~adamodar/)
 - [WSO DCF Modeling Guide](https://www.wallstreetoasis.com/)
-- `{baseDir}/references/dcf-formulas.md` for Excel formula templates
+- `${CLAUDE_SKILL_DIR}/references/dcf-formulas.md` for Excel formula templates

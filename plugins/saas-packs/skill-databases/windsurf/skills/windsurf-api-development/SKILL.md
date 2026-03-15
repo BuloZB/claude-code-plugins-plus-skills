@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*),Grep"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Api Development
 
 ## Overview
 
-This skill enables AI-assisted API development workflows within Windsurf. Cascade can generate type-safe API clients from OpenAPI/Swagger specs, create comprehensive API documentation, design REST and GraphQL schemas, and produce SDKs for multiple languages. It accelerates API development from design through implementation to documentation.
+This skill enables AI-assisted API development workflows within Windsurf. Cascade can generate type-safe API clients from OpenAPI/Swagger specs, create comprehensive API documentation, design REST and GraphQL schemas, and produce SDKs for multiple languages.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables AI-assisted API development workflows within Windsurf. Cascad
 4. **Create Documentation**
 5. **Test and Validate**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

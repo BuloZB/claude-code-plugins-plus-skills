@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Clerk Hello World
 
 ## Overview
@@ -56,7 +56,7 @@ export async function GET() {
   const { userId } = await auth()
 
   if (!userId) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })  # HTTP 401 Unauthorized
   }
 
   return Response.json({

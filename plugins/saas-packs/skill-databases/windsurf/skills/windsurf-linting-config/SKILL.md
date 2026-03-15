@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*)"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Linting Config
 
 ## Overview
 
-This skill enables comprehensive linting configuration within Windsurf. Cascade assists with ESLint, Prettier, Stylelint, and other linting tool setup, helping resolve configuration conflicts, suggesting rules based on project patterns, and automating code quality enforcement. Proper linting configuration catches errors early and maintains consistent code style.
+This skill enables comprehensive linting configuration within Windsurf. Cascade assists with ESLint, Prettier, Stylelint, and other linting tool setup, helping resolve configuration conflicts, suggesting rules based on project patterns, and automating code quality enforcement.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables comprehensive linting configuration within Windsurf. Cascade 
 4. **Add Pre-Commit Hooks**
 5. **Integrate with CI**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

@@ -6,6 +6,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(cmd:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
 # Recommendation Engine
 
@@ -13,7 +14,7 @@ This skill provides automated assistance for recommendation engine tasks.
 
 ## Overview
 
-This skill enables Claude to design and implement recommendation systems tailored to specific datasets and use cases. It automates the process of selecting appropriate algorithms, preprocessing data, training models, and evaluating performance, ultimately providing users with a functional recommendation engine.
+design and implement recommendation systems tailored to specific datasets and use cases. It automates the process of selecting appropriate algorithms, preprocessing data, training models, and evaluating performance, ultimately providing users with a functional recommendation engine.
 
 ## How It Works
 

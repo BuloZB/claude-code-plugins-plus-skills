@@ -22,14 +22,14 @@ const DIST_DIR = path.join(REPO_ROOT, 'marketplace', 'dist');
 // Directories to exclude from performance analysis (binary downloads, not web assets)
 const EXCLUDE_DIRS = ['downloads'];
 
-// Performance budgets (calibrated for 270+ plugin marketplace, 2026-02)
+// Performance budgets (calibrated for 343+ plugin marketplace, 2026-03)
 const BUDGETS = {
-  totalSize: 12 * 1024 * 1024,  // 12MB gzipped (270+ plugin pages + explore/skills/compare)
-  largestFile: 500 * 1024,      // 500KB gzipped (explore page lists all plugins)
+  totalSize: 16 * 1024 * 1024,  // 16MB gzipped (343+ plugin pages + dark/light theme CSS + scroll reveals + explore/skills/compare)
+  largestFile: 550 * 1024,      // 550KB gzipped (explore page lists all plugins + keyword filter + install buttons)
   buildTime: 10 * 1000,         // 10 seconds (ms)
   routeCount: {
     min: 1600,
-    max: 1850,  // 270+ plugins × multiple page types + core pages
+    max: 2000,  // 340+ plugins × multiple page types + core pages
   },
 };
 

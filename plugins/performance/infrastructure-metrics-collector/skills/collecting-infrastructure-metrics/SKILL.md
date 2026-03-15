@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(metrics:*), Bash(monitoring:*), Bash(system:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Infrastructure Metrics Collector
 
@@ -61,7 +62,7 @@ This skill can be integrated with other plugins for deployment, configuration ma
 - Access to infrastructure monitoring systems (Prometheus, Datadog, CloudWatch)
 - System permissions for metrics agent installation
 - Network access to monitored infrastructure components
-- Storage for metrics data in {baseDir}/metrics/
+- Storage for metrics data in ${CLAUDE_SKILL_DIR}/metrics/
 
 ## Instructions
 

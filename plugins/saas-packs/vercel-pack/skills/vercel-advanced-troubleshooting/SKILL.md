@@ -10,8 +10,8 @@ allowed-tools: Read, Grep, Bash(kubectl:*), Bash(curl:*), Bash(tcpdump:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Advanced Troubleshooting
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Use the support template with all collected evidence.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Support Portal](https://support.vercel.com)
 - [Vercel Status Page](https://www.vercel-status.com)
+
+## Overview
+
+Execute apply Vercel advanced debugging techniques for hard-to-diagnose issues.

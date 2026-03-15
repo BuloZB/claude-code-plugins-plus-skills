@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Security Basics
 
 ## Prerequisites
@@ -20,7 +20,7 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 - Access to Vercel dashboard
 
 
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 - Secure API key storage
@@ -29,12 +29,24 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Security Guide](https://vercel.com/docs/security)
 - [Vercel API Scopes](https://vercel.com/docs/scopes)
+
+## Overview
+
+Execute apply Vercel security best practices for secrets and access control.
+
+## Instructions
+
+1. Assess the current state of the security configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference

@@ -1,7 +1,7 @@
 ---
 name: langchain-upgrade-migration
 description: |
-  Plan and execute LangChain SDK upgrades and migrations.
+  Manage LangChain SDK upgrades and migrations.
   Use when upgrading LangChain versions, migrating from legacy patterns,
   or updating to new APIs after breaking changes.
   Trigger with phrases like "upgrade langchain", "langchain migration",
@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # LangChain Upgrade Migration
 
 ## Overview
@@ -27,6 +27,7 @@ Guide for upgrading LangChain versions safely with migration strategies for brea
 
 ### Step 1: Check Current Versions
 ```bash
+set -euo pipefail
 pip show langchain langchain-core langchain-openai langchain-community
 
 # Output current requirements
@@ -155,6 +156,7 @@ chain_with_history = RunnableWithMessageHistory(
 
 ### Step 7: Upgrade Packages
 ```bash
+set -euo pipefail
 # Create backup of current environment
 pip freeze > requirements_backup.txt
 
@@ -206,3 +208,15 @@ mypy src/
 
 ## Next Steps
 After upgrade, use `langchain-common-errors` to troubleshoot any issues.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Examples
+
+**Basic usage**: Apply langchain upgrade migration to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize langchain upgrade migration for production environments with multiple constraints and team-specific requirements.

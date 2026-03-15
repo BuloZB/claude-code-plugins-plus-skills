@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Webhooks Events
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Prevent duplicate processing with event ID tracking.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Supabase Webhooks Guide](https://supabase.com/docs/webhooks)
 - [Webhook Security Best Practices](https://supabase.com/docs/webhooks/security)
+
+## Overview
+
+Implement Supabase webhook signature validation and event handling.

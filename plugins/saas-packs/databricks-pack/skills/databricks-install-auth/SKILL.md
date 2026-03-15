@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(pip:*), Bash(databricks:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Databricks Install & Auth
 
 ## Overview
@@ -27,6 +27,7 @@ Set up Databricks CLI and SDK with authentication credentials.
 
 ### Step 1: Install Databricks CLI and SDK
 ```bash
+set -euo pipefail
 # Install CLI v2 (recommended)
 pip install databricks-cli
 

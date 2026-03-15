@@ -8,13 +8,13 @@ allowed-tools: Read,Write,Edit,Grep,Glob
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Cascade Context
 
 ## Overview
 
-This skill enables advanced context management for Cascade AI in large-scale projects. It covers context prioritization, memory persistence across sessions, and optimization strategies for codebases with hundreds or thousands of files. Proper context management ensures Cascade maintains accurate understanding of your project architecture and conventions during extended development sessions.
+This skill enables advanced context management for Cascade AI in large-scale projects. It covers context prioritization, memory persistence across sessions, and optimization strategies for codebases with hundreds or thousands of files.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables advanced context management for Cascade AI in large-scale pro
 4. **Optimize for Workflow**
 5. **Monitor and Refine**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

@@ -10,8 +10,8 @@ allowed-tools: Read, Grep, Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Juicebox Security Basics
 
 ## Overview
@@ -75,12 +75,12 @@ export function requireJuiceboxAccess(requiredScope: string) {
     const user = req.user;
 
     if (!user) {
-      return res.status(401).json({ error: 'Authentication required' });
+      return res.status(401).json({ error: 'Authentication required' });  # HTTP 401 Unauthorized
     }
 
     const hasScope = user.permissions.includes(`juicebox:${requiredScope}`);
     if (!hasScope) {
-      return res.status(403).json({ error: 'Insufficient permissions' });
+      return res.status(403).json({ error: 'Insufficient permissions' });  # HTTP 403 Forbidden
     }
 
     next();
@@ -123,7 +123,7 @@ export class JuiceboxAuditLogger {
   private isSuspicious(event: AuditEvent): boolean {
     return (
       event.action === 'bulk_export' ||
-      event.metadata?.resultCount > 1000 ||
+      event.metadata?.resultCount > 1000 ||  # 1000: 1 second in ms
       this.isOffHours()
     );
   }
@@ -209,3 +209,15 @@ export class DataPrivacyHandler {
 
 ## Next Steps
 After security setup, see `juicebox-prod-checklist` for deployment readiness.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Examples
+
+**Basic usage**: Apply juicebox security basics to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize juicebox security basics for production environments with multiple constraints and team-specific requirements.

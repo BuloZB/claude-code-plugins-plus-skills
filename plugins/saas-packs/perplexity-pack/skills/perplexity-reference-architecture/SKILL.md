@@ -10,229 +10,78 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Perplexity Reference Architecture
 
+## Contents
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Instructions](#instructions)
+- [Output](#output)
+- [Error Handling](#error-handling)
+- [Examples](#examples)
+- [Resources](#resources)
+
 ## Overview
-Production-ready architecture patterns for Perplexity integrations.
+Production architecture for AI-powered research and search with Perplexity Sonar API. Covers model routing for cost/quality tradeoffs, citation extraction, multi-query research pipelines, and conversational search.
 
 ## Prerequisites
-- Understanding of layered architecture
-- Perplexity SDK knowledge
-- TypeScript project setup
-- Testing framework configured
+- Perplexity API key (Sonar access)
+- OpenAI-compatible client library
+- Understanding of search models (sonar, sonar-pro, sonar-reasoning)
 
-## Project Structure
-
-```
-my-perplexity-project/
-├── src/
-│   ├── perplexity/
-│   │   ├── client.ts           # Singleton client wrapper
-│   │   ├── config.ts           # Environment configuration
-│   │   ├── types.ts            # TypeScript types
-│   │   ├── errors.ts           # Custom error classes
-│   │   └── handlers/
-│   │       ├── webhooks.ts     # Webhook handlers
-│   │       └── events.ts       # Event processing
-│   ├── services/
-│   │   └── perplexity/
-│   │       ├── index.ts        # Service facade
-│   │       ├── sync.ts         # Data synchronization
-│   │       └── cache.ts        # Caching layer
-│   ├── api/
-│   │   └── perplexity/
-│   │       └── webhook.ts      # Webhook endpoint
-│   └── jobs/
-│       └── perplexity/
-│           └── sync.ts         # Background sync job
-├── tests/
-│   ├── unit/
-│   │   └── perplexity/
-│   └── integration/
-│       └── perplexity/
-├── config/
-│   ├── perplexity.development.json
-│   ├── perplexity.staging.json
-│   └── perplexity.production.json
-└── docs/
-    └── perplexity/
-        ├── SETUP.md
-        └── RUNBOOK.md
-```
-
-## Layer Architecture
+## Architecture
 
 ```
-┌─────────────────────────────────────────┐
-│             API Layer                    │
-│   (Controllers, Routes, Webhooks)        │
-├─────────────────────────────────────────┤
-│           Service Layer                  │
-│  (Business Logic, Orchestration)         │
-├─────────────────────────────────────────┤
-│          Perplexity Layer        │
-│   (Client, Types, Error Handling)        │
-├─────────────────────────────────────────┤
-│         Infrastructure Layer             │
-│    (Cache, Queue, Monitoring)            │
-└─────────────────────────────────────────┘
-```
-
-## Key Components
-
-### Step 1: Client Wrapper
-```typescript
-// src/perplexity/client.ts
-export class PerplexityService {
-  private client: PerplexityClient;
-  private cache: Cache;
-  private monitor: Monitor;
-
-  constructor(config: PerplexityConfig) {
-    this.client = new PerplexityClient(config);
-    this.cache = new Cache(config.cacheOptions);
-    this.monitor = new Monitor('perplexity');
-  }
-
-  async get(id: string): Promise<Resource> {
-    return this.cache.getOrFetch(id, () =>
-      this.monitor.track('get', () => this.client.get(id))
-    );
-  }
-}
-```
-
-### Step 2: Error Boundary
-```typescript
-// src/perplexity/errors.ts
-export class PerplexityServiceError extends Error {
-  constructor(
-    message: string,
-    public readonly code: string,
-    public readonly retryable: boolean,
-    public readonly originalError?: Error
-  ) {
-    super(message);
-    this.name = 'PerplexityServiceError';
-  }
-}
-
-export function wrapPerplexityError(error: unknown): PerplexityServiceError {
-  // Transform SDK errors to application errors
-}
-```
-
-### Step 3: Health Check
-```typescript
-// src/perplexity/health.ts
-export async function checkPerplexityHealth(): Promise<HealthStatus> {
-  try {
-    const start = Date.now();
-    await perplexityClient.ping();
-    return {
-      status: 'healthy',
-      latencyMs: Date.now() - start,
-    };
-  } catch (error) {
-    return { status: 'unhealthy', error: error.message };
-  }
-}
-```
-
-## Data Flow Diagram
-
-```
-User Request
-     │
-     ▼
-┌─────────────┐
-│   API       │
-│   Gateway   │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐    ┌─────────────┐
-│   Service   │───▶│   Cache     │
-│   Layer     │    │   (Redis)   │
-└──────┬──────┘    └─────────────┘
-       │
-       ▼
-┌─────────────┐
-│ Perplexity    │
-│   Client    │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│ Perplexity    │
-│   API       │
-└─────────────┘
-```
-
-## Configuration Management
-
-```typescript
-// config/perplexity.ts
-export interface PerplexityConfig {
-  apiKey: string;
-  environment: 'development' | 'staging' | 'production';
-  timeout: number;
-  retries: number;
-  cache: {
-    enabled: boolean;
-    ttlSeconds: number;
-  };
-}
-
-export function loadPerplexityConfig(): PerplexityConfig {
-  const env = process.env.NODE_ENV || 'development';
-  return require(`./perplexity.${env}.json`);
-}
+Application Layer (Research Agent, Fact Checker, Content Writer)
+        |
+Search Router (sonar/sonar-pro/sonar-reasoning)
+        |
+Citation Pipeline (Extract URLs, Validate, Store, Render)
+        |
+Cache Layer (Query Hash -> Result, TTL by freshness need)
 ```
 
 ## Instructions
 
-### Step 1: Create Directory Structure
-Set up the project layout following the reference structure above.
+### Step 1: Set Up Search Service with Model Routing
+Use OpenAI-compatible client pointed at `api.perplexity.ai`. Route queries by depth: quick/standard (sonar), deep (sonar-pro), reasoning (sonar-reasoning).
 
-### Step 2: Implement Client Wrapper
-Create the singleton client with caching and monitoring.
+### Step 2: Build Citation Extraction Pipeline
+Parse response text for `[N] URL` patterns and inline URLs. Deduplicate and store citations with metadata.
 
-### Step 3: Add Error Handling
-Implement custom error classes for Perplexity operations.
+### Step 3: Create Research Pipeline
+Multi-phase: broad overview (fast model) -> identify subtopics -> deep dive each (sonar-pro) -> deduplicate citations.
 
-### Step 4: Configure Health Checks
-Add health check endpoint for Perplexity connectivity.
+### Step 4: Implement Conversational Search
+Maintain message history for follow-up questions that build on previous context.
+
+See [detailed implementation](${CLAUDE_SKILL_DIR}/references/implementation.md) for search service, citation extraction, multi-query research pipeline, conversational session, and fact-check service code.
 
 ## Output
-- Structured project layout
-- Client wrapper with caching
-- Error boundary implemented
-- Health checks configured
+- Search service with model routing by query depth
+- Citation extraction from responses
+- Multi-query research pipeline
+- Conversational search with context
 
 ## Error Handling
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Circular dependencies | Wrong layering | Separate concerns by layer |
-| Config not loading | Wrong paths | Verify config file locations |
-| Type errors | Missing types | Add Perplexity types |
-| Test isolation | Shared state | Use dependency injection |
+| No citations returned | Using basic sonar for complex query | Upgrade to sonar-pro |
+| Stale information | Outdated sources | Add recency preference in system prompt |
+| High cost | Using sonar-pro for simple queries | Route simple queries to sonar |
+| Rate limit | Too many concurrent searches | Add request queue with delays |
 
 ## Examples
 
-### Quick Setup Script
-```bash
-# Create reference structure
-mkdir -p src/perplexity/{handlers} src/services/perplexity src/api/perplexity
-touch src/perplexity/{client,config,types,errors}.ts
-touch src/services/perplexity/{index,sync,cache}.ts
+### Quick Fact Check
+```typescript
+const result = await factCheck("The Earth is approximately 4.5 billion years old");
+console.log(result.verdict);  // Accurate, with sources
+console.log(result.sources);  // Citation URLs
 ```
 
 ## Resources
-- [Perplexity SDK Documentation](https://docs.perplexity.com/sdk)
-- [Perplexity Best Practices](https://docs.perplexity.com/best-practices)
-
-## Flagship Skills
-For multi-environment setup, see `perplexity-multi-env-setup`.
+- [Perplexity API Docs](https://docs.perplexity.ai/)
+- [Perplexity Model Guide](https://docs.perplexity.ai/guides/model-cards)

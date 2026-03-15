@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(npm:*), Bash(rum:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Real User Monitoring
 
@@ -57,7 +58,7 @@ This skill can be used in conjunction with other monitoring and analytics tools 
 
 ## Prerequisites
 
-- Access to web application frontend code in {baseDir}/
+- Access to web application frontend code in ${CLAUDE_SKILL_DIR}/
 - RUM platform account (Google Analytics, Datadog, New Relic)
 - Understanding of Core Web Vitals metrics
 - Privacy compliance documentation (GDPR, CCPA)

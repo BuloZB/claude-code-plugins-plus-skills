@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(git:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # CodeRabbit Upgrade & Migration
 
 ## Overview
@@ -27,6 +27,7 @@ Guide for upgrading CodeRabbit SDK versions and handling breaking changes.
 
 ### Step 1: Check Current Version
 ```bash
+set -euo pipefail
 npm list @coderabbit/sdk
 npm view @coderabbit/sdk version
 ```
@@ -38,6 +39,7 @@ open https://github.com/coderabbit/sdk/releases
 
 ### Step 3: Create Upgrade Branch
 ```bash
+set -euo pipefail
 git checkout -b upgrade/coderabbit-sdk-vX.Y.Z
 npm install @coderabbit/sdk@latest
 npm test
@@ -83,6 +85,7 @@ const client = new CodeRabbitClient({
 
 ### Rollback Procedure
 ```bash
+set -euo pipefail
 npm install @coderabbit/sdk@1.x.x --save-exact
 ```
 

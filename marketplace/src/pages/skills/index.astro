@@ -23,9 +23,9 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
   <style>
     /* Skills Page Specific Styles */
     .skills-header {
-      background: white;
-      border-bottom: 1px solid var(--brand-light-gray);
-      padding: 2rem 4rem;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 3rem;
     }
 
     .skills-header-content {
@@ -36,18 +36,19 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
     .skills-title {
       font-size: 2.5rem;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--text);
       margin-bottom: 0.5rem;
     }
 
     .skills-subtitle {
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
       font-size: 1rem;
+      font-family: 'DM Mono', monospace;
     }
 
     .filters-section {
-      background: white;
-      border-bottom: 1px solid var(--brand-light-gray);
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
       padding: 2rem 4rem;
     }
 
@@ -65,17 +66,17 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
 
     .filter-group label {
       display: block;
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
       font-size: 0.875rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text);
       margin-bottom: 0.5rem;
     }
 
     .filter-input {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 2px solid var(--brand-light-gray);
+      border: 2px solid var(--border);
       border-radius: 8px;
       font-size: 0.95rem;
       font-family: 'Lora', Georgia, serif;
@@ -84,12 +85,12 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
 
     .filter-input:focus {
       outline: none;
-      border-color: var(--brand-orange);
-      box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.1);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px oklch(62% 0.16 35 / 0.1);
     }
 
     .filter-input::placeholder {
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
     }
 
     .filters-footer {
@@ -100,14 +101,14 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
 
     .results-count {
       font-size: 0.875rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
     }
 
     .clear-filters-btn {
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
       background: transparent;
       border: none;
-      color: var(--brand-orange);
+      color: var(--primary);
       font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
@@ -115,7 +116,7 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
     }
 
     .clear-filters-btn:hover {
-      color: var(--brand-orange-dark);
+      color: var(--primary-dark);
     }
 
     .skills-grid-section {
@@ -133,29 +134,29 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
     .skill-card {
       display: block;
       padding: 1.5rem;
-      background: white;
+      background: var(--card);
       border-radius: 12px;
-      border: 2px solid var(--brand-light-gray);
+      border: 2px solid var(--border);
       text-decoration: none;
       transition: all 0.3s var(--transition-smooth);
     }
 
     .skill-card:hover {
-      border-color: var(--brand-orange);
+      border-color: var(--primary);
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(217, 119, 87, 0.12);
+      box-shadow: 0 8px 24px oklch(62% 0.16 35 / 0.12);
     }
 
     .skill-name {
       font-size: 1.1rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text);
       margin-bottom: 0.5rem;
     }
 
     .skill-description {
       font-size: 0.9rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
       line-height: 1.6;
       margin-bottom: 1rem;
       display: -webkit-box;
@@ -173,17 +174,17 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
 
     .tool-badge {
       padding: 0.25rem 0.75rem;
-      background: rgba(217, 119, 87, 0.1);
-      color: var(--brand-orange-dark);
+      background: oklch(62% 0.16 35 / 0.1);
+      color: var(--primary-dark);
       font-size: 0.75rem;
       font-weight: 600;
       border-radius: 6px;
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
     }
 
     .tool-badge-more {
-      background: var(--brand-light-gray);
-      color: var(--brand-mid-gray);
+      background: var(--border);
+      color: var(--text-2);
     }
 
     .skill-meta {
@@ -191,7 +192,7 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
       align-items: center;
       justify-content: space-between;
       font-size: 0.75rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
     }
 
     .skill-category {
@@ -201,13 +202,13 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
     .skill-plugin-info {
       margin-top: 0.75rem;
       padding-top: 0.75rem;
-      border-top: 1px solid var(--brand-light-gray);
+      border-top: 1px solid var(--border);
       font-size: 0.8125rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
     }
 
     .skill-plugin-info strong {
-      color: var(--brand-blue);
+      color: var(--primary);
       font-weight: 600;
     }
 
@@ -218,14 +219,14 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
 
     .no-results p {
       font-size: 1.25rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2);
       margin-bottom: 1.5rem;
     }
 
     .no-results button {
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
       padding: 0.75rem 1.5rem;
-      background: var(--brand-orange);
+      background: var(--primary);
       color: white;
       border: none;
       border-radius: 8px;
@@ -236,7 +237,7 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
     }
 
     .no-results button:hover {
-      background: var(--brand-orange-dark);
+      background: var(--primary-dark);
       transform: translateY(-2px);
     }
 
@@ -268,8 +269,8 @@ const lightweightSkills = skillsCatalog.skills.map(skill => ({
   <!-- Header -->
   <div class="skills-header">
     <div class="skills-header-content">
-      <h1 class="skills-title">Skills (Embedded in Plugins)</h1>
-      <p class="skills-subtitle">{skillsCatalog.count} skills embedded in plugins across {skillsCatalog.categories.length} categories</p>
+      <h1 class="skills-title">Skills Directory</h1>
+      <p class="skills-subtitle"><strong style="font-family: 'DM Mono', monospace; color: var(--primary);">{skillsCatalog.count}</strong> skills across {skillsCatalog.categories.length} categories. Download plugins with <a href="/cowork" style="color: var(--primary); text-decoration: underline;">Cowork</a> or install via CLI.</p>
     </div>
   </div>
 

@@ -10,8 +10,8 @@ allowed-tools: Read, Grep, Bash(kubectl:*), Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Incident Runbook
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Update internal and external stakeholders.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Status Page](https://www.vercel-status.com)
 - [Vercel Support](https://support.vercel.com)
+
+## Overview
+
+Execute Vercel incident response procedures with triage, mitigation, and postmortem.

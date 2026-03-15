@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(system_profiler:*), Bash(log:*), Bash(sw_
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Granola Debug Bundle
 
 ## Overview
@@ -82,6 +82,7 @@ Get-EventLog -LogName Application -Source "Granola" -Newest 100 | Out-File app-e
 
 ### Step 3: Network Diagnostics
 ```bash
+set -euo pipefail
 # Test Granola connectivity
 curl -s -o /dev/null -w "%{http_code}" https://api.granola.ai/health > network-test.txt
 curl -s -o /dev/null -w "%{http_code}" https://granola.ai >> network-test.txt
@@ -194,3 +195,17 @@ Before contacting support, check:
 
 ## Next Steps
 Proceed to `granola-rate-limits` to understand usage limits.
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with debugging |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply granola debug bundle to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize granola debug bundle for production environments with multiple constraints and team-specific requirements.

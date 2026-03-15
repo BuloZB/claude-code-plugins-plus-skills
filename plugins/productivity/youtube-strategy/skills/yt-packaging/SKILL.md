@@ -4,13 +4,13 @@ description: |
   Create optimized YouTube titles and thumbnail concepts for maximum CTR. Use this skill whenever the user
   says "title ideas", "thumbnail concepts", "package this video", "CTR optimization", "title options", "packaging",
   or has an approved brief and needs to finalize the title and thumbnail direction before outlining. Packaging
-  determines whether viewers click.
+  determines whether viewers click. Use when working with yt packaging. Trigger with 'yt', 'packaging'.
 allowed-tools: WebSearch, Read, Write
 version: 1.0.0
 author: Claude Code Plugins <plugins@claudecodeplugins.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # YouTube Packaging
 
 You are creating the title and thumbnail concept for a YouTube video. Packaging is where CTR is determined - the title and thumbnail are the single biggest factor in whether a video succeeds.
@@ -19,7 +19,7 @@ You are creating the title and thumbnail concept for a YouTube video. Packaging 
 
 You need from the user:
 
-1. **The approved brief** - Either load `video-brief-{slug}.md` from the working directory or get the brief details from the user
+1. **The approved brief** - Either load `video-brief-yt-packaging.md` from the working directory or get the brief details from the user
 2. **Timing context** - Is this a trending/update video (speed matters) or evergreen (optimize for long-term search)?
 3. **Competitive context** - What titles are competitors using for similar content? (Use WebSearch if not already known)
 
@@ -126,7 +126,7 @@ Title #[X] + Thumbnail Concept [Y] because [reasoning]
 
 ### Step 6: Save
 
-Save the approved packaging as `packaging-{slug}.md`.
+Save the approved packaging as `packaging-yt-packaging.md`.
 
 ## Key Principles
 
@@ -135,3 +135,47 @@ Save the approved packaging as `packaging-{slug}.md`.
 - **Search + browse balance.** For evergreen content, include searchable keywords. For trending content, prioritize curiosity and urgency.
 - **Mobile-first thumbnails.** Most YouTube browsing happens on mobile. Thumbnails must be readable at small sizes.
 - **Under 60 characters.** Titles get truncated on mobile. The most important words should be in the first 40 characters.
+
+## Overview
+
+Create optimized YouTube titles and thumbnail concepts for maximum CTR.
+
+## Prerequisites
+
+- Access to the optimization environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with optimization concepts and terminology
+
+## Instructions
+
+1. Assess the current state of the optimization configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with optimization |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply yt packaging to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize yt packaging for production environments with multiple constraints and team-specific requirements.
+
+## Resources
+
+- Official optimization documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

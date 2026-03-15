@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(aws:*), Bash(gcloud:*), Bash(vault:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Multi Env Setup
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Implement safeguards for production-only operations.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Supabase Environments Guide](https://supabase.com/docs/environments)
 - [12-Factor App Config](https://12factor.net/config)
+
+## Overview
+
+Configure Supabase across development, staging, and production environments.

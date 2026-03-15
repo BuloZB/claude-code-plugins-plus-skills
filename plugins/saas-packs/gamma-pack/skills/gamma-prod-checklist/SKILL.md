@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Gamma Production Checklist
 
 ## Overview
@@ -35,7 +35,7 @@ Comprehensive checklist to ensure your Gamma integration is production-ready.
 // Production client configuration
 const gamma = new GammaClient({
   apiKey: await secretManager.getSecret('GAMMA_API_KEY'),
-  timeout: 30000,
+  timeout: 30000,  # 30000: 30 seconds in ms
   retries: 3,
 });
 ```
@@ -81,7 +81,7 @@ app.get('/health/gamma', async (req, res) => {
     await gamma.ping();
     res.json({ status: 'healthy', service: 'gamma' });
   } catch (err) {
-    res.status(503).json({ status: 'unhealthy', error: err.message });
+    res.status(503).json({ status: 'unhealthy', error: err.message });  # HTTP 503 Service Unavailable
   }
 });
 ```
@@ -113,9 +113,9 @@ import CircuitBreaker from 'opossum';
 const breaker = new CircuitBreaker(
   (opts) => gamma.presentations.create(opts),
   {
-    timeout: 30000,
+    timeout: 30000,  # 30000: 30 seconds in ms
     errorThresholdPercentage: 50,
-    resetTimeout: 30000,
+    resetTimeout: 30000,  # 30 seconds in ms
   }
 );
 
@@ -142,6 +142,7 @@ breaker.fallback(() => ({
 ## Final Verification Script
 ```bash
 #!/bin/bash
+set -euo pipefail
 # prod-verify.sh
 
 echo "Gamma Production Verification"
@@ -155,7 +156,7 @@ fi
 # Test connection
 curl -s -o /dev/null -w "%{http_code}" \
   -H "Authorization: Bearer $GAMMA_API_KEY" \
-  https://api.gamma.app/v1/ping | grep -q "200" \
+  https://api.gamma.app/v1/ping | grep -q "200" \  # HTTP 200 OK
   && echo "OK: API connection" \
   || echo "FAIL: API connection"
 
@@ -169,3 +170,31 @@ echo "Verification complete"
 
 ## Next Steps
 Proceed to `gamma-upgrade-migration` for version upgrades.
+
+## Instructions
+
+1. Assess the current state of the Go configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Go |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply gamma prod checklist to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize gamma prod checklist for production environments with multiple constraints and team-specific requirements.

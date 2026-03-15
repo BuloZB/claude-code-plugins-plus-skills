@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Edit,Bash(cmd:*)"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Release Automation
 
 ## Overview
 
-This skill enables automated release workflows within Windsurf using Cascade AI. It analyzes commits to determine semantic version bumps, generates comprehensive changelogs, manages Git tags, and publishes releases. Cascade understands conventional commits to automatically categorize changes and highlight breaking changes for proper version increments.
+This skill enables automated release workflows within Windsurf using Cascade AI. It analyzes commits to determine semantic version bumps, generates comprehensive changelogs, manages Git tags, and publishes releases.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables automated release workflows within Windsurf using Cascade AI.
 4. **Execute Release**
 5. **Post-Release Tasks**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -45,11 +44,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

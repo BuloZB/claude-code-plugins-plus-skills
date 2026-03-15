@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Granola Cost Tuning
 
 ## Overview
@@ -19,7 +19,7 @@ Optimize Granola costs by selecting the right plan and maximizing usage efficien
 
 ## Plan Comparison
 
-### Current Pricing (as of 2025)
+### Current Pricing
 | Plan | Price | Best For |
 |------|-------|----------|
 | Free | $0/month | Trying Granola, < 10 meetings/month |
@@ -50,12 +50,12 @@ Time Saved per Meeting:
 
 Monthly Calculation:
 Meetings per month: [20]
-Time saved: 20 * 20 min = 400 min = 6.7 hours
+Time saved: 20 * 20 min = 400 min = 6.7 hours  # HTTP 400 Bad Request
 Hourly rate: [$50]
-Value of time saved: 6.7 * $50 = $333
+Value of time saved: 6.7 * $50 = $333  # 333 = configured value
 
 Cost of Granola Pro: $10/month
-ROI: ($333 - $10) / $10 = 3,230%
+ROI: ($333 - $10) / $10 = 3,230%  # 230 = configured value
 
 Break-even: 0.6 meetings/month
 ```
@@ -72,8 +72,8 @@ Total time saved: 10 * 20 * 20 = 4,000 min = 66.7 hours
 Blended hourly rate: $75
 Value: 66.7 * $75 = $5,000/month
 
-Business plan cost: 10 * $25 = $250/month
-ROI: ($5,000 - $250) / $250 = 1,900%
+Business plan cost: 10 * $25 = $250/month  # 250 = configured value
+ROI: ($5,000 - $250) / $250 = 1,900%  # 900: timeout: 15 minutes
 ```
 
 ## Optimization Strategies
@@ -150,16 +150,16 @@ Optimize Zaps:
 ```
 Monthly Billing:
 Pro: $10/month × 12 = $120/year
-Business: $25/user × 12 = $300/user/year
+Business: $25/user × 12 = $300/user/year  # 300: timeout: 5 minutes
 
 Annual Billing (if offered, typically 15-20% discount):
 Pro: ~$96/year (save $24)
-Business: ~$255/user/year (save $45)
+Business: ~$255/user/year (save $45)  # 255 = configured value
 
 Team of 10:
 Monthly: $3,000/year
-Annual: $2,550/year
-Savings: $450/year
+Annual: $2,550/year  # 550 = configured value
+Savings: $450/year  # 450 = configured value
 ```
 
 ## Usage Monitoring
@@ -263,3 +263,37 @@ Savings:
 
 ## Next Steps
 Proceed to `granola-reference-architecture` for enterprise deployment patterns.
+
+## Prerequisites
+
+- Access to the optimization environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with optimization concepts and terminology
+
+## Instructions
+
+1. Assess the current state of the optimization configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with optimization |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply granola cost tuning to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize granola cost tuning for production environments with multiple constraints and team-specific requirements.

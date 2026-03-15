@@ -8,6 +8,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(general:*), Bash(util:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
 # YAML Master
 
@@ -54,6 +55,6 @@ This skill activates when working with `.yml`/`.yaml` files to detect structural
 
 ## Resources
 
-- Full detailed guide (kept for reference): `{baseDir}/references/SKILL.full.md`
+- Full detailed guide (kept for reference): `${CLAUDE_SKILL_DIR}/references/SKILL.full.md`
 - YAML spec: https://yaml.org/spec/
 - GitHub Actions workflow syntax: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions

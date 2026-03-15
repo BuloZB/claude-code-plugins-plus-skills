@@ -9,8 +9,8 @@ allowed-tools: Read, Write, Edit, Bash(node:*), Bash(python:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Sentry Hello World
 
 ## Prerequisites
@@ -26,7 +26,7 @@ author: Jeremy Longshore <jeremy@intentsolutions.io>
 4. Verify event details are correct
 
 
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 - Test error visible in Sentry dashboard
@@ -35,12 +35,16 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Sentry Error Capture](https://docs.sentry.io/platforms/javascript/usage/)
 - [Sentry Context](https://docs.sentry.io/platforms/javascript/enriching-events/context/)
+
+## Overview
+
+Execute capture your first error with Sentry and verify it appears in the dashboard.

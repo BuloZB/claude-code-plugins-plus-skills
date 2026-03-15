@@ -11,8 +11,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python:*)
 version: 2.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Backtesting Trading Strategies
 
 ## Overview
@@ -31,63 +31,41 @@ Validate trading strategies against historical data before risking real capital.
 Install required dependencies:
 
 ```bash
+set -euo pipefail
 pip install pandas numpy yfinance matplotlib
 ```
 
 Optional for advanced features:
 ```bash
+set -euo pipefail
 pip install ta-lib scipy scikit-learn
 ```
 
 ## Instructions
 
-### Step 1: Fetch Historical Data
-
-```bash
-python {baseDir}/scripts/fetch_data.py --symbol BTC-USD --period 2y --interval 1d
-```
-
-Data is cached to `{baseDir}/data/{symbol}_{interval}.csv` for reuse.
-
-### Step 2: Run Backtest
-
-Basic backtest with default parameters:
-
-```bash
-python {baseDir}/scripts/backtest.py --strategy sma_crossover --symbol BTC-USD --period 1y
-```
-
-Advanced backtest with custom parameters:
-
-```bash
-# Example: backtest with specific date range
-python {baseDir}/scripts/backtest.py \
-  --strategy rsi_reversal \
-  --symbol ETH-USD \
-  --period 1y \
-  --capital 10000 \
-  --params '{"period": 14, "overbought": 70, "oversold": 30}'
-```
-
-### Step 3: Analyze Results
-
-Results are saved to `{baseDir}/reports/` including:
-- `*_summary.txt` - Performance metrics
-- `*_trades.csv` - Trade log
-- `*_equity.csv` - Equity curve data
-- `*_chart.png` - Visual equity curve
-
-### Step 4: Optimize Parameters
-
-Find optimal parameters via grid search:
-
-```bash
-python {baseDir}/scripts/optimize.py \
-  --strategy sma_crossover \
-  --symbol BTC-USD \
-  --period 1y \
-  --param-grid '{"fast_period": [10, 20, 30], "slow_period": [50, 100, 200]}'
-```
+1. Fetch historical data (cached to `${CLAUDE_SKILL_DIR}/data/` for reuse):
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/fetch_data.py --symbol BTC-USD --period 2y --interval 1d
+   ```
+2. Run a backtest with default or custom parameters:
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/backtest.py --strategy sma_crossover --symbol BTC-USD --period 1y
+   python ${CLAUDE_SKILL_DIR}/scripts/backtest.py \
+     --strategy rsi_reversal \
+     --symbol ETH-USD \
+     --period 1y \
+     --capital 10000 \  # 10000: 10 seconds in ms
+     --params '{"period": 14, "overbought": 70, "oversold": 30}'
+   ```
+3. Analyze results saved to `${CLAUDE_SKILL_DIR}/reports/` -- includes `*_summary.txt` (performance metrics), `*_trades.csv` (trade log), `*_equity.csv` (equity curve data), and `*_chart.png` (visual equity curve).
+4. Optimize parameters via grid search to find the best combination:
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/optimize.py \
+     --strategy sma_crossover \
+     --symbol BTC-USD \
+     --period 1y \
+     --param-grid '{"fast_period": [10, 20, 30], "slow_period": [50, 100, 200]}'  # HTTP 200 OK
+   ```
 
 ## Output
 
@@ -154,7 +132,7 @@ python {baseDir}/scripts/optimize.py \
 
 ## Configuration
 
-Create `{baseDir}/config/settings.yaml`:
+Create `${CLAUDE_SKILL_DIR}/config/settings.yaml`:
 
 ```yaml
 data:
@@ -162,7 +140,7 @@ data:
   cache_dir: ./data
 
 backtest:
-  default_capital: 10000
+  default_capital: 10000  # 10000: 10 seconds in ms
   commission: 0.001     # 0.1% per trade
   slippage: 0.0005      # 0.05% slippage
 
@@ -174,11 +152,11 @@ risk:
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for common issues and solutions.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for common issues and solutions.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed usage examples including:
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed usage examples including:
 - Multi-asset comparison
 - Walk-forward analysis
 - Parameter optimization workflows

@@ -8,8 +8,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(cmd:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Excel Pivot Wizard
 
 ## Overview
@@ -59,4 +59,4 @@ Result: Time-series pivot with calculated YoY growth fields
 ## Resources
 
 - [Microsoft Pivot Table Guide](https://support.microsoft.com/)
-- `{baseDir}/references/pivot-formulas.md` for calculated field syntax
+- `${CLAUDE_SKILL_DIR}/references/pivot-formulas.md` for calculated field syntax

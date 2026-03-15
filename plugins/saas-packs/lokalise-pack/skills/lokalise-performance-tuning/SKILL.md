@@ -10,347 +10,128 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Lokalise Performance Tuning
 
 ## Overview
-Optimize Lokalise API performance with caching, pagination, and bulk operations.
+Optimize Lokalise API throughput and response times for translation pipeline integrations. Lokalise enforces a global rate limit of 6 requests per second across most endpoints, making request efficiency critical for projects with thousands of keys.
 
 ## Prerequisites
-- Lokalise SDK installed
-- Understanding of async patterns
-- Redis or in-memory cache available (optional)
-- Performance monitoring in place
-
-## Latency Benchmarks
-
-| Operation | Typical P50 | Typical P95 | Max Items |
-|-----------|-------------|-------------|-----------|
-| List projects | 100ms | 300ms | 100 |
-| List keys | 150ms | 500ms | 500 |
-| Create key | 200ms | 600ms | 1 |
-| Bulk create keys | 300ms | 1000ms | 500 |
-| Download files | 500ms | 2000ms | All |
-| Upload file | 1000ms | 5000ms | 1 |
+- Lokalise SDK (`@lokalise/node-api`) or REST API access
+- Understanding of project size (key count, language count)
+- Cache layer (Redis or in-memory LRU)
 
 ## Instructions
 
-### Step 1: Enable Compression
+### Step 1: Use Cursor Pagination with Maximum Page Size
 ```typescript
-const client = new LokaliseApi({
-  apiKey: process.env.LOKALISE_API_TOKEN!,
-  enableCompression: true,  // Enable gzip for large responses
-});
-```
+import { LokaliseApi } from '@lokalise/node-api';
+const lok = new LokaliseApi({ apiKey: process.env.LOKALISE_API_TOKEN! });
 
-### Step 2: Implement Response Caching
-```typescript
-import { LRUCache } from "lru-cache";
-
-const cache = new LRUCache<string, any>({
-  max: 1000,
-  ttl: 60000,  // 1 minute default TTL
-  updateAgeOnGet: true,
-});
-
-async function cachedRequest<T>(
-  key: string,
-  fetcher: () => Promise<T>,
-  ttl?: number
-): Promise<T> {
-  const cached = cache.get(key);
-  if (cached !== undefined) {
-    return cached as T;
-  }
-
-  const result = await fetcher();
-  cache.set(key, result, { ttl });
-  return result;
-}
-
-// Usage
-async function getProject(projectId: string) {
-  return cachedRequest(
-    `project:${projectId}`,
-    () => client.projects().get(projectId),
-    300000  // 5 minutes
-  );
-}
-
-async function getKeys(projectId: string) {
-  return cachedRequest(
-    `keys:${projectId}`,
-    () => client.keys().list({ project_id: projectId, limit: 500 }),
-    60000  // 1 minute
-  );
-}
-```
-
-### Step 3: Use Cursor Pagination
-```typescript
-// Cursor pagination is more efficient for large datasets
-async function* iterateAllKeys(projectId: string) {
+// Use cursor pagination (faster than offset for large datasets)
+async function* getAllKeys(projectId: string) {
   let cursor: string | undefined;
-
   do {
-    const result = await client.keys().list({
+    const result = await lok.keys().list({
       project_id: projectId,
-      limit: 500,  // Max allowed
-      pagination: "cursor",
+      limit: 500,           // Maximum allowed  # HTTP 500 Internal Server Error
+      pagination: 'cursor',
       cursor,
     });
-
-    for (const key of result.items) {
-      yield key;
-    }
-
+    for (const key of result.items) yield key;
     cursor = result.hasNextCursor() ? result.nextCursor : undefined;
   } while (cursor);
 }
+// 10,000 keys: 20 API calls instead of 100 (at limit=500 vs default limit=100)  # HTTP 500 Internal Server Error
+```
 
-// Usage
-async function getAllKeys(projectId: string) {
-  const keys = [];
-  for await (const key of iterateAllKeys(projectId)) {
-    keys.push(key);
-  }
-  return keys;
+### Step 2: Cache Translation Downloads
+```typescript
+import { LRUCache } from 'lru-cache';
+
+const downloadCache = new LRUCache<string, any>({ max: 100, ttl: 300_000 }); // 5 min
+
+async function cachedDownload(projectId: string, format: string, langIso: string) {
+  const key = `${projectId}:${format}:${langIso}`;
+  const cached = downloadCache.get(key);
+  if (cached) return cached;
+
+  const bundle = await lok.files().download(projectId, {
+    format, filter_langs: [langIso], original_filenames: false,
+  });
+  downloadCache.set(key, bundle);
+  return bundle;
 }
 ```
 
-### Step 4: Batch Operations
+### Step 3: Batch Key Operations
 ```typescript
-// Batch creates are much faster than individual creates
-async function createKeysBatched(
-  projectId: string,
-  keys: any[],
-  batchSize = 100
-): Promise<any[]> {
-  const results: any[] = [];
-
-  for (let i = 0; i < keys.length; i += batchSize) {
-    const batch = keys.slice(i, i + batchSize);
-
-    const result = await client.keys().create({
-      project_id: projectId,
-      keys: batch,
-    });
-
+// Bulk create keys (up to 500 per request)  # HTTP 500 Internal Server Error
+async function createKeysBatched(projectId: string, keys: any[]) {
+  const BATCH_SIZE = 500;  # HTTP 500 Internal Server Error
+  const results = [];
+  for (let i = 0; i < keys.length; i += BATCH_SIZE) {
+    const batch = keys.slice(i, i + BATCH_SIZE);
+    const result = await lok.keys().create({ project_id: projectId, keys: batch });
     results.push(...result.items);
-
-    // Small delay to respect rate limits
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise(r => setTimeout(r, 200)); // Respect rate limit  # HTTP 200 OK
   }
-
   return results;
 }
-
-// DataLoader for automatic batching
-import DataLoader from "dataloader";
-
-const keyLoader = new DataLoader<string, any>(
-  async (keyIds) => {
-    // Batch fetch keys
-    const result = await client.keys().list({
-      project_id: projectId,
-      filter_key_ids: keyIds.join(","),
-    });
-
-    // Return in same order as requested
-    return keyIds.map(id =>
-      result.items.find(k => k.key_id.toString() === id) || null
-    );
-  },
-  {
-    maxBatchSize: 100,
-    batchScheduleFn: callback => setTimeout(callback, 10),
-  }
-);
+// 2,000 keys: 4 batched requests vs 2,000 individual requests
 ```
 
-### Step 5: Parallel Downloads with Rate Limiting
+### Step 4: Implement Request Throttling
 ```typescript
-import PQueue from "p-queue";
+import PQueue from 'p-queue';
 
-const queue = new PQueue({
-  concurrency: 5,
-  interval: 1000,
-  intervalCap: 5,
-});
+// Lokalise rate limit: 6 requests/second
+const queue = new PQueue({ concurrency: 5, interval: 1000, intervalCap: 5 });  # 1000: 1 second in ms
 
-async function downloadMultipleProjects(projectIds: string[]) {
-  return Promise.all(
-    projectIds.map(id =>
-      queue.add(() =>
-        client.files().download(id, {
-          format: "json",
-          original_filenames: false,
-        })
-      )
-    )
-  );
+async function throttledRequest<T>(fn: () => Promise<T>): Promise<T> {
+  return queue.add(fn) as Promise<T>;
 }
+
+// All API calls go through the queue
+const project = await throttledRequest(() => lok.projects().get(projectId));
 ```
 
-## Output
-- Compression enabled for faster transfers
-- Response caching implemented
-- Cursor pagination for large datasets
-- Batch operations for bulk changes
+### Step 5: Use Webhooks Instead of Polling
+```bash
+set -euo pipefail
+# Replace polling for translation status with webhooks
+curl -X POST "https://api.lokalise.com/api2/projects/PROJECT_ID/webhooks" \
+  -H "X-Api-Token: $LOKALISE_API_TOKEN" \
+  -d '{
+    "url": "https://hooks.company.com/lokalise",
+    "events": ["project.translation_completed", "project.exported"]
+  }'
+# Eliminates need to poll project status every N seconds
+```
 
 ## Error Handling
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Cache miss storm | TTL expired | Use stale-while-revalidate |
-| Memory pressure | Cache too large | Set max entries, use Redis |
-| Slow pagination | Offset pagination | Switch to cursor pagination |
-| Rate limit hit | Too many parallel requests | Use request queue |
+| `429 Too Many Requests` | Exceeded 6 req/s rate limit | Use PQueue throttling, retry with backoff |
+| Slow file downloads | Large project with many languages | Filter by language, use async download + webhook |
+| Pagination timeout | Offset pagination on 50K+ keys | Switch to cursor pagination |
+| Bulk create fails partially | Network timeout on large batch | Reduce batch size to 200, add retry logic |
 
 ## Examples
 
-### Redis Caching (Distributed)
-```typescript
-import Redis from "ioredis";
+**Basic usage**: Apply lokalise performance tuning to a standard project setup with default configuration options.
 
-const redis = new Redis(process.env.REDIS_URL);
+**Advanced scenario**: Customize lokalise performance tuning for production environments with multiple constraints and team-specific requirements.
 
-async function cachedWithRedis<T>(
-  key: string,
-  fetcher: () => Promise<T>,
-  ttlSeconds = 60
-): Promise<T> {
-  const cached = await redis.get(key);
-  if (cached) {
-    return JSON.parse(cached);
-  }
+## Output
 
-  const result = await fetcher();
-  await redis.setex(key, ttlSeconds, JSON.stringify(result));
-  return result;
-}
-
-// Stale-while-revalidate pattern
-async function staleWhileRevalidate<T>(
-  key: string,
-  fetcher: () => Promise<T>,
-  staleTtl = 60,
-  maxTtl = 3600
-): Promise<T> {
-  const cached = await redis.get(key);
-
-  if (cached) {
-    const { data, timestamp } = JSON.parse(cached);
-    const age = (Date.now() - timestamp) / 1000;
-
-    if (age < staleTtl) {
-      return data;  // Fresh
-    }
-
-    if (age < maxTtl) {
-      // Stale but usable - revalidate in background
-      revalidate(key, fetcher, staleTtl, maxTtl);
-      return data;
-    }
-  }
-
-  // Cache miss or expired - fetch fresh
-  return revalidate(key, fetcher, staleTtl, maxTtl);
-}
-
-async function revalidate<T>(
-  key: string,
-  fetcher: () => Promise<T>,
-  staleTtl: number,
-  maxTtl: number
-): Promise<T> {
-  const data = await fetcher();
-  await redis.setex(key, maxTtl, JSON.stringify({
-    data,
-    timestamp: Date.now(),
-  }));
-  return data;
-}
-```
-
-### Performance Monitoring
-```typescript
-async function measuredRequest<T>(
-  operation: string,
-  fn: () => Promise<T>
-): Promise<T> {
-  const start = performance.now();
-
-  try {
-    const result = await fn();
-    const duration = performance.now() - start;
-
-    console.log({
-      operation,
-      duration: `${duration.toFixed(2)}ms`,
-      status: "success",
-    });
-
-    // Report to metrics
-    await reportMetric("lokalise_request_duration", duration, {
-      operation,
-      status: "success",
-    });
-
-    return result;
-  } catch (error: any) {
-    const duration = performance.now() - start;
-
-    console.error({
-      operation,
-      duration: `${duration.toFixed(2)}ms`,
-      status: "error",
-      error: error.message,
-    });
-
-    await reportMetric("lokalise_request_duration", duration, {
-      operation,
-      status: "error",
-    });
-
-    throw error;
-  }
-}
-```
-
-### Preloading Translations
-```typescript
-// Preload translations during app startup
-async function preloadTranslations(
-  projectId: string,
-  locales: string[]
-): Promise<Map<string, any>> {
-  const translations = new Map();
-
-  // Download all in parallel
-  const downloads = await Promise.all(
-    locales.map(async (locale) => {
-      const result = await cachedWithRedis(
-        `translations:${projectId}:${locale}`,
-        () => fetchTranslationsForLocale(projectId, locale),
-        3600  // 1 hour cache
-      );
-      return { locale, translations: result };
-    })
-  );
-
-  for (const { locale, translations: trans } of downloads) {
-    translations.set(locale, trans);
-  }
-
-  return translations;
-}
-```
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
 
 ## Resources
-- [Lokalise API Rate Limits](https://developers.lokalise.com/reference/api-rate-limits)
-- [Node SDK Documentation](https://lokalise.github.io/node-lokalise-api/)
-- [DataLoader Documentation](https://github.com/graphql/dataloader)
 
-## Next Steps
-For cost optimization, see `lokalise-cost-tuning`.
+- Official ORM documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

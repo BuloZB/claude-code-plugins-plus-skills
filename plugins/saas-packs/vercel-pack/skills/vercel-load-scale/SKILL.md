@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(k6:*), Bash(kubectl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Load Scale
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Record results in benchmark template.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [k6 Documentation](https://k6.io/docs/)
 - [Kubernetes HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 - [Vercel Rate Limits](https://vercel.com/docs/rate-limits)
+
+## Overview
+
+Implement Vercel load testing, auto-scaling, and capacity planning strategies.

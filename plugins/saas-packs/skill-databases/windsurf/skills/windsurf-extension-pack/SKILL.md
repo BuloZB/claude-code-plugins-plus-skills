@@ -8,13 +8,13 @@ allowed-tools: "Read,Write,Bash(cmd:*)"
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Extension Pack
 
 ## Overview
 
-This skill enables rapid setup of Windsurf with essential extensions for productive development. It covers language support, linting, formatting, Git integration, and productivity tools. Create team-standard extension configurations that can be shared and automatically installed for consistent development environments across your organization.
+This skill enables rapid setup of Windsurf with essential extensions for productive development. It covers language support, linting, formatting, Git integration, and productivity tools.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables rapid setup of Windsurf with essential extensions for product
 4. **Create Team Configuration**
 5. **Document and Share**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npx:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Policy Guardrails
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Add production safeguards for dangerous operations.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [ESLint Plugin Development](https://eslint.org/docs/latest/extend/plugins)
 - [Pre-commit Framework](https://pre-commit.com/)
 - [Open Policy Agent](https://www.openpolicyagent.org/)
+
+## Overview
+
+Implement Vercel lint rules, policy enforcement, and automated guardrails.

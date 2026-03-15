@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Bash(pnpm:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Langfuse Install & Auth
 
 ## Overview
@@ -28,6 +28,7 @@ Set up Langfuse SDK and configure authentication for LLM observability and traci
 ### Step 1: Install SDK
 
 ```bash
+set -euo pipefail
 # Node.js / TypeScript
 npm install langfuse
 # or
@@ -128,8 +129,8 @@ const langfuse = new Langfuse({
   baseUrl: process.env.LANGFUSE_HOST,
   // Optional configuration
   flushAt: 15,        // Flush after 15 events (default: 15)
-  flushInterval: 10000, // Flush every 10 seconds (default: 10000ms)
-  requestTimeout: 10000, // Request timeout (default: 10000ms)
+  flushInterval: 10000, // Flush every 10 seconds (default: 10000ms)  # 10000: 10 seconds in ms
+  requestTimeout: 10000, // Request timeout (default: 10000ms)  # 10 seconds in ms
   enabled: process.env.NODE_ENV === "production", // Disable in dev
 });
 

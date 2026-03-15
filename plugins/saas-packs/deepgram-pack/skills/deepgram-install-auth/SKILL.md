@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Deepgram Install & Auth
 
 ## Overview
@@ -27,6 +27,7 @@ Set up Deepgram SDK and configure authentication credentials for speech-to-text 
 
 ### Step 1: Install SDK
 ```bash
+set -euo pipefail
 # Node.js
 npm install @deepgram/sdk
 

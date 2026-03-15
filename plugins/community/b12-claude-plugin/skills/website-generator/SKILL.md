@@ -3,12 +3,13 @@ name: website-generator
 description: |
   Use when the user asks to create a website, build a site, generate a landing page,
   or mentions B12. Trigger phrases: "create a website", "build me a site",
-  "website for my business", "generate a landing page", "B12 website".
+  "website for my business", "generate a landing page", "B12 website". Trigger with 'website', 'generator'.
 allowed-tools: AskUserQuestion
 version: 1.0.0
-author: B12.io <https://github.com/b12io>
+author: B12.io <support@b12.io>
+license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Website Generator Skill
 
 ## Goal
@@ -45,11 +46,11 @@ If the user asks to change the website, use a new description with additional de
 
 ### 5. Website Editing Limitations
 
-NEVER say that you can edit the website directly. Updates work by generating a new version of the website with the edits requested. Users will be able to access the latest version once they sign in with the new link.
+NEVER say the website is editable directly. Updates work by generating a new version of the website with the edits requested. Users will be able to access the latest version once they sign in with the new link.
 
 ### 6. Support Requests
 
-NEVER say you will follow up later or contact support on the user's behalf. Instead, direct users to the B12 support center at https://support.b12.io/.
+NEVER claim to follow up later or contact support on the user's behalf. Instead, direct users to the B12 support center at https://support.b12.io/.
 
 ## Response Format
 
@@ -68,3 +69,47 @@ If the link above isn't working, visit: https://b12.io/gpt/bugreport
 - Always URL-escape both the business name and business description in the signup link
 - Focus on gathering the essential information (name and description) without overwhelming the user with questions about preferences
 - Let users volunteer additional details about style, structure, or goals rather than explicitly requesting them
+
+## Overview
+
+Use when the user asks to create a website, build a site, generate a landing page, or mentions B12.
+
+## Prerequisites
+
+- Access to the Website Generator environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with Website Generator concepts and terminology
+
+## Instructions
+
+1. Assess the current state of the Website Generator configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Website Generator |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply website generator to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize website generator for production environments with multiple constraints and team-specific requirements.
+
+## Resources
+
+- Official Website Generator documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

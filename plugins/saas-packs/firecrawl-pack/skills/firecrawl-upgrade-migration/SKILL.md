@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(git:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # FireCrawl Upgrade & Migration
 
 ## Overview
@@ -27,6 +27,7 @@ Guide for upgrading FireCrawl SDK versions and handling breaking changes.
 
 ### Step 1: Check Current Version
 ```bash
+set -euo pipefail
 npm list @firecrawl/sdk
 npm view @firecrawl/sdk version
 ```
@@ -38,6 +39,7 @@ open https://github.com/firecrawl/sdk/releases
 
 ### Step 3: Create Upgrade Branch
 ```bash
+set -euo pipefail
 git checkout -b upgrade/firecrawl-sdk-vX.Y.Z
 npm install @firecrawl/sdk@latest
 npm test
@@ -83,6 +85,7 @@ const client = new FireCrawlClient({
 
 ### Rollback Procedure
 ```bash
+set -euo pipefail
 npm install @firecrawl/sdk@1.x.x --save-exact
 ```
 

@@ -1,222 +1,200 @@
 ---
 name: groq-multi-env-setup
 description: |
-  Configure Groq across development, staging, and production environments.
-  Use when setting up multi-environment deployments, configuring per-environment secrets,
-  or implementing environment-specific Groq configurations.
-  Trigger with phrases like "groq environments", "groq staging",
-  "groq dev prod", "groq environment setup", "groq config by env".
+  Configure Groq LLM API across development, staging, and production environments.
+  Use when setting up multi-environment deployments with Groq, managing model
+  selection per environment, or implementing rate-limit-aware config management.
+  Trigger with phrases like "groq environments", "groq staging", "groq dev prod",
+  "groq environment setup", "groq multi-env", "groq model config by env".
 allowed-tools: Read, Write, Edit, Bash(aws:*), Bash(gcloud:*), Bash(vault:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Groq Multi-Environment Setup
 
 ## Overview
-Configure Groq across development, staging, and production environments.
+Configure Groq across environments with the right balance of cost, speed, and capability per tier. Groq's key differentiator is inference speed (100-300 tokens/second), but rate limits differ dramatically by plan: free tier is 30 RPM / 14,400 RPD for llama-3.1-70b, while paid tier removes most limits.
 
 ## Prerequisites
-- Separate Groq accounts or API keys per environment
-- Secret management solution (Vault, AWS Secrets Manager, etc.)
-- CI/CD pipeline with environment variables
-- Environment detection in application
+- Groq API key(s) per environment from console.groq.com
+- Environment variable management (`.env.local`, GitHub Secrets, or cloud secret manager)
+- Understanding of Groq's model tiers and rate limits
 
 ## Environment Strategy
 
-| Environment | Purpose | API Keys | Data |
-|-------------|---------|----------|------|
-| Development | Local dev | Test keys | Sandbox |
-| Staging | Pre-prod validation | Staging keys | Test data |
-| Production | Live traffic | Production keys | Real data |
-
-## Configuration Structure
-
-```
-config/
-├── groq/
-│   ├── base.json           # Shared config
-│   ├── development.json    # Dev overrides
-│   ├── staging.json        # Staging overrides
-│   └── production.json     # Prod overrides
-```
-
-### base.json
-```json
-{
-  "timeout": 30000,
-  "retries": 3,
-  "cache": {
-    "enabled": true,
-    "ttlSeconds": 60
-  }
-}
-```
-
-### development.json
-```json
-{
-  "apiKey": "${GROQ_API_KEY}",
-  "baseUrl": "https://api-sandbox.groq.com",
-  "debug": true,
-  "cache": {
-    "enabled": false
-  }
-}
-```
-
-### staging.json
-```json
-{
-  "apiKey": "${GROQ_API_KEY_STAGING}",
-  "baseUrl": "https://api-staging.groq.com",
-  "debug": false
-}
-```
-
-### production.json
-```json
-{
-  "apiKey": "${GROQ_API_KEY_PROD}",
-  "baseUrl": "https://api.groq.com",
-  "debug": false,
-  "retries": 5
-}
-```
-
-## Environment Detection
-
-```typescript
-// src/groq/config.ts
-import baseConfig from '../../config/groq/base.json';
-
-type Environment = 'development' | 'staging' | 'production';
-
-function detectEnvironment(): Environment {
-  const env = process.env.NODE_ENV || 'development';
-  const validEnvs: Environment[] = ['development', 'staging', 'production'];
-  return validEnvs.includes(env as Environment)
-    ? (env as Environment)
-    : 'development';
-}
-
-export function getGroqConfig() {
-  const env = detectEnvironment();
-  const envConfig = require(`../../config/groq/${env}.json`);
-
-  return {
-    ...baseConfig,
-    ...envConfig,
-    environment: env,
-  };
-}
-```
-
-## Secret Management by Environment
-
-### Local Development
-```bash
-# .env.local (git-ignored)
-GROQ_API_KEY=sk_test_dev_***
-```
-
-### CI/CD (GitHub Actions)
-```yaml
-env:
-  GROQ_API_KEY: ${{ secrets.GROQ_API_KEY_${{ matrix.environment }} }}
-```
-
-### Production (Vault/Secrets Manager)
-```bash
-# AWS Secrets Manager
-aws secretsmanager get-secret-value --secret-id groq/production/api-key
-
-# GCP Secret Manager
-gcloud secrets versions access latest --secret=groq-api-key
-
-# HashiCorp Vault
-vault kv get -field=api_key secret/groq/production
-```
-
-## Environment Isolation
-
-```typescript
-// Prevent production operations in non-prod
-function guardProductionOperation(operation: string): void {
-  const config = getGroqConfig();
-
-  if (config.environment !== 'production') {
-    console.warn(`[groq] ${operation} blocked in ${config.environment}`);
-    throw new Error(`${operation} only allowed in production`);
-  }
-}
-
-// Usage
-async function deleteAllData() {
-  guardProductionOperation('deleteAllData');
-  // Dangerous operation here
-}
-```
-
-## Feature Flags by Environment
-
-```typescript
-const featureFlags: Record<Environment, Record<string, boolean>> = {
-  development: {
-    newFeature: true,
-    betaApi: true,
-  },
-  staging: {
-    newFeature: true,
-    betaApi: false,
-  },
-  production: {
-    newFeature: false,
-    betaApi: false,
-  },
-};
-```
+| Environment | Model | Rate Limit Risk | Config Source |
+|-------------|-------|-----------------|---------------|
+| Development | `llama-3.1-8b-instant` | Low (small model) | `.env.local` |
+| Staging | `llama-3.1-70b-versatile` | Medium | CI/CD secrets |
+| Production | `llama-3.1-70b-versatile` or `llama-3.3-70b-specdec` | Managed with retry | Secret manager |
 
 ## Instructions
 
-### Step 1: Create Config Structure
-Set up the base and per-environment configuration files.
+### Step 1: Configuration Structure
+```
+config/
+  groq/
+    base.ts           # Shared Groq client setup
+    development.ts    # Dev: fast small models, verbose logging
+    staging.ts        # Staging: production models, test rate limits
+    production.ts     # Prod: hardened retry, error handling
+    index.ts          # Environment resolver
+```
 
-### Step 2: Implement Environment Detection
-Add logic to detect and load environment-specific config.
+### Step 2: Base Configuration with Groq SDK
+```typescript
+// config/groq/base.ts
+import Groq from "groq-sdk";
 
-### Step 3: Configure Secrets
-Store API keys securely using your secret management solution.
+export const BASE_GROQ_CONFIG = {
+  maxRetries: 3,
+  timeout: 30000,  # 30000: 30 seconds in ms
+};
+```
 
-### Step 4: Add Environment Guards
-Implement safeguards for production-only operations.
+### Step 3: Environment-Specific Configs
+```typescript
+// config/groq/development.ts
+export const devConfig = {
+  ...BASE_GROQ_CONFIG,
+  apiKey: process.env.GROQ_API_KEY,
+  model: "llama-3.1-8b-instant",      // fastest, cheapest for dev iteration
+  maxTokens: 1024,  # 1024: 1 KB
+  temperature: 0.7,
+  logRequests: true,                   // verbose logging in dev
+};
 
-## Output
-- Multi-environment config structure
-- Environment detection logic
-- Secure secret management
-- Production safeguards enabled
+// config/groq/staging.ts
+export const stagingConfig = {
+  ...BASE_GROQ_CONFIG,
+  apiKey: process.env.GROQ_API_KEY_STAGING,
+  model: "llama-3.1-70b-versatile",   // match production model
+  maxTokens: 4096,  # 4096: 4 KB
+  temperature: 0.3,
+  logRequests: false,
+};
+
+// config/groq/production.ts
+export const productionConfig = {
+  ...BASE_GROQ_CONFIG,
+  apiKey: process.env.GROQ_API_KEY_PROD,
+  model: "llama-3.1-70b-versatile",   // or llama-3.3-70b-specdec for faster
+  maxTokens: 4096,  # 4 KB
+  temperature: 0.3,
+  maxRetries: 5,                       // more retries for production reliability
+  logRequests: false,
+};
+```
+
+### Step 4: Environment Resolver with Groq Client
+```typescript
+// config/groq/index.ts
+import Groq from "groq-sdk";
+
+type Env = "development" | "staging" | "production";
+
+function detectEnvironment(): Env {
+  const env = process.env.NODE_ENV || "development";
+  if (env === "production") return "production";
+  if (env === "staging") return "staging";
+  return "development";
+}
+
+let _client: Groq | null = null;
+
+export function getGroqClient(): Groq {
+  if (_client) return _client;
+
+  const env = detectEnvironment();
+  const configs = { development: devConfig, staging: stagingConfig, production: productionConfig };
+  const config = configs[env];
+
+  if (!config.apiKey) {
+    throw new Error(`GROQ_API_KEY not configured for ${env} environment`);
+  }
+
+  _client = new Groq({
+    apiKey: config.apiKey,
+    maxRetries: config.maxRetries,
+    timeout: config.timeout,
+  });
+
+  return _client;
+}
+
+export function getModelConfig() {
+  const env = detectEnvironment();
+  const configs = { development: devConfig, staging: stagingConfig, production: productionConfig };
+  return configs[env];
+}
+```
+
+### Step 5: Usage with Rate Limit Handling
+```typescript
+// lib/groq-service.ts
+import { getGroqClient, getModelConfig } from "../config/groq";
+
+export async function complete(prompt: string): Promise<string> {
+  const groq = getGroqClient();
+  const { model, maxTokens, temperature } = getModelConfig();
+
+  try {
+    const completion = await groq.chat.completions.create({
+      model,
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: maxTokens,
+      temperature,
+    });
+    return completion.choices[0].message.content || "";
+  } catch (err: any) {
+    if (err.status === 429) {  # HTTP 429 Too Many Requests
+      const retryAfter = parseInt(err.headers?.["retry-after"] || "10");
+      console.warn(`Groq rate limited. Retry after ${retryAfter}s`);
+      throw new Error(`Rate limited on model ${model}. Retry after ${retryAfter}s`);
+    }
+    throw err;
+  }
+}
+```
 
 ## Error Handling
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Wrong environment | Missing NODE_ENV | Set environment variable |
-| Secret not found | Wrong secret path | Verify secret manager config |
-| Config merge fails | Invalid JSON | Validate config files |
-| Production guard triggered | Wrong environment | Check NODE_ENV value |
+| `401 Unauthorized` | Invalid API key for environment | Verify `GROQ_API_KEY` in secret manager |
+| `429 rate_limit_exceeded` | Free tier limit hit | Switch to paid plan or implement request queuing |
+| Model not found | Deprecated model ID | Check console.groq.com/docs/models for current list |
+| Slow responses in dev | Using 70b model for iteration | Switch dev config to `llama-3.1-8b-instant` |
 
 ## Examples
 
-### Quick Environment Check
+### Check Which Config Is Active
 ```typescript
-const env = getGroqConfig();
-console.log(`Running in ${env.environment} with ${env.baseUrl}`);
+import { getModelConfig } from "./config/groq";
+
+const cfg = getModelConfig();
+console.log(`Model: ${cfg.model}, max_tokens: ${cfg.maxTokens}`);
+```
+
+### Test Rate Limits Per Environment
+```bash
+set -euo pipefail
+# Quick check: what's my current rate limit status?
+curl -s "https://api.groq.com/openai/v1/models" \
+  -H "Authorization: Bearer $GROQ_API_KEY" | jq '.data[].id'
 ```
 
 ## Resources
-- [Groq Environments Guide](https://docs.groq.com/environments)
-- [12-Factor App Config](https://12factor.net/config)
+- [Groq API Documentation](https://console.groq.com/docs)
+- [Groq Models Reference](https://console.groq.com/docs/models)
+- [Groq Rate Limits by Tier](https://console.groq.com/docs/rate-limits)
 
 ## Next Steps
-For observability setup, see `groq-observability`.
+For deployment configuration, see `groq-deploy-integration`.
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale

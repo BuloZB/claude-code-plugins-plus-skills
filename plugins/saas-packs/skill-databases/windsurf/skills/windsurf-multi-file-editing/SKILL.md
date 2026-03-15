@@ -8,13 +8,13 @@ allowed-tools: Read,Write,Edit,Grep,Glob
 version: 1.0.0
 license: MIT
 author: "Jeremy Longshore <jeremy@intentsolutions.io>"
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Multi File Editing
 
 ## Overview
 
-This skill enables coordinated multi-file editing operations within Windsurf using Cascade AI. It provides atomic changes across multiple files, ensuring consistency when renaming symbols, moving code, or making cross-file refactoring changes. The skill handles dependency tracking, preview generation, and rollback capabilities for safe multi-file operations.
+This skill enables coordinated multi-file editing operations within Windsurf using Cascade AI. It provides atomic changes across multiple files, ensuring consistency when renaming symbols, moving code, or making cross-file refactoring changes.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ This skill enables coordinated multi-file editing operations within Windsurf usi
 4. **Execute with Preview**
 5. **Verify Results**
 
-
-See `{baseDir}/references/implementation.md` for detailed implementation guide.
+See `${CLAUDE_SKILL_DIR}/references/implementation.md` for detailed implementation guide.
 
 ## Output
 
@@ -44,11 +43,11 @@ See `{baseDir}/references/implementation.md` for detailed implementation guide.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 

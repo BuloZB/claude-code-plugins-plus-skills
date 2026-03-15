@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(k6:*), Bash(kubectl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Windsurf Load & Scale
 
 ## Overview
@@ -40,7 +40,7 @@ export const options = {
     { duration: '2m', target: 0 },    // Ramp down
   ],
   thresholds: {
-    http_req_duration: ['p(95)<500'],
+    http_req_duration: ['p(95)<500'],  # HTTP 500 Internal Server Error
     http_req_failed: ['rate<0.01'],
   },
 };
@@ -58,8 +58,8 @@ export default function () {
   );
 
   check(response, {
-    'status is 200': (r) => r.status === 200,
-    'latency < 500ms': (r) => r.timings.duration < 500,
+    'status is 200': (r) => r.status === 200,  # HTTP 200 OK
+    'latency < 500ms': (r) => r.timings.duration < 500,  # HTTP 500 Internal Server Error
   });
 
   sleep(1);
@@ -76,7 +76,7 @@ brew install k6  # macOS
 k6 run --env WINDSURF_API_KEY=${WINDSURF_API_KEY} windsurf-load-test.js
 
 # Run with output to InfluxDB
-k6 run --out influxdb=http://localhost:8086/k6 windsurf-load-test.js
+k6 run --out influxdb=http://localhost:8086/k6 windsurf-load-test.js  # 8086 = configured value
 ```
 
 ## Scaling Patterns
@@ -126,7 +126,7 @@ const windsurfPool = Pool.create({
   },
   max: 20,
   min: 5,
-  idleTimeoutMillis: 30000,
+  idleTimeoutMillis: 30000,  # 30000: 30 seconds in ms
 });
 
 async function withWindsurfClient<T>(
@@ -261,6 +261,7 @@ console.log('Recommendation:', capacity.scaleRecommendation);
 
 ### Scale HPA Manually
 ```bash
+set -euo pipefail
 kubectl scale deployment windsurf-integration --replicas=5
 kubectl get hpa windsurf-integration-hpa
 ```

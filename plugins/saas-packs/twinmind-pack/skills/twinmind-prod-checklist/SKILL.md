@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # TwinMind Production Checklist
 
 ## Overview
@@ -50,7 +50,7 @@ Comprehensive checklist for deploying TwinMind integrations to production.
 
 ```markdown
 ## Data Protection
-- [ ] Transcripts encrypted at rest (AES-256)
+- [ ] Transcripts encrypted at rest (AES-256)  # 256 bytes
 - [ ] PII redaction enabled and tested
 - [ ] Data retention policies configured
 - [ ] Backup encryption verified
@@ -200,6 +200,7 @@ Comprehensive checklist for deploying TwinMind integrations to production.
 
 ```bash
 #!/bin/bash
+set -euo pipefail
 # pre-launch-check.sh
 
 echo "TwinMind Production Pre-Launch Check"
@@ -227,7 +228,7 @@ echo -n "Testing API connectivity... "
 HEALTH=$(curl -s -o /dev/null -w "%{http_code}" \
   -H "Authorization: Bearer $TWINMIND_API_KEY" \
   https://api.twinmind.com/v1/health)
-if [ "$HEALTH" = "200" ]; then
+if [ "$HEALTH" = "200" ]; then  # HTTP 200 OK
   echo "OK"
 else
   echo "FAIL: HTTP $HEALTH"
@@ -246,7 +247,7 @@ echo -n "Checking encryption key... "
 if [ -n "$TWINMIND_ENCRYPTION_KEY" ]; then
   KEY_LEN=${#TWINMIND_ENCRYPTION_KEY}
   if [ "$KEY_LEN" -ge 64 ]; then
-    echo "OK (256-bit)"
+    echo "OK (256-bit)"  # 256 bytes
   else
     echo "WARNING: Key too short"
   fi
@@ -360,3 +361,17 @@ verifyProduction();
 
 ## Next Steps
 For upgrading between tiers, see `twinmind-upgrade-migration`.
+
+## Instructions
+
+1. Assess the current state of the deployment configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Examples
+
+**Basic usage**: Apply twinmind prod checklist to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize twinmind prod checklist for production environments with multiple constraints and team-specific requirements.

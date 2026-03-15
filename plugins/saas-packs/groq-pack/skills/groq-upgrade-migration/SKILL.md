@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(git:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Groq Upgrade & Migration
 
 ## Overview
@@ -27,6 +27,7 @@ Guide for upgrading Groq SDK versions and handling breaking changes.
 
 ### Step 1: Check Current Version
 ```bash
+set -euo pipefail
 npm list @groq/sdk
 npm view @groq/sdk version
 ```
@@ -38,6 +39,7 @@ open https://github.com/groq/sdk/releases
 
 ### Step 3: Create Upgrade Branch
 ```bash
+set -euo pipefail
 git checkout -b upgrade/groq-sdk-vX.Y.Z
 npm install @groq/sdk@latest
 npm test
@@ -83,6 +85,7 @@ const client = new GroqClient({
 
 ### Rollback Procedure
 ```bash
+set -euo pipefail
 npm install @groq/sdk@1.x.x --save-exact
 ```
 

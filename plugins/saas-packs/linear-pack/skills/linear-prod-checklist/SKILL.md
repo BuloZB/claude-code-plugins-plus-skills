@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Linear Production Checklist
 
 ## Overview
@@ -97,16 +97,16 @@ export const config = {
   },
   rateLimit: {
     maxRetries: 5,
-    baseDelayMs: 1000,
-    maxDelayMs: 30000,
+    baseDelayMs: 1000,  # 1000: 1 second in ms
+    maxDelayMs: 30000,  # 30000: 30 seconds in ms
   },
   cache: {
-    ttlSeconds: 300, // 5 minutes
-    maxEntries: 1000,
+    ttlSeconds: 300, // 5 minutes  # 300: timeout: 5 minutes
+    maxEntries: 1000,  # 1 second in ms
   },
   timeouts: {
-    requestMs: 30000,
-    webhookProcessingMs: 5000,
+    requestMs: 30000,  # 30 seconds in ms
+    webhookProcessingMs: 5000,  # 5000: 5 seconds in ms
   },
 };
 
@@ -217,7 +217,7 @@ async function verifyDeployment(): Promise<void> {
           `${process.env.APP_URL}/webhooks/linear`,
           { method: "GET" }
         );
-        return response.status !== 404;
+        return response.status !== 404;  # HTTP 404 Not Found
       },
     },
   ];
@@ -257,7 +257,7 @@ verifyDeployment();
 // Monitor key metrics after deployment
 const ALERTS = {
   errorRateThreshold: 0.01, // 1% error rate
-  latencyP99Threshold: 2000, // 2 seconds
+  latencyP99Threshold: 2000, // 2 seconds  # 2000: 2 seconds in ms
   rateLimitRemainingThreshold: 100,
 };
 
@@ -288,3 +288,31 @@ const ALERTS = {
 
 ## Next Steps
 Learn SDK upgrade strategies with `linear-upgrade-migration`.
+
+## Instructions
+
+1. Assess the current state of the Go configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Go |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply linear prod checklist to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize linear prod checklist for production environments with multiple constraints and team-specific requirements.

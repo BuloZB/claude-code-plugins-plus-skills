@@ -18,10 +18,19 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     }
 
     .explorer-hero {
-      background: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-orange-dark) 100%);
-      color: white;
-      padding: 4rem 4rem 3rem;
+      background: var(--surface);
+      color: var(--text);
+      padding: 3.5rem 3rem 2.5rem;
       text-align: center;
+      position: relative;
+    }
+
+    .explorer-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 0%, oklch(62% 0.16 35 / 0.08) 0%, transparent 60%);
+      pointer-events: none;
     }
 
     .explorer-title {
@@ -33,7 +42,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
 
     .explorer-subtitle {
       font-size: 1.2rem;
-      opacity: 0.95;
+      color: var(--text-2);
       max-width: 700px;
       margin: 0 auto 2.5rem;
     }
@@ -48,9 +57,11 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       width: 100%;
       padding: 1.25rem 1.75rem;
       font-size: 1.1rem;
-      border: none;
+      border: 1px solid var(--border);
       border-radius: 12px;
-      font-family: 'Lora', Georgia, serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      background: var(--surface-1);
+      color: var(--text);
       box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
 
@@ -69,19 +80,20 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       justify-content: center;
       margin-top: 2rem;
       font-size: 0.9rem;
-      opacity: 0.9;
+      color: var(--text-2);
     }
 
     .hero-stat span {
       font-weight: 700;
       font-size: 1.2rem;
       display: block;
+      font-family: 'DM Mono', monospace;
     }
 
     /* Filters Section */
     .filters-bar {
-      background: white;
-      border-bottom: 2px solid var(--brand-light-gray);
+      background: var(--surface-1);
+      border-bottom: 2px solid var(--border);
       padding: 1.5rem 4rem;
       position: sticky;
       top: 80px;
@@ -100,13 +112,13 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     .type-toggle {
       display: flex;
       gap: 0.5rem;
-      background: var(--brand-light);
+      background: var(--surface-3);
       padding: 0.25rem;
       border-radius: 8px;
     }
 
     .type-btn {
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
       padding: 0.5rem 1.25rem;
       border: none;
       background: transparent;
@@ -119,8 +131,8 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     }
 
     .type-btn.active {
-      background: white;
-      color: var(--brand-orange);
+      background: var(--surface-1);
+      color: var(--gold);
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
@@ -129,15 +141,16 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       border: 2px solid var(--brand-light-gray);
       border-radius: 8px;
       font-size: 0.9rem;
-      font-family: 'Lora', Georgia, serif;
-      background: white;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      background: var(--surface-2);
+      color: var(--text);
       cursor: pointer;
       transition: border-color 0.2s;
     }
 
     .filter-select:focus {
       outline: none;
-      border-color: var(--brand-orange);
+      border-color: var(--gold);
     }
 
     .results-info {
@@ -151,16 +164,15 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       align-items: center;
       gap: 0.25rem;
       font-size: 0.75rem;
-      color: var(--brand-mid-gray);
-      opacity: 0.7;
+      color: var(--text-3);
     }
 
     .keyboard-hint kbd {
-      background: var(--brand-light);
+      background: var(--surface-3);
       border: 1px solid var(--brand-light-gray);
       border-radius: 4px;
       padding: 0.15rem 0.4rem;
-      font-family: monospace;
+      font-family: 'DM Mono', monospace;
       font-size: 0.7rem;
     }
 
@@ -187,17 +199,17 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       display: flex;
       flex-direction: column;
       padding: 1.75rem;
-      background: white;
+      background: var(--surface-2);
       border-radius: 12px;
-      border: 2px solid var(--brand-light-gray);
+      border: 1px solid var(--border);
       transition: all 0.3s var(--transition-smooth);
       position: relative;
     }
 
     .result-card:hover {
-      border-color: var(--brand-orange);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(217, 119, 87, 0.15);
+      border-color: var(--primary-border);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px oklch(0% 0 0 / 0.25);
     }
 
     .result-card-link {
@@ -207,12 +219,40 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       flex: 1;
     }
 
-    .compare-toggle-btn {
-      position: absolute;
-      bottom: 1rem;
-      right: 1rem;
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+
+    .install-copy-btn {
       padding: 0.4rem 0.75rem;
-      background: var(--brand-light);
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--surface);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+    }
+
+    .install-copy-btn:hover {
+      background: var(--brand-orange-dark);
+      border-color: var(--brand-orange-dark);
+    }
+
+    .install-copy-btn.copied {
+      background: #10b981;
+      border-color: #10b981;
+    }
+
+    .compare-toggle-btn {
+      padding: 0.4rem 0.75rem;
+      background: var(--surface-3);
       border: 1px solid var(--brand-light-gray);
       border-radius: 6px;
       font-size: 0.75rem;
@@ -220,13 +260,14 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       color: var(--brand-mid-gray);
       cursor: pointer;
       transition: all 0.2s;
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      position: static;
     }
 
     .compare-toggle-btn:hover {
-      border-color: var(--brand-orange);
-      color: var(--brand-orange);
-      background: rgba(217, 119, 87, 0.1);
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(234, 170, 0, 0.1);
     }
 
     .compare-toggle-btn.active {
@@ -254,6 +295,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       border-radius: 4px;
       font-size: 0.65rem;
       font-weight: 700;
+      font-family: 'DM Mono', monospace;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
@@ -269,8 +311,37 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     }
 
     .card-badge.has-skills {
-      background: rgba(217, 119, 87, 0.15);
-      color: var(--brand-orange-dark);
+      background: rgba(234, 170, 0, 0.15);
+      color: var(--gold);
+    }
+
+    .card-badge.verification-gold {
+      background: linear-gradient(135deg, #fbbf24 0%, #d4a017 100%);
+      color: #78350f;
+      text-decoration: none;
+    }
+
+    .card-badge.verification-silver {
+      background: linear-gradient(135deg, #cbd5e1 0%, #8e9aaf 100%);
+      color: #1e293b;
+      text-decoration: none;
+    }
+
+    .card-badge.verification-bronze {
+      background: linear-gradient(135deg, #d4a574 0%, #cd7f32 100%);
+      color: #451a03;
+      text-decoration: none;
+    }
+
+    .verified-toggle {
+      border: 1.5px solid var(--border) !important;
+      transition: all 0.2s;
+    }
+
+    .verified-toggle.active {
+      background: linear-gradient(135deg, #fbbf24, #d4a017) !important;
+      color: #78350f !important;
+      border-color: #d4a017 !important;
     }
 
     /* Bookmark button */
@@ -280,7 +351,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       left: 0.75rem;
       width: 28px;
       height: 28px;
-      background: white;
+      background: var(--surface-3);
       border: 1px solid var(--brand-light-gray);
       border-radius: 6px;
       cursor: pointer;
@@ -299,21 +370,21 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
 
     .bookmark-btn:hover {
       border-color: #ef4444;
-      background: #fef2f2;
+      background: rgba(248, 81, 73, 0.15);
     }
 
     .bookmark-btn.active {
       opacity: 1;
-      background: #fef2f2;
+      background: rgba(248, 81, 73, 0.15);
       border-color: #ef4444;
       color: #ef4444;
     }
 
     /* Keyboard navigation focus state */
     .result-card.keyboard-focused {
-      outline: 3px solid var(--brand-orange);
+      outline: 3px solid var(--gold);
       outline-offset: 2px;
-      box-shadow: 0 0 0 6px rgba(217, 119, 87, 0.2);
+      box-shadow: 0 0 0 6px rgba(234, 170, 0, 0.2);
     }
 
     .result-type-badge {
@@ -323,7 +394,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       padding: 0.35rem 0.75rem;
       font-size: 0.7rem;
       font-weight: 700;
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'DM Mono', monospace;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       border-radius: 6px;
@@ -335,16 +406,36 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     }
 
     .result-type-badge.skill {
-      background: rgba(217, 119, 87, 0.15);
-      color: var(--brand-orange-dark);
+      background: rgba(234, 170, 0, 0.15);
+      color: var(--gold);
+    }
+
+    .official-badge {
+      position: absolute;
+      top: 1rem;
+      right: 5.5rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .author-toggle {
+      margin-left: 0;
     }
 
     .result-name {
       font-size: 1.15rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text);
       margin-bottom: 0.75rem;
-      padding-right: 4rem;
+      padding-right: 5rem;
     }
 
     .result-description {
@@ -371,11 +462,11 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem 0.75rem;
-      background: var(--brand-light);
+      background: var(--surface-3);
       border-radius: 6px;
-      color: var(--brand-orange-dark);
+      color: var(--gold);
       font-weight: 600;
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
     }
 
     .result-category {
@@ -391,12 +482,22 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
 
     .tool-tag {
       padding: 0.25rem 0.6rem;
-      background: rgba(217, 119, 87, 0.1);
-      color: var(--brand-orange-dark);
+      background: rgba(234, 170, 0, 0.1);
+      color: var(--gold);
       font-size: 0.7rem;
       font-weight: 600;
       border-radius: 4px;
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .keyword-tag {
+      padding: 0.25rem 0.6rem;
+      background: rgba(106, 155, 204, 0.1);
+      color: var(--brand-blue);
+      font-size: 0.7rem;
+      font-weight: 600;
+      border-radius: 4px;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
     }
 
     .no-results {
@@ -407,7 +508,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
 
     .no-results h3 {
       font-size: 1.5rem;
-      color: var(--brand-dark);
+      color: var(--text);
       margin-bottom: 1rem;
     }
 
@@ -417,10 +518,10 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     }
 
     .no-results button {
-      font-family: 'Poppins', Arial, sans-serif;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
       padding: 0.75rem 1.5rem;
-      background: var(--brand-orange);
-      color: white;
+      background: var(--gold);
+      color: var(--surface);
       border: none;
       border-radius: 8px;
       font-weight: 600;
@@ -441,6 +542,10 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     }
 
     @media (max-width: 768px) {
+      .explorer-hero {
+        padding: 2.5rem 2rem 2rem;
+      }
+
       .explorer-hero,
       .filters-bar,
       .results-section {
@@ -455,10 +560,23 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       .filters-container {
         flex-direction: column;
         align-items: stretch;
+        gap: 0.75rem;
       }
 
       .type-toggle {
         justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .type-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      .filter-select {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
       }
 
       .results-info {
@@ -470,9 +588,92 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         grid-template-columns: 1fr;
       }
 
+      .result-card {
+        padding: 1.25rem;
+      }
+
+      .result-name {
+        padding-right: 3.5rem;
+      }
+
+      .official-badge {
+        right: 4.5rem;
+      }
+
       .hero-stats {
         flex-direction: column;
         gap: 1rem;
+      }
+
+      .card-badge,
+      .result-type-badge,
+      .tool-tag,
+      .keyword-tag {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .explorer-hero {
+        padding: 2rem 1rem 1.5rem;
+      }
+
+      .filters-bar,
+      .results-section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .explorer-title {
+        font-size: 1.5rem;
+      }
+
+      .explorer-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-search-input {
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+      }
+
+      .result-card {
+        padding: 1rem;
+      }
+
+      .result-name {
+        font-size: 1rem;
+        padding-right: 3rem;
+      }
+
+      .result-description {
+        font-size: 0.85rem;
+      }
+
+      .result-type-badge {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+      }
+
+      .official-badge {
+        right: 3.5rem;
+      }
+
+      .card-actions {
+        flex-wrap: wrap;
+      }
+
+      .hero-stats {
+        gap: 0.75rem;
+      }
+
+      .hero-stat span {
+        font-size: 1rem;
+      }
+
+      .no-results {
+        padding: 2rem 1rem;
       }
     }
   </style>
@@ -520,12 +721,25 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         <button class="type-btn" data-type="favorites" id="favorites-btn">♡ Favorites</button>
       </div>
 
+      <div class="type-toggle author-toggle">
+        <button class="type-btn active" data-author="all">All Authors</button>
+        <button class="type-btn" data-author="official">Official</button>
+        <button class="type-btn" data-author="community">Community</button>
+      </div>
+
       <select id="category-filter" class="filter-select">
         <option value="">All Categories</option>
         {searchIndex.stats.categories.map(category => (
           <option value={category}>
             {category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </option>
+        ))}
+      </select>
+
+      <select id="keyword-filter" class="filter-select">
+        <option value="">All Keywords</option>
+        {(searchIndex.stats.allKeywords || []).map(kw => (
+          <option value={kw}>{kw.replace(/-/g, ' ')}</option>
         ))}
       </select>
 
@@ -536,11 +750,16 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         ))}
       </select>
 
+      <button class="type-btn verified-toggle" id="verified-toggle" title="Show only verified plugins">
+        Verified Only
+      </button>
+
       <select id="sort-filter" class="filter-select">
         <option value="relevance">Sort: Relevance</option>
         <option value="a-z">Sort: A → Z</option>
         <option value="z-a">Sort: Z → A</option>
         <option value="category">Sort: Category</option>
+        <option value="score">Sort: Verification Score</option>
       </select>
 
       <span id="results-info" class="results-info">
@@ -558,15 +777,19 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     <div id="results-grid" class="results-grid">
       {searchIndex.items.map(item => (
         <div
-          class="result-card"
+          class={`result-card ${item.verificationBadge ? 'has-verification' : ''}`}
           data-type={item.type}
           data-category={item.category}
           data-tools={item.type === 'skill' ? JSON.stringify(item.allowedTools) : '[]'}
+          data-keywords={JSON.stringify(item.keywords || [])}
           data-item-id={item.id || item.name}
           data-item-name={item.displayName || item.name}
           data-featured={item.isFeatured || false}
           data-new={item.isNew || false}
           data-skill-count={item.skillCount || 0}
+          data-verification-badge={item.verificationBadge || ''}
+          data-verification-score={item.verificationScore || 0}
+          data-author-type={item.authorType || 'official'}
         >
           <button
             class="bookmark-btn"
@@ -575,15 +798,23 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
           >♡</button>
 
           <a
-            href={item.type === 'plugin' ? `/plugins/${item.name}/` : `/skills/${item.slug}/`}
+            href={item.type === 'plugin' ? `/plugins/${item.name}/` : (item.parentPlugin ? `/cowork` : `/skills/${item.slug}/`)}
             class="result-card-link"
           >
             <span class={`result-type-badge ${item.type}`}>
               {item.type}
             </span>
+            {item.authorType === 'official' && (
+              <span class="official-badge" title="Official plugin maintained by Intent Solutions">&#x2713;</span>
+            )}
 
-            {(item.isFeatured || item.skillCount > 0) && (
+            {(item.isFeatured || item.skillCount > 0 || item.verificationBadge) && (
               <div class="card-badges">
+                {item.verificationBadge && (
+                  <a href="/verification" class={`card-badge verification-${item.verificationBadge}`} title={`Verified ${item.verificationBadge.charAt(0).toUpperCase() + item.verificationBadge.slice(1)} — ${item.verificationScore}/100`}>
+                    {item.verificationBadge === 'gold' ? '🥇' : item.verificationBadge === 'silver' ? '🥈' : '🥉'} {item.verificationScore}
+                  </a>
+                )}
                 {item.isFeatured && <span class="card-badge featured">★ Featured</span>}
                 {item.skillCount > 0 && <span class="card-badge has-skills">{item.skillCount} skills</span>}
               </div>
@@ -602,6 +833,17 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
               <div class="result-category">{item.category.replace(/-/g, ' ')}</div>
             </div>
 
+            {item.type === 'plugin' && item.keywords && item.keywords.length > 0 && (
+              <div class="result-tools">
+                {item.keywords.slice(0, 4).map(kw => (
+                  <span class="keyword-tag">{kw.replace(/-/g, ' ')}</span>
+                ))}
+                {item.keywords.length > 4 && (
+                  <span class="keyword-tag">+{item.keywords.length - 4} more</span>
+                )}
+              </div>
+            )}
+
             {item.type === 'skill' && item.allowedTools && item.allowedTools.length > 0 && (
               <div class="result-tools">
                 {item.allowedTools.slice(0, 4).map(tool => (
@@ -614,15 +856,24 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
             )}
           </a>
 
-          <button
-            class="compare-toggle-btn"
-            data-compare-id={item.id || item.name}
-            data-compare-name={item.displayName || item.name}
-            data-compare-type={item.type}
-            title="Add to comparison"
-          >
-            + Compare
-          </button>
+          <div class="card-actions">
+            <button
+              class="install-copy-btn"
+              data-install-cmd={`/plugin install ${item.type === 'plugin' ? item.name : (item.parentPlugin?.name || item.name)}@claude-code-plugins-plus`}
+              title="Copy install command"
+            >
+              Install
+            </button>
+            <button
+              class="compare-toggle-btn"
+              data-compare-id={item.id || item.name}
+              data-compare-name={item.displayName || item.name}
+              data-compare-type={item.type}
+              title="Add to comparison"
+            >
+              + Compare
+            </button>
+          </div>
         </div>
       ))}
     </div>
@@ -637,17 +888,20 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
     const resultsInfo = document.getElementById('results-info');
 
     const fuse = new Fuse(allItems, {
-      keys: ['name', 'description', 'category', 'searchText'],
+      keys: ['name', 'description', 'category', 'keywords', 'searchText'],
       threshold: 0.3,
       includeScore: true
     });
 
     let activeFilters = {
       type: 'all',
+      authorType: 'all',
       category: null,
+      keyword: null,
       tool: null,
       search: '',
-      sort: 'relevance'
+      sort: 'relevance',
+      verifiedOnly: false
     };
 
     function applyFilters() {
@@ -668,9 +922,21 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         filtered = filtered.filter(item => item.type === activeFilters.type);
       }
 
+      // Apply author type filter
+      if (activeFilters.authorType !== 'all') {
+        filtered = filtered.filter(item => (item.authorType || 'official') === activeFilters.authorType);
+      }
+
       // Apply category filter
       if (activeFilters.category) {
         filtered = filtered.filter(item => item.category === activeFilters.category);
+      }
+
+      // Apply keyword filter (plugins only)
+      if (activeFilters.keyword) {
+        filtered = filtered.filter(item =>
+          item.keywords && item.keywords.includes(activeFilters.keyword)
+        );
       }
 
       // Apply tool filter (skills only)
@@ -678,6 +944,11 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         filtered = filtered.filter(item =>
           item.type === 'skill' && item.allowedTools && item.allowedTools.includes(activeFilters.tool)
         );
+      }
+
+      // Apply verified filter
+      if (activeFilters.verifiedOnly) {
+        filtered = filtered.filter(item => item.verificationBadge);
       }
 
       // Apply sorting
@@ -694,6 +965,8 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
             case 'category':
               const catCompare = a.category.localeCompare(b.category);
               return catCompare !== 0 ? catCompare : nameA.localeCompare(nameB);
+            case 'score':
+              return (b.verificationScore || 0) - (a.verificationScore || 0);
             default:
               return 0; // relevance - keep Fuse.js order
           }
@@ -710,7 +983,9 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       if (activeFilters.search) params.set('q', activeFilters.search);
       if (activeFilters.type !== 'all') params.set('type', activeFilters.type);
       if (activeFilters.category) params.set('category', activeFilters.category);
+      if (activeFilters.keyword) params.set('keyword', activeFilters.keyword);
       if (activeFilters.sort !== 'relevance') params.set('sort', activeFilters.sort);
+      if (activeFilters.verifiedOnly) params.set('verified', '1');
 
       const newURL = params.toString()
         ? `${window.location.pathname}?${params.toString()}`
@@ -803,10 +1078,10 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         }
       });
 
-      // Type toggle buttons
-      document.querySelectorAll('.type-btn').forEach(btn => {
+      // Type toggle buttons (only in the first toggle group, not author toggle)
+      document.querySelectorAll('.type-toggle:not(.author-toggle) .type-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.type-toggle:not(.author-toggle) .type-btn').forEach(b => b.classList.remove('active'));
           e.target.classList.add('active');
           activeFilters.type = e.target.dataset.type;
           applyFilters();
@@ -816,12 +1091,44 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         });
       });
 
+      // Author type toggle buttons
+      document.querySelectorAll('.author-toggle .type-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.author-toggle .type-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          activeFilters.authorType = e.target.dataset.author;
+          applyFilters();
+          if (window.trackEvent) {
+            window.trackEvent('filter_applied', { filter_type: 'author', value: activeFilters.authorType });
+          }
+        });
+      });
+
+      // Verified toggle
+      document.getElementById('verified-toggle').addEventListener('click', (e) => {
+        activeFilters.verifiedOnly = !activeFilters.verifiedOnly;
+        e.target.classList.toggle('active', activeFilters.verifiedOnly);
+        applyFilters();
+        if (window.trackEvent) {
+          window.trackEvent('filter_applied', { filter_type: 'verified', value: activeFilters.verifiedOnly });
+        }
+      });
+
       // Category filter
       document.getElementById('category-filter').addEventListener('change', (e) => {
         activeFilters.category = e.target.value || null;
         applyFilters();
         if (window.trackEvent && activeFilters.category) {
           window.trackEvent('filter_applied', { filter_type: 'category', value: activeFilters.category });
+        }
+      });
+
+      // Keyword filter
+      document.getElementById('keyword-filter').addEventListener('change', (e) => {
+        activeFilters.keyword = e.target.value || null;
+        applyFilters();
+        if (window.trackEvent && activeFilters.keyword) {
+          window.trackEvent('filter_applied', { filter_type: 'keyword', value: activeFilters.keyword });
         }
       });
 
@@ -852,9 +1159,21 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
         document.getElementById('category-filter').value = categoryParam;
       }
 
-      if (sortParam && ['relevance', 'a-z', 'z-a', 'category'].includes(sortParam)) {
+      const keywordParam = urlParams.get('keyword');
+      if (keywordParam) {
+        activeFilters.keyword = keywordParam;
+        document.getElementById('keyword-filter').value = keywordParam;
+      }
+
+      if (sortParam && ['relevance', 'a-z', 'z-a', 'category', 'score'].includes(sortParam)) {
         activeFilters.sort = sortParam;
         document.getElementById('sort-filter').value = sortParam;
+      }
+
+      const verifiedParam = urlParams.get('verified');
+      if (verifiedParam === '1') {
+        activeFilters.verifiedOnly = true;
+        document.getElementById('verified-toggle').classList.add('active');
       }
 
       // Keyboard shortcuts
@@ -947,9 +1266,10 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
 
       // Clear all filters function
       window.clearAllFilters = () => {
-        activeFilters = { type: 'all', category: null, tool: null, search: '', sort: 'relevance' };
+        activeFilters = { type: 'all', category: null, keyword: null, tool: null, search: '', sort: 'relevance' };
         document.getElementById('main-search').value = '';
         document.getElementById('category-filter').value = '';
+        document.getElementById('keyword-filter').value = '';
         document.getElementById('tool-filter').value = '';
         document.getElementById('sort-filter').value = 'relevance';
         document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
@@ -975,6 +1295,22 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
       if (window.CompareManager) {
         window.CompareManager.updateCardStates();
       }
+
+      // Add click handlers to install buttons
+      document.querySelectorAll('.install-copy-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const cmd = btn.dataset.installCmd;
+          navigator.clipboard.writeText(cmd).then(() => {
+            const original = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1500);
+            if (window.trackEvent) window.trackEvent('install_copied', { plugin_name: cmd, source: 'explore_card' });
+          });
+        });
+      });
 
       // Add click handlers to compare buttons
       document.querySelectorAll('.compare-toggle-btn').forEach(btn => {

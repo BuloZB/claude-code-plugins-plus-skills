@@ -6,6 +6,7 @@ allowed-tools: Read, Write, Edit, Grep, Bash(cmd:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
 # ADK Agent Builder
 
@@ -61,7 +62,7 @@ Build production-ready agents with Google’s Agent Development Kit (ADK): scaff
 
 ## Resources
 
-- Full detailed guide (kept for reference): `{baseDir}/references/SKILL.full.md`
+- Full detailed guide (kept for reference): `${CLAUDE_SKILL_DIR}/references/SKILL.full.md`
 - Repo standards (source of truth):
   - `000-docs/6767-a-SPEC-DR-STND-claude-code-plugins-standard.md`
   - `000-docs/6767-b-SPEC-DR-STND-claude-skills-standard.md`

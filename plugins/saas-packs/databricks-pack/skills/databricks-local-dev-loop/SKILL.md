@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(pip:*), Bash(databricks:*), Bash(dbx:*), 
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Databricks Local Dev Loop
 
 ## Overview
@@ -57,6 +57,7 @@ my-databricks-project/
 
 ### Step 2: Install Development Tools
 ```bash
+set -euo pipefail
 # Install Databricks SDK and CLI
 pip install databricks-sdk databricks-cli
 
@@ -78,7 +79,7 @@ databricks-connect configure
 # Or set environment variables
 export DATABRICKS_HOST="https://adb-1234567890.1.azuredatabricks.net"
 export DATABRICKS_TOKEN="dapi..."
-export DATABRICKS_CLUSTER_ID="1234-567890-abcde123"
+export DATABRICKS_CLUSTER_ID="1234-567890-abcde123"  # 567890: port 1234 - example/test
 ```
 
 ### Step 4: Create databricks.yml (Asset Bundle)

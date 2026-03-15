@@ -3,13 +3,13 @@ name: creating-kubernetes-deployments
 description: |
   Deploy applications to Kubernetes with production-ready manifests.
   Supports Deployments, Services, Ingress, HPA, ConfigMaps, Secrets, StatefulSets, and NetworkPolicies.
-  Includes health checks, resource limits, auto-scaling, and TLS termination.
+  Includes health checks, resource limits, auto-scaling, and TLS termination. Use when working with creating kubernetes deployments. Trigger with 'creating', 'kubernetes', 'deployments'.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(kubectl:*)
 version: 2.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Creating Kubernetes Deployments
 
 Generate production-ready Kubernetes manifests with health checks, resource limits, and security best practices.
@@ -45,7 +45,7 @@ spec:
       - name: my-api
         image: my-registry/my-api:v1.0.0
         ports:
-        - containerPort: 8080
+        - containerPort: 8080  # 8080: HTTP proxy port
         resources:
           requests:
             cpu: 100m
@@ -56,13 +56,13 @@ spec:
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 8080
+            port: 8080  # HTTP proxy port
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /readyz
-            port: 8080
+            port: 8080  # HTTP proxy port
           initialDelaySeconds: 5
           periodSeconds: 5
 ---
@@ -76,7 +76,7 @@ spec:
     app: my-api
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 8080  # HTTP proxy port
 ```
 
 ## Deployment Strategies
@@ -126,7 +126,7 @@ spec:
     version: blue  # Switch to 'green' for deployment
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 8080  # 8080: HTTP proxy port
 ```
 
 ## Service Types
@@ -195,7 +195,7 @@ resources:
 livenessProbe:
   httpGet:
     path: /healthz
-    port: 8080
+    port: 8080  # 8080: HTTP proxy port
   initialDelaySeconds: 30  # Wait for app startup
   periodSeconds: 10         # Check every 10s
   timeoutSeconds: 5         # Timeout per check
@@ -208,7 +208,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /readyz
-    port: 8080
+    port: 8080  # 8080: HTTP proxy port
   initialDelaySeconds: 5    # Quick check after start
   periodSeconds: 5          # Check every 5s
   successThreshold: 1       # 1 success = ready
@@ -221,7 +221,7 @@ readinessProbe:
 startupProbe:
   httpGet:
     path: /healthz
-    port: 8080
+    port: 8080  # 8080: HTTP proxy port
   initialDelaySeconds: 0
   periodSeconds: 10
   failureThreshold: 30      # Allow 5 minutes to start (30 * 10s)
@@ -256,7 +256,7 @@ spec:
         averageUtilization: 80
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: 300  # Wait 5min before scale down
+      stabilizationWindowSeconds: 300  # 300: Wait 5min before scale down
 ```
 
 ## ConfigMaps and Secrets
@@ -273,7 +273,7 @@ data:
   API_ENDPOINT: "https://api.example.com"
   config.yaml: |
     server:
-      port: 8080
+      port: 8080  # 8080: HTTP proxy port
     features:
       enabled: true
 ```
@@ -345,7 +345,7 @@ spec:
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive troubleshooting.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive troubleshooting.
 
 | Error | Quick Fix |
 |-------|-----------|
@@ -356,11 +356,29 @@ See `{baseDir}/references/errors.md` for comprehensive troubleshooting.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed walkthroughs.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed walkthroughs.
 
 ## Resources
 
 - Kubernetes documentation: https://kubernetes.io/docs/
 - kubectl reference: https://kubernetes.io/docs/reference/kubectl/
-- Templates in `{baseDir}/assets/`
-- Scripts in `{baseDir}/scripts/`
+- Templates in `${CLAUDE_SKILL_DIR}/assets/`
+- Scripts in `${CLAUDE_SKILL_DIR}/scripts/`
+
+## Overview
+
+Deploy applications to Kubernetes with production-ready manifests.
+
+## Prerequisites
+
+- Access to the Kubernetes environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with Kubernetes concepts and terminology
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [Kubernetes implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.

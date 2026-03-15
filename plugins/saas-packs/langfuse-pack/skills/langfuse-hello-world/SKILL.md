@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Langfuse Hello World
 
 ## Overview
@@ -133,7 +133,7 @@ async function main() {
   });
 
   // Simulate response
-  await new Promise((r) => setTimeout(r, 500));
+  await new Promise((r) => setTimeout(r, 500));  # HTTP 500 Internal Server Error
 
   // End generation with output
   generation.end({

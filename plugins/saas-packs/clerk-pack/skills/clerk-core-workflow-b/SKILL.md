@@ -10,262 +10,69 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Clerk Core Workflow B: Session & Middleware
 
+## Contents
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Instructions](#instructions)
+- [Output](#output)
+- [Error Handling](#error-handling)
+- [Examples](#examples)
+- [Resources](#resources)
+
 ## Overview
-Manage user sessions, protect routes with middleware, and handle JWT tokens.
+Implement session management and route protection with Clerk middleware. Covers Next.js middleware configuration, API route protection, role-based access control, and organization-scoped sessions.
 
 ## Prerequisites
-- Clerk SDK installed and configured
-- Authentication flows implemented
-- Understanding of Next.js middleware
+- Clerk account with application created
+- `@clerk/nextjs` package installed
+- Next.js 14+ with App Router
+- Understanding of JWT session tokens
 
 ## Instructions
 
-### Step 1: Advanced Middleware Configuration
-```typescript
-// middleware.ts
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
+### Step 1: Configure Clerk Middleware
+Create `middleware.ts` at project root. Define public routes (landing, sign-in, webhooks) and admin routes. Use `clerkMiddleware` with `auth.protect()` for private routes and role-based protection for admin routes.
 
-const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks(.*)',
-  '/api/public(.*)'
-])
+### Step 2: Protect API Routes
+Use `auth()` in route handlers to get `userId`, `orgId`, and `has()` for permission checks. Return 401/403 for unauthorized/insufficient permissions.
 
-const isAdminRoute = createRouteMatcher(['/admin(.*)'])
-const isAPIRoute = createRouteMatcher(['/api/(.*)'])
+### Step 3: Handle Session Claims
+Access session data, user profile, and generate JWT tokens for external APIs (Supabase, etc.) using `getToken({ template: 'name' })`.
 
-export default clerkMiddleware(async (auth, request) => {
-  const { userId, orgRole, sessionClaims } = await auth()
+### Step 4: Add Server Component Auth
+Use `auth()` in server components with `redirect('/sign-in')` for unauthenticated users. Check roles/permissions with `has()` for conditional UI rendering.
 
-  // Allow public routes
-  if (isPublicRoute(request)) {
-    return NextResponse.next()
-  }
-
-  // Require authentication for all other routes
-  if (!userId) {
-    const signInUrl = new URL('/sign-in', request.url)
-    signInUrl.searchParams.set('redirect_url', request.url)
-    return NextResponse.redirect(signInUrl)
-  }
-
-  // Admin route protection
-  if (isAdminRoute(request)) {
-    if (orgRole !== 'org:admin') {
-      return NextResponse.redirect(new URL('/unauthorized', request.url))
-    }
-  }
-
-  // Add custom headers for API routes
-  if (isAPIRoute(request)) {
-    const response = NextResponse.next()
-    response.headers.set('x-user-id', userId)
-    return response
-  }
-
-  return NextResponse.next()
-})
-
-export const config = {
-  matcher: ['/((?!_next|[^?]*\\.(?:html?|css|js|jpe?g|webp|png|gif|svg|ttf|woff2?|ico)).*)', '/']
-}
-```
-
-### Step 2: Session Management
-```typescript
-'use client'
-import { useSession, useAuth } from '@clerk/nextjs'
-
-export function SessionManager() {
-  const { session, isLoaded } = useSession()
-  const { signOut } = useAuth()
-
-  if (!isLoaded) return <div>Loading session...</div>
-  if (!session) return <div>No active session</div>
-
-  const handleSignOutAll = async () => {
-    // Sign out from all devices
-    await signOut({ sessionId: 'all' })
-  }
-
-  const handleSignOutCurrent = async () => {
-    // Sign out from current session only
-    await signOut()
-  }
-
-  return (
-    <div>
-      <h2>Session Info</h2>
-      <p>Session ID: {session.id}</p>
-      <p>Created: {new Date(session.createdAt).toLocaleString()}</p>
-      <p>Last Active: {new Date(session.lastActiveAt).toLocaleString()}</p>
-      <p>Expires: {new Date(session.expireAt).toLocaleString()}</p>
-
-      <div className="space-x-2">
-        <button onClick={handleSignOutCurrent}>Sign Out</button>
-        <button onClick={handleSignOutAll}>Sign Out All Devices</button>
-      </div>
-    </div>
-  )
-}
-```
-
-### Step 3: Token Management
-```typescript
-'use client'
-import { useAuth } from '@clerk/nextjs'
-
-export function useClerkToken() {
-  const { getToken, isLoaded, isSignedIn } = useAuth()
-
-  const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-    if (!isLoaded || !isSignedIn) {
-      throw new Error('Not authenticated')
-    }
-
-    const token = await getToken()
-
-    return fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-  }
-
-  const fetchWithCustomTemplate = async (url: string, template: string) => {
-    const token = await getToken({ template })
-
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-  }
-
-  return { fetchWithAuth, fetchWithCustomTemplate, getToken }
-}
-```
-
-### Step 4: Server-Side Session Validation
-```typescript
-// app/api/protected/route.ts
-import { auth } from '@clerk/nextjs/server'
-import { headers } from 'next/headers'
-
-export async function GET() {
-  const { userId, sessionId, sessionClaims } = await auth()
-
-  if (!userId) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  // Access session claims
-  const email = sessionClaims?.email as string
-  const role = sessionClaims?.metadata?.role as string
-
-  // Validate session freshness
-  const sessionAge = Date.now() - (sessionClaims?.iat ?? 0) * 1000
-  const maxAge = 60 * 60 * 1000 // 1 hour
-
-  if (sessionAge > maxAge) {
-    return Response.json({ error: 'Session expired' }, { status: 401 })
-  }
-
-  return Response.json({
-    userId,
-    sessionId,
-    email,
-    role
-  })
-}
-```
-
-### Step 5: Multi-Session Support
-```typescript
-'use client'
-import { useSessionList, useSession } from '@clerk/nextjs'
-
-export function SessionList() {
-  const { sessions, isLoaded, setActive } = useSessionList()
-  const { session: currentSession } = useSession()
-
-  if (!isLoaded) return <div>Loading sessions...</div>
-
-  return (
-    <div>
-      <h2>Active Sessions</h2>
-      <ul>
-        {sessions?.map((session) => (
-          <li key={session.id}>
-            <span>{session.id}</span>
-            <span>{session.id === currentSession?.id ? ' (current)' : ''}</span>
-            <button onClick={() => setActive({ session: session.id })}>
-              Switch
-            </button>
-            <button onClick={() => session.remove()}>
-              Revoke
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-```
+See [detailed implementation](${CLAUDE_SKILL_DIR}/references/implementation.md) for complete middleware config, API route examples, session claims, server component patterns, and role-based navigation.
 
 ## Output
-- Protected routes with middleware
-- Session management UI
-- Token refresh handling
-- Multi-session support
+- Middleware protecting all non-public routes
+- API routes with auth and permission checks
+- Server components with role-based rendering
+- JWT tokens configured for external services
 
 ## Error Handling
-| Error | Cause | Solution |
+| Issue | Cause | Solution |
 |-------|-------|----------|
-| Session not found | Expired or revoked | Redirect to sign-in |
-| Token expired | JWT lifetime exceeded | Call getToken() for fresh token |
-| Middleware loop | Incorrect matcher | Check matcher regex excludes static files |
-| Headers already sent | Response already started | Check middleware order |
+| Middleware redirect loop | Public route not in matcher | Add route to `isPublicRoute` |
+| 401 on API route | Token not forwarded | Ensure fetch includes credentials |
+| Missing org context | User not in organization | Check `orgId` before org-scoped ops |
+| Session expired | Token TTL exceeded | Configure session lifetime in dashboard |
 
 ## Examples
 
-### Rate-Limited Middleware
+### Quick Permission Check
 ```typescript
-import { clerkMiddleware } from '@clerk/nextjs/server'
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
-
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(10, '10 s')
-})
-
-export default clerkMiddleware(async (auth, request) => {
-  const { userId } = await auth()
-
-  if (userId) {
-    const { success } = await ratelimit.limit(userId)
-    if (!success) {
-      return Response.json({ error: 'Rate limited' }, { status: 429 })
-    }
-  }
-})
+const { has } = await auth();
+if (has({ permission: 'org:data:write' })) {
+  // User can write data in this organization
+}
 ```
 
 ## Resources
-- [Middleware Guide](https://clerk.com/docs/references/nextjs/clerk-middleware)
-- [Session Management](https://clerk.com/docs/authentication/configuration/session-options)
-- [JWT Templates](https://clerk.com/docs/backend-requests/making/jwt-templates)
-
-## Next Steps
-Proceed to `clerk-common-errors` for troubleshooting common issues.
+- [Clerk Middleware](https://clerk.com/docs/references/nextjs/clerk-middleware)
+- [Clerk Auth Helper](https://clerk.com/docs/references/nextjs/auth)
+- [Clerk Organizations](https://clerk.com/docs/organizations/overview)

@@ -9,8 +9,8 @@ allowed-tools: Read, Write, Bash(crypto:yield-*)
 version: 2.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Optimizing DeFi Yields
 
 ## Overview
@@ -27,94 +27,39 @@ Before using this skill, ensure you have:
 
 ## Instructions
 
-### Step 1: Search for Yield Opportunities
-
-Find top yields across all chains:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --top 20
-```
-
-Filter by specific chain:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --chain ethereum --top 10
-```
-
-### Step 2: Filter by Criteria
-
-Filter by minimum TVL (for safety):
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --min-tvl 10000000 --top 15
-```
-
-Filter by asset type:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --asset USDC --chain ethereum
-```
-
-Filter by protocol:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --protocol aave,compound,curve
-```
-
-### Step 3: Apply Risk Filters
-
-Show only audited protocols:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --audited-only --min-tvl 1000000
-```
-
-Filter by risk level:
-
-| Level | Flag | Description |
-|-------|------|-------------|
-| Low | `--risk low` | Blue-chip, battle-tested protocols |
-| Medium | `--risk medium` | Established protocols, moderate risk |
-| High | `--risk high` | Newer protocols, higher yields |
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --risk low --min-apy 3
-```
-
-### Step 4: Analyze Specific Opportunities
-
-Get detailed breakdown for a pool:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --pool "aave-v3-usdc-ethereum" --detailed
-```
-
-Compare specific protocols:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --compare aave,compound,spark --asset USDC
-```
-
-### Step 5: Export Results
-
-Export to JSON for further analysis:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --top 50 --format json --output yields.json
-```
-
-Export to CSV:
-
-```bash
-python {baseDir}/scripts/yield_optimizer.py --chain ethereum --format csv --output eth_yields.csv
-```
+1. Search for yield opportunities across all chains or filter by a specific chain:
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --top 20
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --chain ethereum --top 10
+   ```
+2. Filter by criteria -- minimum TVL (for safety), asset type, or protocol:
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --min-tvl 10000000 --top 15  # 10000000 = 10M limit
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --asset USDC --chain ethereum
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --protocol aave,compound,curve
+   ```
+3. Apply risk filters -- show only audited protocols or filter by risk level (`--risk low`, `--risk medium`, `--risk high`):
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --audited-only --min-tvl 1000000  # 1000000 = 1M limit
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --risk low --min-apy 3
+   ```
+4. Analyze specific opportunities -- get detailed pool breakdown or compare protocols:
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --pool "aave-v3-usdc-ethereum" --detailed
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --compare aave,compound,spark --asset USDC
+   ```
+5. Export results to JSON or CSV for further analysis:
+   ```bash
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --top 50 --format json --output yields.json
+   python ${CLAUDE_SKILL_DIR}/scripts/yield_optimizer.py --chain ethereum --format csv --output eth_yields.csv
+   ```
 
 ## Output
 
 ### Yield Summary Table
 ```
 ==============================================================================
-  DEFI YIELD OPTIMIZER                              2026-01-15 15:30 UTC
+  DEFI YIELD OPTIMIZER                              2026-01-15 15:30 UTC  # 2026 year
 ==============================================================================
 
   TOP YIELD OPPORTUNITIES
@@ -155,7 +100,7 @@ python {baseDir}/scripts/yield_optimizer.py --chain ethereum --format csv --outp
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 Common issues:
 - **API timeout**: Uses cached data with staleness warning
@@ -164,13 +109,13 @@ Common issues:
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed usage examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed usage examples.
 
 ### Quick Examples
 
 **Find stablecoin yields**:
 ```bash
-python yield_optimizer.py --asset USDC,USDT,DAI --min-tvl 10000000
+python yield_optimizer.py --asset USDC,USDT,DAI --min-tvl 10000000  # 10000000 = 10M limit
 ```
 
 **Low-risk opportunities**:
@@ -190,7 +135,7 @@ python yield_optimizer.py --top 100 --format json --output all_yields.json
 
 ## Configuration
 
-Settings in `{baseDir}/config/settings.yaml`:
+Settings in `${CLAUDE_SKILL_DIR}/config/settings.yaml`:
 
 - **Default chain**: Primary chain to search
 - **Cache TTL**: How long to cache API responses

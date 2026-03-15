@@ -10,229 +10,67 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Clay Reference Architecture
 
 ## Overview
-Production-ready architecture patterns for Clay integrations.
+
+Production architecture for Clay-based lead enrichment and data operations. Covers table design, enrichment pipeline patterns, webhook integration, and CRM synchronization flows.
 
 ## Prerequisites
-- Understanding of layered architecture
-- Clay SDK knowledge
-- TypeScript project setup
-- Testing framework configured
 
-## Project Structure
-
-```
-my-clay-project/
-├── src/
-│   ├── clay/
-│   │   ├── client.ts           # Singleton client wrapper
-│   │   ├── config.ts           # Environment configuration
-│   │   ├── types.ts            # TypeScript types
-│   │   ├── errors.ts           # Custom error classes
-│   │   └── handlers/
-│   │       ├── webhooks.ts     # Webhook handlers
-│   │       └── events.ts       # Event processing
-│   ├── services/
-│   │   └── clay/
-│   │       ├── index.ts        # Service facade
-│   │       ├── sync.ts         # Data synchronization
-│   │       └── cache.ts        # Caching layer
-│   ├── api/
-│   │   └── clay/
-│   │       └── webhook.ts      # Webhook endpoint
-│   └── jobs/
-│       └── clay/
-│           └── sync.ts         # Background sync job
-├── tests/
-│   ├── unit/
-│   │   └── clay/
-│   └── integration/
-│       └── clay/
-├── config/
-│   ├── clay.development.json
-│   ├── clay.staging.json
-│   └── clay.production.json
-└── docs/
-    └── clay/
-        ├── SETUP.md
-        └── RUNBOOK.md
-```
-
-## Layer Architecture
-
-```
-┌─────────────────────────────────────────┐
-│             API Layer                    │
-│   (Controllers, Routes, Webhooks)        │
-├─────────────────────────────────────────┤
-│           Service Layer                  │
-│  (Business Logic, Orchestration)         │
-├─────────────────────────────────────────┤
-│          Clay Layer        │
-│   (Client, Types, Error Handling)        │
-├─────────────────────────────────────────┤
-│         Infrastructure Layer             │
-│    (Cache, Queue, Monitoring)            │
-└─────────────────────────────────────────┘
-```
-
-## Key Components
-
-### Step 1: Client Wrapper
-```typescript
-// src/clay/client.ts
-export class ClayService {
-  private client: ClayClient;
-  private cache: Cache;
-  private monitor: Monitor;
-
-  constructor(config: ClayConfig) {
-    this.client = new ClayClient(config);
-    this.cache = new Cache(config.cacheOptions);
-    this.monitor = new Monitor('clay');
-  }
-
-  async get(id: string): Promise<Resource> {
-    return this.cache.getOrFetch(id, () =>
-      this.monitor.track('get', () => this.client.get(id))
-    );
-  }
-}
-```
-
-### Step 2: Error Boundary
-```typescript
-// src/clay/errors.ts
-export class ClayServiceError extends Error {
-  constructor(
-    message: string,
-    public readonly code: string,
-    public readonly retryable: boolean,
-    public readonly originalError?: Error
-  ) {
-    super(message);
-    this.name = 'ClayServiceError';
-  }
-}
-
-export function wrapClayError(error: unknown): ClayServiceError {
-  // Transform SDK errors to application errors
-}
-```
-
-### Step 3: Health Check
-```typescript
-// src/clay/health.ts
-export async function checkClayHealth(): Promise<HealthStatus> {
-  try {
-    const start = Date.now();
-    await clayClient.ping();
-    return {
-      status: 'healthy',
-      latencyMs: Date.now() - start,
-    };
-  } catch (error) {
-    return { status: 'unhealthy', error: error.message };
-  }
-}
-```
-
-## Data Flow Diagram
-
-```
-User Request
-     │
-     ▼
-┌─────────────┐
-│   API       │
-│   Gateway   │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐    ┌─────────────┐
-│   Service   │───▶│   Cache     │
-│   Layer     │    │   (Redis)   │
-└──────┬──────┘    └─────────────┘
-       │
-       ▼
-┌─────────────┐
-│ Clay    │
-│   Client    │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│ Clay    │
-│   API       │
-└─────────────┘
-```
-
-## Configuration Management
-
-```typescript
-// config/clay.ts
-export interface ClayConfig {
-  apiKey: string;
-  environment: 'development' | 'staging' | 'production';
-  timeout: number;
-  retries: number;
-  cache: {
-    enabled: boolean;
-    ttlSeconds: number;
-  };
-}
-
-export function loadClayConfig(): ClayConfig {
-  const env = process.env.NODE_ENV || 'development';
-  return require(`./clay.${env}.json`);
-}
-```
+- Clay account with API access
+- Understanding of Clay tables and enrichment columns
+- CRM integration configured (HubSpot, Salesforce)
+- Webhook endpoint for automation triggers
 
 ## Instructions
 
-### Step 1: Create Directory Structure
-Set up the project layout following the reference structure above.
+### Step 1: Design Table Schema
 
-### Step 2: Implement Client Wrapper
-Create the singleton client with caching and monitoring.
+Define input columns (company name, domain, contact, LinkedIn URL), enrichment columns (company size, industry, email, phone, technologies), formula columns (ICP score, lead tier), and AI columns (personalized intro, pain points).
 
-### Step 3: Add Error Handling
-Implement custom error classes for Clay operations.
+### Step 2: Configure Enrichment Waterfall
 
-### Step 4: Configure Health Checks
-Add health check endpoint for Clay connectivity.
+Order providers by cost: Apollo (1 credit) -> Hunter (1) -> Dropcontact (2) -> Findymail (3). Enable "stop on first result" to minimize credit usage.
 
-## Output
-- Structured project layout
-- Client wrapper with caching
-- Error boundary implemented
-- Health checks configured
+### Step 3: Set Up Webhook Integration
+
+On enrichment completion, check ICP score. Push high-value leads (score >= 80 with valid email) to CRM immediately. Add tier-A leads to outreach sequences.
+
+### Step 4: Implement ICP Scoring Formula
+
+Weight company size (up to 50 pts), target industry match (30 pts), and technology stack matches (10 pts each, max 100 total).
+
+For architecture diagrams, TypeScript implementations, and ICP scoring code, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
 ## Error Handling
+
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Circular dependencies | Wrong layering | Separate concerns by layer |
-| Config not loading | Wrong paths | Verify config file locations |
-| Type errors | Missing types | Add Clay types |
-| Test isolation | Shared state | Use dependency injection |
+| Enrichment credits exhausted | Too many lookups | Use waterfall pattern, set daily limits |
+| Duplicate records | Re-importing same list | Deduplicate on domain + contact name |
+| Webhook timeout | Processing too slow | Acknowledge immediately, process async |
+| Low email find rate | Bad input data | Validate domains before enrichment |
+
+## Resources
+
+- [Clay API Documentation](https://docs.clay.com/api)
+- [Clay Enrichment Providers](https://docs.clay.com/enrichments)
+- [Clay Formulas Guide](https://docs.clay.com/formulas)
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [design implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
 
 ## Examples
 
-### Quick Setup Script
-```bash
-# Create reference structure
-mkdir -p src/clay/{handlers} src/services/clay src/api/clay
-touch src/clay/{client,config,types,errors}.ts
-touch src/services/clay/{index,sync,cache}.ts
-```
+**Basic usage**: Apply clay reference architecture to a standard project setup with default configuration options.
 
-## Resources
-- [Clay SDK Documentation](https://docs.clay.com/sdk)
-- [Clay Best Practices](https://docs.clay.com/best-practices)
-
-## Flagship Skills
-For multi-environment setup, see `clay-multi-env-setup`.
+**Advanced scenario**: Customize clay reference architecture for production environments with multiple constraints and team-specific requirements.

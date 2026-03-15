@@ -10,8 +10,8 @@ allowed-tools: Read, Bash(grep:*), Bash(curl:*), Bash(tar:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Langfuse Debug Bundle
 
 ## Overview
@@ -39,6 +39,7 @@ echo "" >> "$BUNDLE_DIR/summary.txt"
 
 ### Step 2: Collect Environment Info
 ```bash
+set -euo pipefail
 # Environment info
 echo "--- Environment ---" >> "$BUNDLE_DIR/summary.txt"
 echo "Node.js: $(node --version 2>/dev/null || echo 'not installed')" >> "$BUNDLE_DIR/summary.txt"
@@ -57,6 +58,7 @@ echo "" >> "$BUNDLE_DIR/summary.txt"
 
 ### Step 3: Gather SDK and Package Info
 ```bash
+set -euo pipefail
 # SDK versions
 echo "--- SDK Versions ---" >> "$BUNDLE_DIR/summary.txt"
 npm list langfuse 2>/dev/null >> "$BUNDLE_DIR/summary.txt" || echo "npm: langfuse not found" >> "$BUNDLE_DIR/summary.txt"
@@ -71,6 +73,7 @@ echo "" >> "$BUNDLE_DIR/summary.txt"
 
 ### Step 4: Test API Connectivity
 ```bash
+set -euo pipefail
 # Network connectivity test
 echo "--- Network Test ---" >> "$BUNDLE_DIR/summary.txt"
 
@@ -273,3 +276,9 @@ echo "Created: $BUNDLE_DIR.tar.gz"
 
 ## Next Steps
 For rate limit issues, see `langfuse-rate-limits`.
+
+## Examples
+
+**Basic usage**: Apply langfuse debug bundle to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize langfuse debug bundle for production environments with multiple constraints and team-specific requirements.

@@ -5,14 +5,13 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(security:*), Bash(scan:*), Bash(audit:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Input Validation Scanner
 
-This skill provides automated assistance for input validation scanner tasks.
-
 ## Overview
 
-This skill automates the process of identifying potential input validation flaws within a codebase. By analyzing how user-provided data is handled, it helps developers proactively address security vulnerabilities before they can be exploited. This skill streamlines security audits and improves the overall security posture of applications.
+Scan application source code for missing or insufficient input validation that could lead to injection attacks (SQL, XSS, command injection), buffer overflows, and path traversal vulnerabilities. Analyzes how user-provided data flows from HTTP parameters, form fields, and API inputs through the application to identify locations where sanitization or validation is absent.
 
 ## How It Works
 
@@ -59,7 +58,7 @@ This skill can be used in conjunction with other security-related skills to prov
 
 ## Prerequisites
 
-- Access to codebase and configuration files in {baseDir}/
+- Access to codebase and configuration files in ${CLAUDE_SKILL_DIR}/
 - Security scanning tools installed as needed
 - Understanding of security standards and best practices
 - Permissions for security analysis operations

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python:*launch_tracker*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Token Launch Tracker
 
 ## Overview
@@ -86,7 +86,7 @@ python launch_tracker.py chains
 
 1. **Check recent launches** on a specific chain:
    ```bash
-   cd {baseDir}/scripts
+   cd ${CLAUDE_SKILL_DIR}/scripts
    python launch_tracker.py recent --chain ethereum --hours 6
    ```
 
@@ -140,14 +140,14 @@ python launch_tracker.py chains
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling including:
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling including:
 - RPC connection issues and fallback chain
 - Rate limiting and backoff strategies
 - Contract analysis edge cases
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples including:
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples including:
 - Finding high-risk tokens
 - Multi-chain monitoring scripts
 - Python integration

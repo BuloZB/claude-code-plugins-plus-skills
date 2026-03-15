@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Bash(performance:*), Bash(monitoring:*), Grep"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Throughput Analyzer
 
@@ -60,7 +61,7 @@ This skill can be used in conjunction with other monitoring and performance anal
 
 ## Prerequisites
 
-- Access to throughput metrics in {baseDir}/metrics/throughput/
+- Access to throughput metrics in ${CLAUDE_SKILL_DIR}/metrics/throughput/
 - System performance monitoring tools
 - Historical throughput baselines
 - Current capacity and scaling limits

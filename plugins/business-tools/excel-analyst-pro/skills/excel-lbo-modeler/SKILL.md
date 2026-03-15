@@ -8,8 +8,8 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(cmd:*)
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Excel LBO Modeler
 
 ## Overview
@@ -59,4 +59,4 @@ Result: Integrated model with synergy phase-in and accretion analysis
 
 - [Macabacus LBO Modeling](https://macabacus.com/)
 - [WSO PE Interview Prep](https://www.wallstreetoasis.com/)
-- `{baseDir}/references/lbo-formulas.md` for debt schedule templates
+- `${CLAUDE_SKILL_DIR}/references/lbo-formulas.md` for debt schedule templates

@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Groq Security Basics
 
 ## Overview
@@ -38,6 +38,7 @@ GROQ_SECRET=***
 
 ### Step 2: Implement Secret Rotation
 ```bash
+set -euo pipefail
 # 1. Generate new key in Groq dashboard
 # 2. Update environment variable
 export GROQ_API_KEY="new_key_here"

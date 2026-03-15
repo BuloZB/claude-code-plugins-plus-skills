@@ -10,8 +10,8 @@ allowed-tools: Read, Grep, Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Exa Common Errors
 
 ## Overview
@@ -80,13 +80,14 @@ Request timeout after 30000ms
 **Solution:**
 ```typescript
 // Increase timeout
-const client = new Client({ timeout: 60000 });
+const client = new Client({ timeout: 60000 });  # 60000: 1 minute in ms
 ```
 
 ## Examples
 
 ### Quick Diagnostic Commands
 ```bash
+set -euo pipefail
 # Check Exa status
 curl -s https://status.exa.com
 

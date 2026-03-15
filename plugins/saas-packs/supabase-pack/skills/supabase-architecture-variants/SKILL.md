@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Architecture Variants
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Document upgrade path for future scaling.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Monolith First](https://martinfowler.com/bliki/MonolithFirst.html)
 - [Microservices Guide](https://martinfowler.com/microservices/)
 - [Supabase Architecture Guide](https://supabase.com/docs/architecture)
+
+## Overview
+
+Execute choose and implement Supabase validated architecture blueprints for different scales.

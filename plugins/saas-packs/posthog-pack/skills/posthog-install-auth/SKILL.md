@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(npm:*), Bash(pip:*), Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # PostHog Install & Auth
 
 ## Overview
@@ -27,6 +27,7 @@ Set up PostHog SDK/CLI and configure authentication credentials.
 
 ### Step 1: Install SDK
 ```bash
+set -euo pipefail
 # Node.js
 npm install @posthog/sdk
 

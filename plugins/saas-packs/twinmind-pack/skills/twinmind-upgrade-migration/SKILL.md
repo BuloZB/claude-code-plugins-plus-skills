@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit, Bash(curl:*)
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # TwinMind Upgrade & Migration
 
 ## Overview
@@ -80,7 +80,7 @@ async function auditUsage() {
   if (usage.data.api_requests > 0 && account.data.plan === 'free') {
     console.log('- Upgrade to Pro for API access');
   }
-  if (usage.data.ai_tokens_used > 400000) {
+  if (usage.data.ai_tokens_used > 400000) {  # 400000 = configured value
     console.log('- Consider Pro for 2M token context');
   }
   if (usage.data.rate_limit_hits > 10) {
@@ -186,8 +186,8 @@ async function requestEnterpriseUpgrade() {
     contact_email: 'admin@company.com',
     company_name: 'Acme Inc',
     estimated_usage: {
-      transcription_hours_monthly: 1000,
-      api_requests_monthly: 100000,
+      transcription_hours_monthly: 1000,  # 1000: 1 second in ms
+      api_requests_monthly: 100000,  # 100000 = configured value
       team_members: 50,
     },
     requirements: [
@@ -206,6 +206,7 @@ async function requestEnterpriseUpgrade() {
 ### Step 4: Update API Keys
 
 ```bash
+set -euo pipefail
 # After upgrade, generate new production API key
 # Go to: https://twinmind.com/settings/api
 
@@ -343,17 +344,17 @@ const tierConfigs = {
   free: {
     rateLimit: 30,
     concurrent: 1,
-    contextTokens: 500000,
+    contextTokens: 500000,  # 500000 = configured value
     model: 'ear-2',
   },
   pro: {
     rateLimit: 60,
     concurrent: 3,
-    contextTokens: 2000000,
+    contextTokens: 2000000,  # 2000000 = configured value
     model: 'ear-3',
   },
   enterprise: {
-    rateLimit: 300,
+    rateLimit: 300,  # 300: timeout: 5 minutes
     concurrent: 10,
     contextTokens: Infinity,
     model: 'ear-3-custom',
@@ -420,3 +421,9 @@ export function updateQueueForTier(tier: 'free' | 'pro' | 'enterprise') {
 
 ## Next Steps
 For CI/CD integration, see `twinmind-ci-integration`.
+
+## Examples
+
+**Basic usage**: Apply twinmind upgrade migration to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize twinmind upgrade migration for production environments with multiple constraints and team-specific requirements.

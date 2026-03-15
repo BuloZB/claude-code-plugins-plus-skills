@@ -10,275 +10,113 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Perplexity Architecture Variants
 
 ## Overview
-Three validated architecture blueprints for Perplexity integrations.
+Deployment architectures for Perplexity Sonar search API at different scales. Perplexity's search-augmented generation model fits different patterns from simple search widgets to full research automation pipelines.
 
 ## Prerequisites
-- Understanding of team size and DAU requirements
-- Knowledge of deployment infrastructure
-- Clear SLA requirements
-- Growth projections available
-
-## Variant A: Monolith (Simple)
-
-**Best for:** MVPs, small teams, < 10K daily active users
-
-```
-my-app/
-├── src/
-│   ├── perplexity/
-│   │   ├── client.ts          # Singleton client
-│   │   ├── types.ts           # Types
-│   │   └── middleware.ts      # Express middleware
-│   ├── routes/
-│   │   └── api/
-│   │       └── perplexity.ts    # API routes
-│   └── index.ts
-├── tests/
-│   └── perplexity.test.ts
-└── package.json
-```
-
-### Key Characteristics
-- Single deployment unit
-- Synchronous Perplexity calls in request path
-- In-memory caching
-- Simple error handling
-
-### Code Pattern
-```typescript
-// Direct integration in route handler
-app.post('/api/create', async (req, res) => {
-  try {
-    const result = await perplexityClient.create(req.body);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-```
-
----
-
-## Variant B: Service Layer (Moderate)
-
-**Best for:** Growing startups, 10K-100K DAU, multiple integrations
-
-```
-my-app/
-├── src/
-│   ├── services/
-│   │   ├── perplexity/
-│   │   │   ├── client.ts      # Client wrapper
-│   │   │   ├── service.ts     # Business logic
-│   │   │   ├── repository.ts  # Data access
-│   │   │   └── types.ts
-│   │   └── index.ts           # Service exports
-│   ├── controllers/
-│   │   └── perplexity.ts
-│   ├── routes/
-│   ├── middleware/
-│   ├── queue/
-│   │   └── perplexity-processor.ts  # Async processing
-│   └── index.ts
-├── config/
-│   └── perplexity/
-└── package.json
-```
-
-### Key Characteristics
-- Separation of concerns
-- Background job processing
-- Redis caching
-- Circuit breaker pattern
-- Structured error handling
-
-### Code Pattern
-```typescript
-// Service layer abstraction
-class PerplexityService {
-  constructor(
-    private client: PerplexityClient,
-    private cache: CacheService,
-    private queue: QueueService
-  ) {}
-
-  async createResource(data: CreateInput): Promise<Resource> {
-    // Business logic before API call
-    const validated = this.validate(data);
-
-    // Check cache
-    const cached = await this.cache.get(cacheKey);
-    if (cached) return cached;
-
-    // API call with retry
-    const result = await this.withRetry(() =>
-      this.client.create(validated)
-    );
-
-    // Cache result
-    await this.cache.set(cacheKey, result, 300);
-
-    // Async follow-up
-    await this.queue.enqueue('perplexity.post-create', result);
-
-    return result;
-  }
-}
-```
-
----
-
-## Variant C: Microservice (Complex)
-
-**Best for:** Enterprise, 100K+ DAU, strict SLAs
-
-```
-perplexity-service/              # Dedicated microservice
-├── src/
-│   ├── api/
-│   │   ├── grpc/
-│   │   │   └── perplexity.proto
-│   │   └── rest/
-│   │       └── routes.ts
-│   ├── domain/
-│   │   ├── entities/
-│   │   ├── events/
-│   │   └── services/
-│   ├── infrastructure/
-│   │   ├── perplexity/
-│   │   │   ├── client.ts
-│   │   │   ├── mapper.ts
-│   │   │   └── circuit-breaker.ts
-│   │   ├── cache/
-│   │   ├── queue/
-│   │   └── database/
-│   └── index.ts
-├── config/
-├── k8s/
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   └── hpa.yaml
-└── package.json
-
-other-services/
-├── order-service/       # Calls perplexity-service
-├── payment-service/
-└── notification-service/
-```
-
-### Key Characteristics
-- Dedicated Perplexity microservice
-- gRPC for internal communication
-- Event-driven architecture
-- Database per service
-- Kubernetes autoscaling
-- Distributed tracing
-- Circuit breaker per service
-
-### Code Pattern
-```typescript
-// Event-driven with domain isolation
-class PerplexityAggregate {
-  private events: DomainEvent[] = [];
-
-  process(command: PerplexityCommand): void {
-    // Domain logic
-    const result = this.execute(command);
-
-    // Emit domain event
-    this.events.push(new PerplexityProcessedEvent(result));
-  }
-
-  getUncommittedEvents(): DomainEvent[] {
-    return [...this.events];
-  }
-}
-
-// Event handler
-@EventHandler(PerplexityProcessedEvent)
-class PerplexityEventHandler {
-  async handle(event: PerplexityProcessedEvent): Promise<void> {
-    // Saga orchestration
-    await this.sagaOrchestrator.continue(event);
-  }
-}
-```
-
----
-
-## Decision Matrix
-
-| Factor | Monolith | Service Layer | Microservice |
-|--------|----------|---------------|--------------|
-| Team Size | 1-5 | 5-20 | 20+ |
-| DAU | < 10K | 10K-100K | 100K+ |
-| Deployment Frequency | Weekly | Daily | Continuous |
-| Failure Isolation | None | Partial | Full |
-| Operational Complexity | Low | Medium | High |
-| Time to Market | Fastest | Moderate | Slowest |
-
-## Migration Path
-
-```
-Monolith → Service Layer:
-1. Extract Perplexity code to service/
-2. Add caching layer
-3. Add background processing
-
-Service Layer → Microservice:
-1. Create dedicated perplexity-service repo
-2. Define gRPC contract
-3. Add event bus
-4. Deploy to Kubernetes
-5. Migrate traffic gradually
-```
+- Perplexity API key configured
+- Clear search/research use case
+- Infrastructure for chosen scale
 
 ## Instructions
 
-### Step 1: Assess Requirements
-Use the decision matrix to identify appropriate variant.
+### Step 1: Direct Search Widget (Simple)
 
-### Step 2: Choose Architecture
-Select Monolith, Service Layer, or Microservice based on needs.
+**Best for:** Adding AI search to an app, < 500 queries/day.
 
-### Step 3: Implement Structure
-Set up project layout following the chosen blueprint.
+```python
+@app.route('/ask')
+def ask():
+    response = pplx_client.chat.completions.create(
+        model="sonar", messages=[{"role": "user", "content": request.args["q"]}]
+    )
+    return jsonify({
+        "answer": response.choices[0].message.content,
+        "citations": response.citations
+    })
+```
 
-### Step 4: Plan Migration Path
-Document upgrade path for future scaling.
+### Step 2: Cached Research Layer (Moderate)
 
-## Output
-- Architecture variant selected
-- Project structure implemented
-- Migration path documented
-- Appropriate patterns applied
+**Best for:** Repeated queries, 500-5K queries/day, research tools.
+
+```python
+class CachedResearch:
+    def __init__(self, client, cache, ttl=1800):  # 1800: timeout: 30 minutes
+        self.client = client
+        self.cache = cache
+        self.ttl = ttl
+
+    def search(self, query: str, model: str = "sonar"):
+        key = f"pplx:{hashlib.sha256(query.encode()).hexdigest()}"
+        cached = self.cache.get(key)
+        if cached:
+            return json.loads(cached)
+        result = self.client.chat.completions.create(
+            model=model, messages=[{"role": "user", "content": query}]
+        )
+        data = {"answer": result.choices[0].message.content, "citations": result.citations}
+        self.cache.setex(key, self.ttl, json.dumps(data))
+        return data
+```
+
+### Step 3: Multi-Query Research Pipeline (Scale)
+
+**Best for:** Automated research, 5K+ queries/day, report generation.
+
+```python
+class ResearchPipeline:
+    async def research_topic(self, topic: str) -> dict:
+        # Decompose into sub-questions
+        sub_questions = await self.decompose(topic)
+        # Run parallel searches
+        results = await asyncio.gather(*[
+            self.search_with_cache(q) for q in sub_questions
+        ])
+        # Synthesize into report
+        report = await self.synthesize(topic, results)
+        return {"topic": topic, "sections": results, "synthesis": report}
+
+    async def decompose(self, topic: str) -> list[str]:
+        r = self.client.chat.completions.create(
+            model="sonar", messages=[
+                {"role": "system", "content": "Break this topic into 3-5 specific research questions."},
+                {"role": "user", "content": topic}
+            ])
+        return r.choices[0].message.content.strip().split("\n")
+```
+
+## Decision Matrix
+
+| Factor | Direct Widget | Cached Layer | Research Pipeline |
+|--------|--------------|--------------|-------------------|
+| Volume | < 500/day | 500-5K/day | 5K+/day |
+| Use Case | Quick answers | Repeated queries | Deep research |
+| Latency | 2-5s | 50ms (cached) | 10-30s |
+| Model | sonar | sonar | sonar-pro |
 
 ## Error Handling
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Over-engineering | Wrong variant choice | Start simpler |
-| Performance issues | Wrong layer | Add caching/async |
-| Team friction | Complex architecture | Simplify or train |
-| Deployment complexity | Microservice overhead | Consider service layer |
+| Slow in UI | No caching | Cache repeated queries |
+| High cost | sonar-pro everywhere | Route by complexity |
+| Stale answers | Long cache TTL | Reduce TTL for current events |
+
+## Resources
+- [Perplexity API Docs](https://docs.perplexity.ai)
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
 
 ## Examples
 
-### Quick Variant Check
-```bash
-# Count team size and DAU to select variant
-echo "Team: $(git log --format='%ae' | sort -u | wc -l) developers"
-echo "DAU: Check analytics dashboard"
-```
+**Basic usage**: Apply perplexity architecture variants to a standard project setup with default configuration options.
 
-## Resources
-- [Monolith First](https://martinfowler.com/bliki/MonolithFirst.html)
-- [Microservices Guide](https://martinfowler.com/microservices/)
-- [Perplexity Architecture Guide](https://docs.perplexity.com/architecture)
-
-## Next Steps
-For common anti-patterns, see `perplexity-known-pitfalls`.
+**Advanced scenario**: Customize perplexity architecture variants for production environments with multiple constraints and team-specific requirements.

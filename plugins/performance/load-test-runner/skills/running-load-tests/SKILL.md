@@ -5,6 +5,7 @@ version: 1.0.0
 allowed-tools: "Read, Write, Edit, Grep, Glob, Bash(k6:*), Bash(jmeter:*), Bash(artillery:*), Bash(performance:*)"
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # Load Test Runner
 
@@ -61,7 +62,7 @@ This skill can be integrated with CI/CD pipelines to automate performance testin
 - Load testing tools installed (k6, JMeter, or Artillery)
 - Access to target application endpoints
 - Test scenario definitions and expected load patterns
-- Results storage location at {baseDir}/load-tests/
+- Results storage location at ${CLAUDE_SKILL_DIR}/load-tests/
 
 ## Instructions
 

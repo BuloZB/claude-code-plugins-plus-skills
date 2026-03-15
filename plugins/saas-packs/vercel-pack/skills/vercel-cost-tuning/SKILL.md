@@ -10,8 +10,8 @@ allowed-tools: Read, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Vercel Cost Tuning
 
 ## Prerequisites
@@ -42,12 +42,16 @@ Enable batching, caching, and sampling where appropriate.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Vercel Pricing](https://vercel.com/pricing)
 - [Vercel Billing Dashboard](https://dashboard.vercel.com/billing)
+
+## Overview
+
+Optimize Vercel costs through tier selection, sampling, and usage monitoring.

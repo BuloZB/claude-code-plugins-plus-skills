@@ -10,8 +10,8 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Supabase Enterprise Rbac
 
 ## Prerequisites
@@ -42,13 +42,17 @@ Track all access for compliance.
 
 ## Error Handling
 
-See `{baseDir}/references/errors.md` for comprehensive error handling.
+See `${CLAUDE_SKILL_DIR}/references/errors.md` for comprehensive error handling.
 
 ## Examples
 
-See `{baseDir}/references/examples.md` for detailed examples.
+See `${CLAUDE_SKILL_DIR}/references/examples.md` for detailed examples.
 
 ## Resources
 - [Supabase Enterprise Guide](https://supabase.com/docs/enterprise)
 - [SAML 2.0 Specification](https://wiki.oasis-open.org/security/FrontPage)
 - [OpenID Connect Spec](https://openid.net/specs/openid-connect-core-1_0.html)
+
+## Overview
+
+Configure Supabase enterprise SSO, role-based access control, and organization management.

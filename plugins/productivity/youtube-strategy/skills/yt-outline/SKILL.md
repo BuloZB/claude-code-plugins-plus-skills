@@ -4,13 +4,13 @@ description: |
   Build detailed step-by-step YouTube video outlines with demo prep, screen-share sequences, and visual
   planning. Use this skill whenever the user says "create an outline", "outline this video", "video outline",
   "build the outline", "production outline", or has an approved brief and packaging and needs the final
-  pre-production document before demo prep and filming.
+  pre-production document before demo prep and filming. Use when working with yt outline. Trigger with 'yt', 'outline'.
 allowed-tools: WebSearch, Read, Write
 version: 1.0.0
 author: Claude Code Plugins <plugins@claudecodeplugins.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
-
 # YouTube Outline
 
 You are creating a detailed production outline for a YouTube video. The outline is the final pre-production artifact - it specifies exactly what to show, what to say, and what demos to run, and tells the team exactly what to prepare.
@@ -19,8 +19,8 @@ You are creating a detailed production outline for a YouTube video. The outline 
 
 You need:
 
-1. **The approved brief** - Load `video-brief-{slug}.md` from the working directory
-2. **The approved packaging** - Load `packaging-{slug}.md` for the final title and thumbnail direction
+1. **The approved brief** - Load `video-brief-yt-outline.md` from the working directory
+2. **The approved packaging** - Load `packaging-yt-outline.md` for the final title and thumbnail direction
 3. **Topic research** (optional) - If the topic requires technical accuracy, use WebSearch to verify specific feature details, steps, or capabilities
 
 ## The Outline Process
@@ -129,8 +129,8 @@ Also present the demo prep checklist separately:
 ### Step 6: Save
 
 Save two files:
-- `video-outline-{slug}.md` - The full outline
-- `demo-prep-checklist-{slug}.md` - The team's preparation checklist
+- `video-outline-yt-outline.md` - The full outline
+- `demo-prep-checklist-yt-outline.md` - The team's preparation checklist
 
 ## Key Principles
 
@@ -140,3 +140,47 @@ Save two files:
 - **Team-ready.** The demo prep checklist should be detailed enough that a team member can prepare everything without asking questions.
 - **Timing is real.** Be honest about section durations. A 20-minute video with 25 minutes of outline is a problem. Cut or restructure.
 - **Failure-proofed.** For every live demo, include a backup plan. If the API call times out, if the feature bugs out - what's the fallback?
+
+## Overview
+
+Build detailed step-by-step YouTube video outlines with demo prep, screen-share sequences, and visual planning.
+
+## Prerequisites
+
+- Access to the Yt Outline environment or API
+- Required CLI tools installed and authenticated
+- Familiarity with Yt Outline concepts and terminology
+
+## Instructions
+
+1. Assess the current state of the Yt Outline configuration
+2. Identify the specific requirements and constraints
+3. Apply the recommended patterns from this skill
+4. Validate the changes against expected behavior
+5. Document the configuration for team reference
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with Yt Outline |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply yt outline to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize yt outline for production environments with multiple constraints and team-specific requirements.
+
+## Resources
+
+- Official Yt Outline documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

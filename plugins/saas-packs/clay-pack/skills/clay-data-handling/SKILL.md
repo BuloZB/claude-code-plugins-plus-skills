@@ -10,211 +10,66 @@ allowed-tools: Read, Write, Edit
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
-
 # Clay Data Handling
 
 ## Overview
-Handle sensitive data correctly when integrating with Clay.
+
+Manage lead data through Clay enrichment pipelines safely. Covers data import validation, deduplication, enrichment data retention, GDPR-compliant management, and secure CRM export.
 
 ## Prerequisites
-- Understanding of GDPR/CCPA requirements
-- Clay SDK with data export capabilities
-- Database for audit logging
-- Scheduled job infrastructure for cleanup
 
-## Data Classification
-
-| Category | Examples | Handling |
-|----------|----------|----------|
-| PII | Email, name, phone | Encrypt, minimize |
-| Sensitive | API keys, tokens | Never log, rotate |
-| Business | Usage metrics | Aggregate when possible |
-| Public | Product names | Standard handling |
-
-## PII Detection
-
-```typescript
-const PII_PATTERNS = [
-  { type: 'email', regex: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g },
-  { type: 'phone', regex: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g },
-  { type: 'ssn', regex: /\b\d{3}-\d{2}-\d{4}\b/g },
-  { type: 'credit_card', regex: /\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/g },
-];
-
-function detectPII(text: string): { type: string; match: string }[] {
-  const findings: { type: string; match: string }[] = [];
-
-  for (const pattern of PII_PATTERNS) {
-    const matches = text.matchAll(pattern.regex);
-    for (const match of matches) {
-      findings.push({ type: pattern.type, match: match[0] });
-    }
-  }
-
-  return findings;
-}
-```
-
-## Data Redaction
-
-```typescript
-function redactPII(data: Record<string, any>): Record<string, any> {
-  const sensitiveFields = ['email', 'phone', 'ssn', 'password', 'apiKey'];
-  const redacted = { ...data };
-
-  for (const field of sensitiveFields) {
-    if (redacted[field]) {
-      redacted[field] = '[REDACTED]';
-    }
-  }
-
-  return redacted;
-}
-
-// Use in logging
-console.log('Clay request:', redactPII(requestData));
-```
-
-## Data Retention Policy
-
-### Retention Periods
-| Data Type | Retention | Reason |
-|-----------|-----------|--------|
-| API logs | 30 days | Debugging |
-| Error logs | 90 days | Root cause analysis |
-| Audit logs | 7 years | Compliance |
-| PII | Until deletion request | GDPR/CCPA |
-
-### Automatic Cleanup
-
-```typescript
-async function cleanupClayData(retentionDays: number): Promise<void> {
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - retentionDays);
-
-  await db.clayLogs.deleteMany({
-    createdAt: { $lt: cutoff },
-    type: { $nin: ['audit', 'compliance'] },
-  });
-}
-
-// Schedule daily cleanup
-cron.schedule('0 3 * * *', () => cleanupClayData(30));
-```
-
-## GDPR/CCPA Compliance
-
-### Data Subject Access Request (DSAR)
-
-```typescript
-async function exportUserData(userId: string): Promise<DataExport> {
-  const clayData = await clayClient.getUserData(userId);
-
-  return {
-    source: 'Clay',
-    exportedAt: new Date().toISOString(),
-    data: {
-      profile: clayData.profile,
-      activities: clayData.activities,
-      // Include all user-related data
-    },
-  };
-}
-```
-
-### Right to Deletion
-
-```typescript
-async function deleteUserData(userId: string): Promise<DeletionResult> {
-  // 1. Delete from Clay
-  await clayClient.deleteUser(userId);
-
-  // 2. Delete local copies
-  await db.clayUserCache.deleteMany({ userId });
-
-  // 3. Audit log (required to keep)
-  await auditLog.record({
-    action: 'GDPR_DELETION',
-    userId,
-    service: 'clay',
-    timestamp: new Date(),
-  });
-
-  return { success: true, deletedAt: new Date() };
-}
-```
-
-## Data Minimization
-
-```typescript
-// Only request needed fields
-const user = await clayClient.getUser(userId, {
-  fields: ['id', 'name'], // Not email, phone, address
-});
-
-// Don't store unnecessary data
-const cacheData = {
-  id: user.id,
-  name: user.name,
-  // Omit sensitive fields
-};
-```
+- Clay account with API access
+- Understanding of data enrichment sources
+- CRM integration for lead export
+- Knowledge of GDPR/CCPA lead data requirements
 
 ## Instructions
 
-### Step 1: Classify Data
-Categorize all Clay data by sensitivity level.
+### Step 1: Validate and Clean Import Data
 
-### Step 2: Implement PII Detection
-Add regex patterns to detect sensitive data in logs.
+Use Zod schemas to validate email format, company domain, and optional fields. Reject invalid records with error details. Track valid rate percentage.
 
-### Step 3: Configure Redaction
-Apply redaction to sensitive fields before logging.
+### Step 2: Deduplicate Before Enrichment
 
-### Step 4: Set Up Retention
-Configure automatic cleanup with appropriate retention periods.
+Key on email (primary) or `domain:first_name:last_name` (fallback). Remove duplicates before sending to Clay to avoid wasting enrichment credits.
 
-## Output
-- Data classification documented
-- PII detection implemented
-- Redaction in logging active
-- Retention policy enforced
+### Step 3: Add Retention Metadata
+
+Tag each enriched record with `enriched_at`, `retention_expires` (default 365 days), and `enrichment_source`. Run weekly cleanup to remove expired records.
+
+### Step 4: GDPR-Compliant Export
+
+Strip PII for analytics exports (hash company names, remove emails). Add `consent_basis: legitimate_interest` for CRM exports. Include enrichment timestamp for audit trails.
+
+For complete TypeScript implementations of validation, dedup, retention, and export, load the reference guide:
+`Read(${CLAUDE_SKILL_DIR}/references/implementation-guide.md)`
 
 ## Error Handling
+
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| PII in logs | Missing redaction | Wrap logging with redact |
-| Deletion failed | Data locked | Check dependencies |
-| Export incomplete | Timeout | Increase batch size |
-| Audit gap | Missing entries | Review log pipeline |
+| High duplicate rate | Same list imported twice | Run dedup before enrichment |
+| Invalid emails | Bad source data | Validate with Zod before import |
+| Expired data in CRM | No retention cleanup | Schedule weekly expiration check |
+| Missing consent | No legal basis tracked | Add consent_basis to all exports |
+
+## Resources
+
+- [Clay API Documentation](https://docs.clay.com/api)
+- [GDPR Lead Data Requirements](https://gdpr.eu/what-is-gdpr/)
+
+## Output
+
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
+
+See [compliance implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
 
 ## Examples
 
-### Quick PII Scan
-```typescript
-const findings = detectPII(JSON.stringify(userData));
-if (findings.length > 0) {
-  console.warn(`PII detected: ${findings.map(f => f.type).join(', ')}`);
-}
-```
+**Basic usage**: Apply clay data handling to a standard project setup with default configuration options.
 
-### Redact Before Logging
-```typescript
-const safeData = redactPII(apiResponse);
-logger.info('Clay response:', safeData);
-```
-
-### GDPR Data Export
-```typescript
-const userExport = await exportUserData('user-123');
-await sendToUser(userExport);
-```
-
-## Resources
-- [GDPR Developer Guide](https://gdpr.eu/developers/)
-- [CCPA Compliance Guide](https://oag.ca.gov/privacy/ccpa)
-- [Clay Privacy Guide](https://docs.clay.com/privacy)
-
-## Next Steps
-For enterprise access control, see `clay-enterprise-rbac`.
+**Advanced scenario**: Customize clay data handling for production environments with multiple constraints and team-specific requirements.

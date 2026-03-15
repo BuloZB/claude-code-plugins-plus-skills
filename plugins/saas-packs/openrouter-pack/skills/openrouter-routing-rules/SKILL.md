@@ -6,6 +6,7 @@ allowed-tools: Read, Write, Edit, Grep
 version: 1.0.0
 license: MIT
 author: Jeremy Longshore <jeremy@intentsolutions.io>
+compatible-with: claude-code, codex, openclaw
 ---
 # OpenRouter Routing Rules
 
@@ -28,27 +29,34 @@ Follow these steps to implement this skill:
 4. **Test the Integration**: Run the verification steps to confirm functionality
 5. **Monitor in Production**: Set up appropriate logging and monitoring
 
-## Overview
-
-This skill covers implementing request-based routing logic to select optimal models based on content, urgency, or cost constraints.
-
-## Prerequisites
-
-- OpenRouter integration
-- Understanding of model capabilities and pricing
-
 ## Basic Routing Strategies
 
-### Content-Based Routing
-```python
-def route_by_content(prompt: str) -> str:
-    """Route to appropriate model based on content analysis."""
-    prompt_lower = prompt.lower()
+Use content-based, cost-based, or latency-based routing to direct requests to the optimal model.
 
-    # Code-related
-    if any(word in prompt_lower for word in ["code", "function", "debug", "python", "javascript"]):
-        return "anthropic/claude-3.5-sonnet"
+## Output
 
-## Detailed Reference
+- Configuration files or code changes applied to the project
+- Validation report confirming correct implementation
+- Summary of changes made and their rationale
 
-See `{baseDir}/references/implementation.md` for complete implementation guide.
+See [optimization implementation details](${CLAUDE_SKILL_DIR}/references/implementation.md) for output format specifications.
+
+## Error Handling
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Authentication failure | Invalid or expired credentials | Refresh tokens or re-authenticate with optimization |
+| Configuration conflict | Incompatible settings detected | Review and resolve conflicting parameters |
+| Resource not found | Referenced resource missing | Verify resource exists and permissions are correct |
+
+## Examples
+
+**Basic usage**: Apply openrouter routing rules to a standard project setup with default configuration options.
+
+**Advanced scenario**: Customize openrouter routing rules for production environments with multiple constraints and team-specific requirements.
+
+## Resources
+
+- Official optimization documentation
+- Community best practices and patterns
+- Related skills in this plugin pack

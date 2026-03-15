@@ -6,6 +6,7 @@ allowed-tools: Read, WebFetch, WebSearch, Grep
 version: 1.0.0
 author: Jeremy Longshore <jeremy@intentsolutions.io>
 license: MIT
+compatible-with: claude-code, codex, openclaw
 ---
 # Google Cloud Agent SDK Master
 
@@ -47,6 +48,6 @@ Use this skill to quickly answer “how do I do X with Google ADK?” and to pro
 
 ## Resources
 
-- Full detailed guide (kept for reference): `{baseDir}/references/SKILL.full.md`
+- Full detailed guide (kept for reference): `${CLAUDE_SKILL_DIR}/references/SKILL.full.md`
 - ADK / Agent Engine docs: https://cloud.google.com/vertex-ai/docs/agent-engine
 - Canonical repo standards: `000-docs/6767-a-SPEC-DR-STND-claude-code-plugins-standard.md`
